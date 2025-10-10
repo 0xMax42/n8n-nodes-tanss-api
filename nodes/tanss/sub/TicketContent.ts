@@ -1,0 +1,244 @@
+import { IExecuteFunctions, INodeProperties, NodeOperationError, IDataObject } from 'n8n-workflow';
+
+export const ticketContentOperations: INodeProperties[] = [
+    {
+        displayName: 'Operation',
+        name: 'operation',
+        type: 'options' as const,
+        noDataExpression: true,
+        displayOptions: {
+            show: {
+                resource: ['ticketContent'],
+            },
+        },
+        options: [
+            {
+                name: 'Get Ticket Documents',
+                value: 'getTicketDocuments',
+                description: 'Gets all documents attached to a ticket (list)',
+                action: 'Get ticket documents',
+            },
+            {
+                name: 'Get Ticket Document',
+                value: 'getTicketDocument',
+                description: 'Generates a one-time download URL for a specific ticket document',
+                action: 'Get a ticket document',
+            },
+            {
+                name: 'Get Ticket Images',
+                value: 'getTicketImages',
+                description: 'Gets all images (screenshots) attached to a ticket (list)',
+                action: 'Get ticket images',
+            },
+            {
+                name: 'Get Ticket Image',
+                value: 'getTicketImage',
+                description: 'Generates a one-time download URL for a specific ticket image',
+                action: 'Get a ticket image',
+            },
+            {
+                name: 'Upload Document / Image',
+                value: 'uploadTicketContent',
+                description: 'Uploads a document or image into a ticket (multipart/form-data)',
+                action: 'Upload document or image to ticket',
+            },
+        ],
+        default: 'getTicketDocuments',
+    },
+];
+
+export const ticketContentFields: INodeProperties[] = [
+    {
+        displayName: 'API Token',
+        name: 'apiToken',
+        type: 'string' as const,
+        required: true,
+        typeOptions: { password: true },
+        default: '',
+        description: 'API token obtained from the TANSS API login',
+        displayOptions: {
+            show: {
+                resource: ['ticketContent'],
+            },
+        },
+    },
+    {
+        displayName: 'Ticket ID',
+        name: 'ticketId',
+        type: 'number' as const,
+        displayOptions: {
+            show: {
+                resource: ['ticketContent'],
+            },
+        },
+        default: 0,
+        description: 'ID of the ticket',
+    },
+    {
+        displayName: 'Document ID',
+        name: 'documentId',
+        type: 'number' as const,
+        displayOptions: {
+            show: {
+                resource: ['ticketContent'],
+                operation: ['getTicketDocument'],
+            },
+        },
+        default: 0,
+        description: 'ID of the document to generate a one-time download URL for',
+    },
+    {
+        displayName: 'Image ID',
+        name: 'imageId',
+        type: 'number' as const,
+        displayOptions: {
+            show: {
+                resource: ['ticketContent'],
+                operation: ['getTicketImage'],
+            },
+        },
+        default: 0,
+        description: 'ID of the image to generate a one-time download URL for',
+    },
+    {
+        displayName: 'Binary Property Name',
+        name: 'binaryPropertyName',
+        type: 'string' as const,
+        default: 'data',
+        description: 'Name of the binary property that contains the file to upload',
+        displayOptions: {
+            show: {
+                resource: ['ticketContent'],
+                operation: ['uploadTicketContent'],
+            },
+        },
+    },
+    {
+        displayName: 'Descriptions',
+        name: 'descriptions',
+        type: 'string' as const,
+        default: '',
+        description: 'Description for the uploaded file(s) (if multiple, separate by newline)',
+        displayOptions: {
+            show: {
+                resource: ['ticketContent'],
+                operation: ['uploadTicketContent'],
+            },
+        },
+    },
+];
+
+export async function handleTicketContent(this: IExecuteFunctions, i: number) {
+    const operation = this.getNodeParameter('operation', i) as string;
+    const supported = [
+        'getTicketDocuments',
+        'getTicketDocument',
+        'getTicketImages',
+        'getTicketImage',
+        'uploadTicketContent',
+    ] as const;
+    if (!supported.includes(operation as typeof supported[number])) {
+        throw new NodeOperationError(this.getNode(), `Operation "${operation}" not supported by TicketContent.`);
+    }
+
+    const credentials = await this.getCredentials('tanssApi');
+    if (!credentials) throw new NodeOperationError(this.getNode(), 'No credentials returned!');
+
+    const apiToken = this.getNodeParameter('apiToken', i, '') as string;
+    const ticketId = this.getNodeParameter('ticketId', i, 0) as number;
+    const typedCredentials = credentials as { baseURL?: string };
+    const baseURL = typedCredentials.baseURL;
+    if (!baseURL) throw new NodeOperationError(this.getNode(), 'No baseURL in credentials');
+    if (!ticketId || ticketId <= 0) throw new NodeOperationError(this.getNode(), 'Valid Ticket ID is required.');
+
+    let url = '';
+    const requestOptions: IDataObject = {
+        method: 'GET',
+        url: '',
+        headers: { apiToken, 'Content-Type': 'application/json' },
+        json: true,
+    };
+
+    if (operation === 'getTicketDocuments') {
+        // Gets all documents attached to a ticket
+        url = `${baseURL}/backend/api/v1/tickets/${ticketId}/documents`;
+    } else if (operation === 'getTicketDocument') {
+        // Generates a one-time download URL for a specific document
+        const documentId = this.getNodeParameter('documentId', i, 0) as number;
+        if (!documentId || documentId <= 0) throw new NodeOperationError(this.getNode(), 'Valid Document ID is required.');
+        url = `${baseURL}/backend/api/v1/tickets/${ticketId}/documents/${documentId}`;
+    } else if (operation === 'getTicketImages') {
+        // Gets all images (screenshots) attached to a ticket
+        url = `${baseURL}/backend/api/v1/tickets/${ticketId}/screenshots`;
+    } else if (operation === 'getTicketImage') {
+        // getTicketImage: one-time download url for a specific image
+        const imageId = this.getNodeParameter('imageId', i, 0) as number;
+        if (!imageId || imageId <= 0) throw new NodeOperationError(this.getNode(), 'Valid Image ID is required.');
+        url = `${baseURL}/backend/api/v1/tickets/${ticketId}/screenshots/${imageId}`;
+    } else {
+        // uploadTicketContent
+        const binaryPropertyName = this.getNodeParameter('binaryPropertyName', i, 'data') as string;
+        const descriptionsParam = this.getNodeParameter('descriptions', i, '') as string;
+
+        const items = this.getInputData();
+        const item = items[i];
+        if (!item.binary || !item.binary[binaryPropertyName]) {
+            throw new NodeOperationError(this.getNode(), `No binary found on item index ${i} with property name "${binaryPropertyName}"`);
+        }
+
+        // shape the binary data object
+        const binaryEntry = item.binary[binaryPropertyName] as {
+            fileName?: string;
+            data: string;
+            mimeType?: string;
+        };
+
+        if (!binaryEntry || typeof binaryEntry.data !== 'string') {
+            throw new NodeOperationError(this.getNode(), 'Binary data malformed or missing.');
+        }
+
+        // Use runtime Buffer via globalThis without requiring @types/node
+        const BufferCtor = (globalThis as unknown as { Buffer?: { from: (data: string, encoding?: string) => Uint8Array } }).Buffer;
+        if (BufferCtor === undefined) {
+            throw new NodeOperationError(this.getNode(), 'Buffer is not available in this runtime.');
+        }
+        const fileBuffer = BufferCtor.from(binaryEntry.data, 'base64');
+
+        const fileName = binaryEntry.fileName ?? 'file';
+        const contentType = binaryEntry.mimeType ?? 'application/octet-stream';
+
+        url = `${baseURL}/backend/api/v1/tickets/${ticketId}/upload`;
+
+        const formData: IDataObject = {
+            files: {
+                value: fileBuffer,
+                options: {
+                    filename: fileName,
+                    contentType,
+                },
+            },
+            descriptions: descriptionsParam,
+        };
+
+        Object.assign(requestOptions, {
+            method: 'POST',
+            url,
+            headers: { apiToken },
+            formData,
+            json: true,
+        });
+    }
+
+    // For non-upload operations, set url and perform request
+    if (operation !== 'uploadTicketContent') {
+        requestOptions.url = url;
+    }
+
+    try {
+        const response = await this.helpers.request(requestOptions);
+        return response;
+    } catch (error: unknown) {
+        const message = error instanceof Error ? error.message : String(error);
+        throw new NodeOperationError(this.getNode(), `Failed to fetch ticket content: ${message}`);
+    }
+}
