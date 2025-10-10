@@ -1,3 +1,25 @@
+## Upcoming Release: New TANSS Node  
+
+A new **TANSS Node** will be released in approximately **2 weeks**.  
+
+---
+
+### API Progress Overview  
+
+**Total Tanss API Endpoints:** 256  
+**Fully Implemented:** ~60  
+**Currently in Testing:** 29  
+
+#### Progress
+🟩🟩🟩🟩⬜⬜⬜⬜⬜⬜ (~35%)
+*(≈ 89 endpoints done / 256 total)*  
+
+---
+
+### 👀 Little Peek for You  
+![TANSS Node Preview](image.png)
+
+
 # TANSS API Integration for n8n
 
 This repository contains custom n8n nodes for interacting with the **TANSS API**. The nodes provide functionalities to manage tickets, authentication, and ticket lists within the TANSS system.
