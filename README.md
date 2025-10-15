@@ -5,14 +5,12 @@ Progress: **30 / 256** (-%)
 
 ## To-Do / Progress
 
----
 <details>
 <summary><strong>security [1] - Working</strong></summary>
 
   - [x] Login with Username & Password → Working  
   - [ ] 2FA Auth Support  
 </details>
----
 <details>
 <summary><strong>tickets [6] - Done</strong></summary>
 
@@ -23,7 +21,6 @@ Progress: **30 / 256** (-%)
   - [x] [GET] Gets a ticket history
   - [x] [POST] Creates a comment
 </details>
----
 <details>
 <summary><strong>ticket lists [10] - Done</strong></summary>
 
@@ -38,7 +35,6 @@ Progress: **30 / 256** (-%)
   - [x] [GET] gets a list of all ticket which a technician has a role in
   - [x] [PUT] Get a (custom) ticket list
 </details>
----
 <details>
 <summary><strong>ticket content [5] - Done</strong></summary>
 
@@ -48,7 +44,6 @@ Progress: **30 / 256** (-%)
   - [x] [GET] Gets a ticket image
   - [x] [POST] upload a document/image
 </details>
----
 <details>
 <summary><strong>ticket states [5] - Working</strong></summary>
 
@@ -58,7 +53,6 @@ Progress: **30 / 256** (-%)
   - [x] [PUT] Updates a ticket state
   - [x] [DEL] Deletes a ticket state
 </details>
----
 <details>
 <summary><strong>timestamp [15] - Development</strong></summary>
 
@@ -78,7 +72,6 @@ Progress: **30 / 256** (-%)
   - [ ] [PUT] updates a pause config
   - [ ] [DEL] deletes a pause config
 </details>
----
 <details>
 <summary><strong>calls [9] - Development</strong></summary>
 
@@ -92,7 +85,6 @@ Progress: **30 / 256** (-%)
   - [ ] [DEL] Deletes an employee assignment
   - [ ] [POST] Creates a call notification
 </details>
----
 <details>
 <summary><strong>calls (user context) [3] - DONE</strong></summary>
 
@@ -100,7 +92,6 @@ Progress: **30 / 256** (-%)
   - [x] [GET] Get phone call by id
   - [x] [POST] identifies a phone call
 </details>
----
 <details>
 <summary><strong>remote supports [11] - ToDo</strong></summary>
 
@@ -116,7 +107,6 @@ Progress: **30 / 256** (-%)
   - [ ] [POST] Creates a technician assignment
   - [ ] [DEL] Delets a technician assignment
 </details>
----
 
 
 # n8n-nodes-tanss
