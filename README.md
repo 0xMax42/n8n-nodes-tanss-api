@@ -12,7 +12,6 @@ Progress: **30 / 256** (-%)
   - [x] Login with Username & Password → Working  
   - [ ] 2FA Auth Support  
 </details>
-
 ---
 <details>
 <summary><strong>tickets [6] - Done</strong></summary>
