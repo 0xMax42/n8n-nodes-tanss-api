@@ -86,7 +86,7 @@ Progress: **30 / 256** (-%)
   - [ ] [POST] Creates a call notification
 </details>
 <details>
-<summary><strong>calls (user context) [3] - DONE</strong></summary>
+<summary><strong>calls (user context) [3] - Done</strong></summary>
 
   - [x] [PUT] Get a list of phone calls
   - [x] [GET] Get phone call by id
