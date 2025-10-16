@@ -6,13 +6,13 @@ Progress: **30 / 256** (-%)
 ## To-Do / Progress
 
 <details>
-<summary><strong>security [1] - Working</strong></summary>
+<summary><strong>security [0/1] - Working</strong></summary>
 
   - [x] Login with Username & Password → Working  
   - [ ] 2FA Auth Support  
 </details>
 <details>
-<summary><strong>tickets [6] - Done</strong></summary>
+<summary><strong>tickets [6/6] - Done</strong></summary>
 
   - [x] [POST] Creates a ticket in the database
   - [x] [GET] Gets a ticket by id
@@ -22,7 +22,7 @@ Progress: **30 / 256** (-%)
   - [x] [POST] Creates a comment
 </details>
 <details>
-<summary><strong>ticket lists [10] - Done</strong></summary>
+<summary><strong>ticket lists [10/10] - Done</strong></summary>
 
   - [x] [GET] gets a list of own tickets (assigned to currently logged in employee)
   - [x] [GET] gets a list of general tickets (assigned to no employee)
@@ -36,7 +36,7 @@ Progress: **30 / 256** (-%)
   - [x] [PUT] Get a (custom) ticket list
 </details>
 <details>
-<summary><strong>ticket content [5] - Done</strong></summary>
+<summary><strong>ticket content [5/5] - Done</strong></summary>
 
   - [x] [GET] Gets all ticket documents
   - [x] [GET] Gets a ticket document
@@ -45,7 +45,7 @@ Progress: **30 / 256** (-%)
   - [x] [POST] upload a document/image
 </details>
 <details>
-<summary><strong>ticket states [5] - Working</strong></summary>
+<summary><strong>ticket states [4/5] - Working</strong></summary>
 
   - [x] [GET] Gets a list of all ticket states
   - [x] [POST] Creates a ticket state
@@ -54,7 +54,7 @@ Progress: **30 / 256** (-%)
   - [x] [DEL] Deletes a ticket state
 </details>
 <details>
-<summary><strong>timestamp [15] - Development</strong></summary>
+<summary><strong>timestamp [0/15] - Development</strong></summary>
 
   - [ ] [GET] gets a list of timestamps from a given period
   - [ ] [POST] writes a timestamp into the database
@@ -73,7 +73,7 @@ Progress: **30 / 256** (-%)
   - [ ] [DEL] deletes a pause config
 </details>
 <details>
-<summary><strong>calls [9] - Development</strong></summary>
+<summary><strong>calls [0/9] - Development</strong></summary>
 
   - [ ] [POST] Creates/imports a phone call into the database
   - [ ] [PUT] Get a list of phone calls
@@ -86,7 +86,7 @@ Progress: **30 / 256** (-%)
   - [ ] [POST] Creates a call notification
 </details>
 <details>
-<summary><strong>calls (user context) [3] - Done</strong></summary>
+<summary><strong>calls (user context) [3/3] - Done</strong></summary>
 
   - [x] [PUT] Get a list of phone calls
   - [x] [GET] Get phone call by id
