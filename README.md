@@ -6,6 +6,10 @@ Progress: **54 / 256** (-%)
 ## To-Do / Progress
 
 <details>
+<summary><strong>Complete overview</strong></summary>
+
+<br>
+<details>
 <summary><strong>security [0/1] - Working</strong></summary>
 
   - [x] Login with Username & Password → Working  
