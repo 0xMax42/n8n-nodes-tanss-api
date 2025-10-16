@@ -1,7 +1,12 @@
 **Status / Progress**  
-Progress: **60 / 256** (-%)
+Progress: **60 / 256 +1 (not in API)** (-%)
 
-`[====================]`
+<svg width="100%" height="18" viewBox="0 0 100 18" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Progress 22.7%">
+  <title>Progress 22.7%</title>
+  <rect x="0" y="0" width="100" height="18" fill="#e5e7eb" rx="4"/>
+  <rect x="0" y="0" width="22.66" height="18" fill="#22c55e" rx="4"/>
+  <text x="50" y="12" text-anchor="middle" font-size="8" fill="#111827">22.7%</text>
+</svg>
 
 ## To-Do / Progress
 
