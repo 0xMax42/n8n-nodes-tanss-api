@@ -93,7 +93,7 @@ Progress: **54 / 256** (-%)
   - [x] [POST] identifies a phone call
 </details>
 <details>
-<summary><strong>remote supports [11] - ToDo</strong></summary>
+<summary><strong>remote supports [0/11] - ToDo</strong></summary>
 
   - [ ] [POST] Creates/imports a remote support into the database
   - [ ] [PUT] Get list of remote supports
@@ -107,7 +107,112 @@ Progress: **54 / 256** (-%)
   - [ ] [POST] Creates a technician assignment
   - [ ] [DEL] Delets a technician assignment
 </details>
+<summary><strong>monitoring [0/7] - ToDo</strong></summary>
 
+  - [ ] [POST] Creates a ticket, using the monitoring api
+  - [ ] [POST] Assigns a groupName to a company or device
+  - [ ] [DEL] Delete a group assignment
+  - [ ] [GET] Gets all group assignments
+  - [ ] [GET] Gets ticket(s), based on a given group
+  - [ ] [GET] Gets a ticket (created by the monitoring api) by id
+  - [ ] [PUT] Updates a ticket (created by the monitoring api) by id
+</details>
+<summary><strong>erp [0/16] - ?</strong></summary>
+
+  - [ ] [POST] Insert new invoices
+  - [ ] [GET] Gets a list of billable supports
+  - [ ] [GET] Get a list of customers and employees
+  - [ ] [POST] Insert new customers
+  - [ ] [POST] create a new ticket
+  - [ ] [GET] gets a list of tickets states
+  - [ ] [GET] gets a list of tickets types
+  - [ ] [POST] upload a document/image into a ticket
+  - [ ] [GET] get all employees from the own company
+  - [ ] [GET] gets all departments
+  - [ ] [GET] list of company categories
+  - [ ] [POST] Creates a new company category
+  - [ ] [GET] gets all employees of a department
+  - [ ] [GET] search for a company
+  - [ ] [GET] gets all departments of a employee
+  - [ ] [GET] gets all users with the associated departments
+</details>
+<summary><strong>chats [0/10] - ToDo</strong></summary>
+
+  - [ ] [POST] Creates a new chat
+  - [ ] [PUT] Get a list of chats
+  - [ ] [GET] Gets a chat
+  - [ ] [GET] Gets chat close requests
+  - [ ] [POST] Creates a new chat message
+  - [ ] [POST] Adds a participant
+  - [ ] [DEL] Deletes a participant
+  - [ ] [POST] Closes a chat
+  - [ ] [PUT] Accept/decline close request
+  - [ ] [POST] re-opens a chat
+</details>
+<summary><strong>offer [0/16] - ?</strong></summary>
+
+  - [ ] [POST] Creates a new erp selection
+  - [ ] [GET] Fetches an erp selection
+  - [ ] [PUT] Updates an erp selection
+  - [ ] [DEL] Deletes an erp selection
+  - [ ] [GET] Gets list of offer templates
+  - [ ] [POST] Creates an offer template
+  - [ ] [GET] Gets an offer templates
+  - [ ] [PUT] Updates an offer templates
+  - [ ] [DEL] Deletes an offer template
+  - [ ] [GET] material picker
+  - [ ] [GET] material picker for erp selection
+  - [ ] [PUT] Gets list of offers
+  - [ ] [POST] Creates an offer
+  - [ ] [GET] Gets an offer
+  - [ ] [PUT] Updates an offer
+  - [ ] [DEL] Deletes an offer
+</details>
+<summary><strong>availability [0/1] - ToDo</strong></summary>
+
+  - [ ] [GET] Fetches availability infos
+</details>
+<summary><strong>employees [0/2] - ToDo</strong></summary>
+
+  - [ ] [GET] Gets all technicians
+  - [ ] [POST] creates an employee
+</details>
+<summary><strong>mails [0/1] - ToDo</strong></summary>
+
+  - [ ] [POST] Test email smtp settings
+</details>
+<summary><strong>tags [0/10] - ToDo</strong></summary>
+
+  - [ ] [POST] Creates a new tag
+  - [ ] [GET] Get all tags
+  - [ ] [GET] Gets a tag
+  - [ ] [PUT] Edits a tag
+  - [ ] [DEL] Deletes a tag
+  - [ ] [POST] Assigns a tag
+  - [ ] [DEL] Removes a tag
+  - [ ] [GET] List of tags to an assignment
+  - [ ] [PUT] Assigns multiple tags
+  - [ ] [GET] List of tags logs to an assignment
+</details>
+<summary><strong>callback [0/4] - ToDo</strong></summary>
+
+  - [ ] [POST] Creates a callback
+  - [ ] [PUT] Get a list of callbacks
+  - [ ] [GET] Gets a callback
+  - [ ] [PUT] Updates a callback
+</details>
+<summary><strong>search [0/1] - ToDo</strong></summary>
+
+  - [ ] [PUT] global search
+</details>
+<summary><strong>checklists [0/5] - ToDo</strong></summary>
+
+  - [ ] [POST] Assigns a checklist to a ticket
+  - [ ] [DEL] Removes a checklist from a ticket
+  - [ ] [GET] Gets checklists for a ticket
+  - [ ] [GET] Gets checklist for ticket
+  - [ ] [PUT] Check an item
+</details>
 
 # n8n-nodes-tanss
 
