@@ -228,6 +228,36 @@ Progress: **54 / 256** (-%)
   - [ ] [GET] Gets checklist for ticket
   - [ ] [PUT] Check an item
 </details>
+<details>
+<summary><strong>supports [0/5] - ToDo</strong></summary>
+
+  - [ ] [PUT] Get a support list
+  - [ ] [POST] Creates a support/appointment
+  - [ ] [GET] Gets a support/appointment
+  - [ ] [PUT] Edits a support/appointment
+  - [ ] [POST] Uploads a signature for supports
+</details>
+<details>
+<summary><strong>timers [0/8] - ?</strong></summary>
+
+  - [ ] [GET] Get all timers of current user
+  - [ ] [POST] Creates a timer
+  - [ ] [DEL] Deletes a timer
+  - [ ] [GET] Get a specific timer
+  - [ ] [PUT] Starts/stops timer
+  - [ ] [GET] Get all timer fragments
+  - [ ] [DEL] Deletes a timer fragment
+  - [ ] [PUT] Updates a timer fragment
+</details>
+<details>
+<summary><strong>pc [0/5] - DONE</strong></summary>
+
+  - [x] [GET] Gets a pc by id
+  - [x] [PUT] Updates a pc
+  - [x] [DEL] Deletes a pc
+  - [x] [POST] Creates a pc
+  - [x] [PUT] Gets a list of pcs
+</details>
 
 </details>
 
