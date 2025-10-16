@@ -79,7 +79,7 @@ export const callsFields: INodeProperties[] = [
         required: true,
         typeOptions: { password: true },
         default: '',
-        description: 'API token obtained from the TANSS API login',
+        description: 'API token obtained from the TANSS web interface (must be generated in TANSS)',
         displayOptions: {
             show: {
                 resource: ['calls'],
@@ -357,8 +357,8 @@ export const callsFields: INodeProperties[] = [
         default: {},
         options: [
             { displayName: 'Date (Timestamp)', name: 'date', type: 'number' as const, default: 0, description: 'Unix timestamp representing the begin of the phone call' },
-            { displayName: 'From Phone Number', name: 'fromPhoneNumber', type: 'string' as const, default: '', description: 'Phone number (or identifier) of the caller' },
-            { displayName: 'To Phone Number', name: 'toPhoneNumber', type: 'string' as const, default: '', description: 'Phone number (or identifier) of the called party' },
+            { displayName: 'fromPhoneNumber', name: 'fromPhoneNumber', type: 'string' as const, default: '', description: 'Phone number (or identifier) of the caller' },
+            { displayName: 'toPhoneNumber', name: 'toPhoneNumber', type: 'string' as const, default: '', description: 'Phone number (or identifier) of the called party' },
             {
                 displayName: 'Direction',
                 name: 'direction',
@@ -535,7 +535,7 @@ export async function handleCalls(this: IExecuteFunctions, i: number) {
             }
         }
 
-        const url = `${baseURL}/api/calls/v1`;
+        const url = `${baseURL}/backend/api/calls/v1`;
         const requestOptions: IDataObject = {
             method: 'POST',
             url,
@@ -595,7 +595,7 @@ export async function handleCalls(this: IExecuteFunctions, i: number) {
             }
         }
 
-        const url = `${baseURL}/api/calls/v1`;
+        const url = `${baseURL}/backend/api/calls/v1`;
         const requestOptions: IDataObject = {
             method: 'PUT',
             url,
@@ -619,7 +619,7 @@ export async function handleCalls(this: IExecuteFunctions, i: number) {
             throw new NodeOperationError(this.getNode(), 'A valid Phone Call ID is required.');
         }
 
-        const url = `${baseURL}/api/calls/v1/${encodeURIComponent(String(phoneCallId))}`;
+        const url = `${baseURL}/backend/api/calls/v1/${encodeURIComponent(String(phoneCallId))}`;
         const requestOptions: IDataObject = {
             method: 'GET',
             url,
@@ -751,7 +751,7 @@ export async function handleCalls(this: IExecuteFunctions, i: number) {
             }
         }
 
-        const url = `${baseURL}/api/calls/v1/${encodeURIComponent(String(phoneCallId))}`;
+        const url = `${baseURL}/backend/api/calls/v1/${encodeURIComponent(String(phoneCallId))}`;
         const requestOptions: IDataObject = {
             method: 'PUT',
             url,
@@ -792,7 +792,7 @@ export async function handleCalls(this: IExecuteFunctions, i: number) {
             body.toPhoneNumber = to;
         }
 
-        const url = `${baseURL}/api/calls/v1/identify`;
+        const url = `${baseURL}/backend/api/calls/v1/identify`;
         const requestOptions: IDataObject = {
             method: 'POST',
             url,
@@ -811,7 +811,7 @@ export async function handleCalls(this: IExecuteFunctions, i: number) {
     }
 
     if (operation === 'getEmployeeAssignments') {
-        const url = `${baseURL}/api/calls/v1/employeeAssignment`;
+        const url = `${baseURL}/backend/api/calls/v1/employeeAssignment`;
         const requestOptions: IDataObject = {
             method: 'GET',
             url,
@@ -854,7 +854,7 @@ export async function handleCalls(this: IExecuteFunctions, i: number) {
             body.username = username;
         }
 
-        const url = `${baseURL}/api/calls/v1/employeeAssignment`;
+        const url = `${baseURL}/backend/api/calls/v1/employeeAssignment`;
         const requestOptions: IDataObject = {
             method: 'POST',
             url,
@@ -894,7 +894,7 @@ export async function handleCalls(this: IExecuteFunctions, i: number) {
             body.username = username;
         }
 
-        const url = `${baseURL}/api/calls/v1/employeeAssignment`;
+        const url = `${baseURL}/backend/api/calls/v1/employeeAssignment`;
         const requestOptions: IDataObject = {
             method: 'DELETE',
             url,

@@ -73,17 +73,17 @@ Progress: **30 / 256** (-%)
   - [ ] [DEL] deletes a pause config
 </details>
 <details>
-<summary><strong>calls [0/9] - Development</strong></summary>
+<summary><strong>calls [9/9] - Testing</strong></summary>
 
-  - [ ] [POST] Creates/imports a phone call into the database
-  - [ ] [PUT] Get a list of phone calls
-  - [ ] [GET] Get phone call by id
-  - [ ] [PUT] Update phone call
-  - [ ] [POST] identifies a phone call
-  - [ ] [GET] Get all employee assignments
-  - [ ] [POST] Creates a new employee assignment
-  - [ ] [DEL] Deletes an employee assignment
-  - [ ] [POST] Creates a call notification
+  - [x] [POST] Creates/imports a phone call into the database
+  - [x] [PUT] Get a list of phone calls
+  - [x] [GET] Get phone call by id
+  - [x] [PUT] Update phone call
+  - [x] [POST] identifies a phone call
+  - [x] [GET] Get all employee assignments
+  - [x] [POST] Creates a new employee assignment
+  - [x] [DEL] Deletes an employee assignment
+  - [x] [POST] Creates a call notification
 </details>
 <details>
 <summary><strong>calls (user context) [3/3] - Done</strong></summary>
