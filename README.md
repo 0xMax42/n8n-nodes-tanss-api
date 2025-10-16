@@ -107,6 +107,7 @@ Progress: **54 / 256** (-%)
   - [ ] [POST] Creates a technician assignment
   - [ ] [DEL] Delets a technician assignment
 </details>
+<details>
 <summary><strong>monitoring [0/7] - ToDo</strong></summary>
 
   - [ ] [POST] Creates a ticket, using the monitoring api
@@ -117,6 +118,7 @@ Progress: **54 / 256** (-%)
   - [ ] [GET] Gets a ticket (created by the monitoring api) by id
   - [ ] [PUT] Updates a ticket (created by the monitoring api) by id
 </details>
+<details>
 <summary><strong>erp [0/16] - ?</strong></summary>
 
   - [ ] [POST] Insert new invoices
@@ -136,6 +138,7 @@ Progress: **54 / 256** (-%)
   - [ ] [GET] gets all departments of a employee
   - [ ] [GET] gets all users with the associated departments
 </details>
+<details>
 <summary><strong>chats [0/10] - ToDo</strong></summary>
 
   - [ ] [POST] Creates a new chat
@@ -149,6 +152,7 @@ Progress: **54 / 256** (-%)
   - [ ] [PUT] Accept/decline close request
   - [ ] [POST] re-opens a chat
 </details>
+<details>
 <summary><strong>offer [0/16] - ?</strong></summary>
 
   - [ ] [POST] Creates a new erp selection
@@ -168,19 +172,23 @@ Progress: **54 / 256** (-%)
   - [ ] [PUT] Updates an offer
   - [ ] [DEL] Deletes an offer
 </details>
+<details>
 <summary><strong>availability [0/1] - ToDo</strong></summary>
 
   - [ ] [GET] Fetches availability infos
 </details>
+<details>
 <summary><strong>employees [0/2] - ToDo</strong></summary>
 
   - [ ] [GET] Gets all technicians
   - [ ] [POST] creates an employee
 </details>
+<details>
 <summary><strong>mails [0/1] - ToDo</strong></summary>
 
   - [ ] [POST] Test email smtp settings
 </details>
+<details>
 <summary><strong>tags [0/10] - ToDo</strong></summary>
 
   - [ ] [POST] Creates a new tag
@@ -194,6 +202,7 @@ Progress: **54 / 256** (-%)
   - [ ] [PUT] Assigns multiple tags
   - [ ] [GET] List of tags logs to an assignment
 </details>
+<details>
 <summary><strong>callback [0/4] - ToDo</strong></summary>
 
   - [ ] [POST] Creates a callback
@@ -201,10 +210,12 @@ Progress: **54 / 256** (-%)
   - [ ] [GET] Gets a callback
   - [ ] [PUT] Updates a callback
 </details>
+<details>
 <summary><strong>search [0/1] - ToDo</strong></summary>
 
   - [ ] [PUT] global search
 </details>
+<details>
 <summary><strong>checklists [0/5] - ToDo</strong></summary>
 
   - [ ] [POST] Assigns a checklist to a ticket
