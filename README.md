@@ -1,5 +1,5 @@
 **Status / Progress**  
-Progress: **54 / 256** (-%)
+Progress: **60 / 256** (-%)
 
 `[====================]`
 
@@ -10,7 +10,7 @@ Progress: **54 / 256** (-%)
 
 <br>
 <details>
-<summary><strong>security [0/1] - Working</strong></summary>
+<summary><strong>security [1/1] - Working</strong></summary>
 
   - [x] Login with Username & Password → Working  
   - [ ] 2FA Auth Support  
@@ -24,6 +24,7 @@ Progress: **54 / 256** (-%)
   - [x] [PUT] Updates a ticket
   - [x] [GET] Gets a ticket history
   - [x] [POST] Creates a comment
+  - [x] [PUT] Merge two Tickets (not in API Docs)
 </details>
 <details>
 <summary><strong>ticket lists [10/10] - Done</strong></summary>
@@ -250,7 +251,7 @@ Progress: **54 / 256** (-%)
   - [ ] [PUT] Updates a timer fragment
 </details>
 <details>
-<summary><strong>pc [0/5] - DONE</strong></summary>
+<summary><strong>pc [5/5] - DONE</strong></summary>
 
   - [x] [GET] Gets a pc by id
   - [x] [PUT] Updates a pc
@@ -258,8 +259,192 @@ Progress: **54 / 256** (-%)
   - [x] [POST] Creates a pc
   - [x] [PUT] Gets a list of pcs
 </details>
+<details>
+<summary><strong>periphery [0/11] - ?</strong></summary>
+
+  - [ ] [GET] Gets a periphery by id
+  - [ ] [PUT] Updates a periphery
+  - [ ] [DEL] Deletes a periphery
+  - [ ] [POST] Creates a periphery
+  - [ ] [PUT] Gets a list of peripheries
+  - [ ] [GET] Get periphery types
+  - [ ] [POST] Create periphery type
+  - [ ] [PUT] Update periphery type
+  - [ ] [DEL] Delete periphery type
+  - [ ] [POST] Assign periphery
+  - [ ] [DEL] Delete periphery assignment
+</details>
+<details>
+<summary><strong>components [0/9] - ?</strong></summary>
+
+  - [ ] [GET] Gets a component by id
+  - [ ] [PUT] Updates a component
+  - [ ] [DEL] Deletes a component
+  - [ ] [POST] Creates a component
+  - [ ] [PUT] Gets a list of components
+  - [ ] [GET] Gets a list of component types
+  - [ ] [POST] Create component type
+  - [ ] [PUT] Update component type
+  - [ ] [DEL] Delete component type
+</details>
+<details>
+<summary><strong>services [0/5] - ?</strong></summary>
+
+  - [ ] [POST] Creates a service
+  - [ ] [GET] Gets a list of all services
+  - [ ] [GET] Gets a service by id
+  - [ ] [PUT] Updates a service
+  - [ ] [DEL] Deletes a service
+</details>
+<details>
+<summary><strong>ips [0/4] - ?</strong></summary>
+
+  - [ ] [GET] Gets ip addresses
+  - [ ] [POST] Creates an ip address
+  - [ ] [PUT] Update ip address
+  - [ ] [DEL] Deletes an ip address
+</details>
+<details>
+<summary><strong>company [0/2] - ToDo</strong></summary>
+
+  - [ ] [POST] Creates a new company
+  - [ ] [GET] Gets all employees of a company
+</details>
+<details>
+<summary><strong>company category [0/10] - ?</strong></summary>
+
+  - [ ] [GET] list of categories
+  - [ ] [POST] Creates a new company category
+  - [ ] [GET] gets a category
+  - [ ] [PUT] updates a category
+  - [ ] [DEL] Deletes a company category
+  - [ ] [GET] list of company types
+  - [ ] [POST] Creates a new company type
+  - [ ] [GET] gets a company type
+  - [ ] [PUT] updates a company type
+  - [ ] [DEL] Deletes a company type
+</details>
+<details>
+<summary><strong>documents [0/6] - ?</strong></summary>
+
+  - [ ] [PUT] Get a list of company documents
+  - [ ] [POST] Creates a document
+  - [ ] [GET] Get a single document (including content)
+  - [ ] [PUT] Updates a document
+  - [ ] [DEL] Deletes a document
+  - [ ] [POST] Uploads a file
+</details>
+<details>
+<summary><strong>webHooks [0/6] - ?</strong></summary>
+
+  - [ ] [POST] creates a rule
+  - [ ] [PUT] get a list of rules
+  - [ ] [PUT] updates a rule
+  - [ ] [GET] gets a rule
+  - [ ] [DEL] deletes a rule
+  - [ ] [PUT] test a rule
+</details>
+<details>
+<summary><strong>ticket board [0/10] - ?</strong></summary>
+
+  - [ ] [GET] Gets the ticket board with all panels
+  - [ ] [GET] Gets an empty ticket board panel
+  - [ ] [POST] Creates a new ticket board panel
+  - [ ] [PUT] Updates a ticket board panel
+  - [ ] [GET] Gets a ticket board panel
+  - [ ] [DEL] Deletes a ticket board panel
+  - [ ] [GET] Gets all registers from a ticket board panel
+  - [ ] [GET] Gets a ticket board from a project
+  - [ ] [GET] Gets all registers from a ticket board project
+  - [ ] [GET] Get global ticket panels
+</details>
+<details>
+<summary><strong>operating systems [0/5] - ToDo</strong></summary>
+
+  - [ ] [POST] Creates a new os
+  - [ ] [GET] Get a list of all os
+  - [ ] [PUT] Updates a os
+  - [ ] [GET] Get a specific os
+  - [ ] [DEL] Deletes a specific os
+</details>
+<details>
+<summary><strong>manufacturer [0/5] - ToDo</strong></summary>
+
+  - [ ] [POST] Creates a new manufacturer
+  - [ ] [GET] Get a list of all manufacturers
+  - [ ] [PUT] Updates a manufacturer
+  - [ ] [GET] Get a manufacturer
+  - [ ] [DEL] Deletes a manufacturer
+</details>
+<details>
+<summary><strong>cpus [0/5] - ToDo</strong></summary>
+
+  - [ ] [POST] Creates a new cpu
+  - [ ] [GET] Get a list of all cpus
+  - [ ] [PUT] Updates a cpu
+  - [ ] [GET] Get a cpu
+  - [ ] [DEL] Deletes a cpu
+</details>
+<details>
+<summary><strong>hddTypes [0/5] - ToDo</strong></summary>
+
+  - [ ] [POST] Creates a new hdd type
+  - [ ] [GET] Get a list of all hdd types
+  - [ ] [PUT] Updates a hdd type
+  - [ ] [GET] Get a hdd type
+  - [ ] [DEL] Deletes a hdd type
+</details>
+<details>
+<summary><strong>identify [0/1] - ToDo</strong></summary>
+
+  - [ ] [POST] identifies items
+</details>
+<details>
+<summary><strong>emailAccounts [0/6] - ?</strong></summary>
+
+  - [ ] [POST] Creates an email account
+  - [ ] [GET] List accounts of company
+  - [ ] [GET] Gets an account
+  - [ ] [PUT] Edit an accounts
+  - [ ] [DEL] Deletes an account
+  - [ ] [GET] List account types
+</details>
+<details>
+<summary><strong>vacationRequests [0/7] - ToDo</strong></summary>
+
+  - [ ] [PUT] Gets a list of vacation requests
+  - [ ] [GET] Gets a list of absence/custom types
+  - [ ] [POST] creates a vacation request
+  - [ ] [PUT] updates a vacation request
+  - [ ] [DEL] deletes a vacation request
+  - [ ] [GET] gets the available vacation days per year
+  - [ ] [POST] sets the available vacation days per year
+</details>
+<details>
+<summary><strong>activityFeed [0/3] - ?</strong></summary>
+
+  - [ ] [PUT] List of user items
+  - [ ] [GET] Number of unseen events
+  - [ ] [POST] Marks all as seen
+</details>
 
 </details>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # n8n-nodes-tanss
 
