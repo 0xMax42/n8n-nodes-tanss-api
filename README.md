@@ -1,5 +1,5 @@
 **Status / Progress**  
-Progress: **30 / 256** (-%)
+Progress: **54 / 256** (-%)
 
 `[====================]`
 
@@ -54,23 +54,23 @@ Progress: **30 / 256** (-%)
   - [x] [DEL] Deletes a ticket state
 </details>
 <details>
-<summary><strong>timestamp [0/15] - Development</strong></summary>
+<summary><strong>timestamp [15/15] - Testing</strong></summary>
 
-  - [ ] [GET] gets a list of timestamps from a given period
-  - [ ] [POST] writes a timestamp into the database
-  - [ ] [PUT] edits a single timestamp
-  - [ ] [PUT] writes the timstamps of a whole day into the database at once
-  - [ ] [GET] gets the timestamp infos for a given time period
-  - [ ] [GET] gets the timestamp infos for a given time period (with statistical values)
-  - [ ] [POST] does one or more "day closings" for the timestamp module
-  - [ ] [DEL] remove / undo one or more "day closings" for the timestamp module
-  - [ ] [GET] gets all infos about last dayclosings for employees
-  - [ ] [POST] created dayClosings to a given date
-  - [ ] [POST] sets the initial balance for this employee
-  - [ ] [GET] gets a list of all pause configs
-  - [ ] [POST] creates a pause config
-  - [ ] [PUT] updates a pause config
-  - [ ] [DEL] deletes a pause config
+  - [x] [GET] gets a list of timestamps from a given period
+  - [x] [POST] writes a timestamp into the database
+  - [x] [PUT] edits a single timestamp
+  - [x] [PUT] writes the timstamps of a whole day into the database at once
+  - [x] [GET] gets the timestamp infos for a given time period
+  - [x] [GET] gets the timestamp infos for a given time period (with statistical values)
+  - [x] [POST] does one or more "day closings" for the timestamp module
+  - [x] [DEL] remove / undo one or more "day closings" for the timestamp module
+  - [x] [GET] gets all infos about last dayclosings for employees
+  - [x] [POST] created dayClosings to a given date
+  - [x] [POST] sets the initial balance for this employee
+  - [x] [GET] gets a list of all pause configs
+  - [x] [POST] creates a pause config
+  - [x] [PUT] updates a pause config
+  - [x] [DEL] deletes a pause config
 </details>
 <details>
 <summary><strong>calls [9/9] - Testing</strong></summary>
