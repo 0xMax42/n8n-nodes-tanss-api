@@ -1,8 +1,5 @@
 **Status / Progress**  
-$\fcolorbox{gray}{#1E1E1E}{%
-  \color{#4CAF50}{\textsf{Progress: 60 / 256 +1 (not in API)}}\quad
-  \color{#00BCD4}{\textsf{(22.7\%)}}%
-}$
+Progress: **60 / 256 +1 (not in API)** (22.7%)
 
 ## To-Do / Progress
 
