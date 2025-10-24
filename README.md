@@ -465,7 +465,7 @@ You only need to provide:
 
 - `username`
 - `password`
-- optionally: `token` (for two-factor authentication) (not in the node right now)
+- optionally: `TOTP Secret Key` (for two-factor authentication)
 
 ## Compatibility
 
