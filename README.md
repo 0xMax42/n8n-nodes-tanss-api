@@ -1,5 +1,5 @@
 **Status / Progress**  
-Progress: **60 / 256 +1 (not in API)** (22.7%)
+Progress: **59 / 255 +1 (not in API)** (22.7%)
 
 ## To-Do / Progress
 
@@ -48,11 +48,10 @@ Progress: **60 / 256 +1 (not in API)** (22.7%)
   - [x] [POST] upload a document/image
 </details>
 <details>
-<summary><strong>ticket states [5/5] - Working / Not Working</strong></summary>
+<summary><strong>ticket states [4/4] - Working</strong></summary>
 
   - [x] [GET] Gets a list of all ticket states
   - [x] [POST] Creates a ticket state
-  - [x] [GET] Gets a single ticket state - Not Working
   - [x] [PUT] Updates a ticket state
   - [x] [DEL] Deletes a ticket state
 </details>
