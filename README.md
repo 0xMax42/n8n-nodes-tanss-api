@@ -11,7 +11,7 @@ Progress: **59 / 255 +1 (not in API)** (22.7%)
 <summary><strong>security [1/1] - Working</strong></summary>
 
   - [x] Login with Username & Password → Working  
-  - [ ] 2FA Auth Support  
+  - [x] 2FA Auth Support  
 </details>
 <details>
 <summary><strong>tickets [6/6] - Done</strong></summary>
