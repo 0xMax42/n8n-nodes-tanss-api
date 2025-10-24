@@ -38,5 +38,17 @@ export class TanssApi implements ICredentialType {
 			required: true,
 			description: 'The password to authenticate with the TANSS API.',
 		},
+		{
+			displayName: '2FA Secret (TOTP)',
+			name: 'totpSecret',
+			type: 'string',
+			typeOptions: {
+				password: true,
+			},
+			default: '',
+			required: false,
+			description:
+				'Base32 secret for TOTP-based 2FA. The 6-digit code will be generated automatically from this secret.',
+		},
 	];
 }

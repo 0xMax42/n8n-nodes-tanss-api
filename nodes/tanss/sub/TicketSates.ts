@@ -19,12 +19,6 @@ export const ticketStatesOperations: INodeProperties[] = [
                 action: 'Get ticket states',
             },
             {
-                name: 'Get Ticket State',
-                value: 'getTicketState',
-                description: 'Gets a single ticket state by ID',
-                action: 'Get ticket state',
-            },
-            {
                 name: 'Create Ticket State',
                 value: 'createTicketState',
                 description: 'Creates a new ticket state',
@@ -48,7 +42,7 @@ export const ticketStatesOperations: INodeProperties[] = [
 ];
 
 export const ticketStatesFields: INodeProperties[] = [
-	{
+    {
         displayName: 'API Token',
         name: 'apiToken',
         type: 'string' as const,
@@ -62,7 +56,7 @@ export const ticketStatesFields: INodeProperties[] = [
             },
         },
     },
-    // ID field used by get/update/delete
+    // ID field used by update/delete (single fetch removed)
     {
         displayName: 'Ticket State ID',
         name: 'id',
@@ -72,7 +66,7 @@ export const ticketStatesFields: INodeProperties[] = [
         displayOptions: {
             show: {
                 resource: ['ticketStates'],
-                operation: ['getTicketState', 'updateTicketState', 'deleteTicketState'],
+                operation: ['updateTicketState', 'deleteTicketState'],
             },
         },
     },
@@ -147,7 +141,7 @@ export const ticketStatesFields: INodeProperties[] = [
 
 export async function handleTicketStates(this: IExecuteFunctions, i: number) {
     const operation = this.getNodeParameter('operation', i) as string;
-    const allowed = ['getTicketStates', 'getTicketState', 'createTicketState', 'updateTicketState', 'deleteTicketState'] as const;
+    const allowed = ['getTicketStates', 'createTicketState', 'updateTicketState', 'deleteTicketState'] as const;
     if (!allowed.includes(operation as typeof allowed[number])) {
         throw new NodeOperationError(this.getNode(), `Operation "${operation}" not supported by TicketStates.`);
     }
@@ -175,26 +169,6 @@ export async function handleTicketStates(this: IExecuteFunctions, i: number) {
         } catch (error: unknown) {
             const message = error instanceof Error ? error.message : String(error);
             throw new NodeOperationError(this.getNode(), `Failed to fetch ticket states: ${message}`);
-        }
-    }
-
-    // GET single
-    if (operation === 'getTicketState') {
-        const id = this.getNodeParameter('id', i, 0) as number;
-        if (!id || id <= 0) throw new NodeOperationError(this.getNode(), 'Valid ID is required.');
-        const url = `${baseURL}/backend/api/v1/admin/ticketStates/${id}`;
-        const requestOptions: IDataObject = {
-            method: 'GET',
-            url,
-            headers: { apiToken, 'Content-Type': 'application/json' },
-            json: true,
-        };
-        try {
-            const response = await this.helpers.request(requestOptions);
-            return response;
-        } catch (error: unknown) {
-            const message = error instanceof Error ? error.message : String(error);
-            throw new NodeOperationError(this.getNode(), `Failed to fetch ticket state: ${message}`);
         }
     }
 
