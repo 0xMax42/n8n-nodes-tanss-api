@@ -1,5 +1,5 @@
 **Status / Progress**  
-Progress: **59 / 255 +1 (not in API)** (22.7%)
+Progress: **70 / 255 +1 (not in API)** (27%)
 
 ## To-Do / Progress
 
@@ -8,9 +8,9 @@ Progress: **59 / 255 +1 (not in API)** (22.7%)
 
 <br>
 <details>
-<summary><strong>security [1/1] - Working</strong></summary>
+<summary><strong>security [1/1] - Done</strong></summary>
 
-  - [x] Login with Username & Password → Working  
+  - [x] Login with Username & Password
   - [x] 2FA Auth Support  
 </details>
 <details>
@@ -95,19 +95,19 @@ Progress: **59 / 255 +1 (not in API)** (22.7%)
   - [x] [POST] identifies a phone call
 </details>
 <details>
-<summary><strong>remote supports [0/11] - ToDo</strong></summary>
+<summary><strong>remote supports [11/11] - Testing</strong></summary>
 
-  - [ ] [POST] Creates/imports a remote support into the database
-  - [ ] [PUT] Get list of remote supports
-  - [ ] [GET] Get remote support by id
-  - [ ] [PUT] Updates a remote support
-  - [ ] [DEL] Delete remote support
-  - [ ] [GET] Gets all device assignments
-  - [ ] [POST] Creates a device assignment
-  - [ ] [DEL] Deletes a device assignment
-  - [ ] [GET] Gets all technician assignments
-  - [ ] [POST] Creates a technician assignment
-  - [ ] [DEL] Delets a technician assignment
+  - [x] [POST] Creates/imports a remote support into the database
+  - [x] [PUT] Get list of remote supports
+  - [x] [GET] Get remote support by id
+  - [x] [PUT] Updates a remote support
+  - [x] [DEL] Delete remote support
+  - [x] [GET] Gets all device assignments
+  - [x] [POST] Creates a device assignment
+  - [x] [DEL] Deletes a device assignment
+  - [x] [GET] Gets all technician assignments
+  - [x] [POST] Creates a technician assignment
+  - [x] [DEL] Delets a technician assignment
 </details>
 <details>
 <summary><strong>monitoring [0/7] - ToDo</strong></summary>

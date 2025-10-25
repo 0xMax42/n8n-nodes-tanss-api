@@ -8,6 +8,7 @@ import { handleTicketStates, ticketStatesOperations, ticketStatesFields } from '
 import { handleTimestamps, timestampOperations, timestampFields } from './sub/timestamp';
 import { handleCalls, callsOperations, callsFields } from './sub/calls';
 import { handleCallsUser, callsUserOperations, callsUserFields } from './sub/callsuser';
+import { handleRemoteSupports, remoteSupportsOperations, remoteSupportsFields } from './sub/RemoteSupports';
 
 export class Tanss implements INodeType {
 	description: INodeTypeDescription = {
@@ -42,6 +43,7 @@ export class Tanss implements INodeType {
 					{ name: 'Call', value: 'calls' },
 					{ name: 'Call User', value: 'callsuser' },
 					{ name: 'PC', value: 'pc' },
+					{ name: 'Remote Support', value: 'remoteSupports' },
 					{ name: 'Ticket', value: 'ticket' },
 					{ name: 'Ticket Content', value: 'ticketContent' },
 					{ name: 'Ticket List', value: 'ticketList' },
@@ -70,6 +72,8 @@ export class Tanss implements INodeType {
 			...callsFields,
 			...callsUserOperations,
 			...callsUserFields,
+			...remoteSupportsOperations,
+			...remoteSupportsFields,
 		],
 	};
 
@@ -90,6 +94,7 @@ export class Tanss implements INodeType {
 			else if (resource === 'timestamps') responseData = await handleTimestamps.call(this, i);
 			else if (resource === 'calls') responseData = await handleCalls.call(this, i);
 			else if (resource === 'callsuser') responseData = await handleCallsUser.call(this, i);
+			else if (resource === 'remoteSupports') responseData = await handleRemoteSupports.call(this, i);
 			else throw new NodeOperationError(this.getNode(), `Unknown resource: ${resource}`, { itemIndex: i });
 
 			if (Array.isArray(responseData)) returnData.push(...responseData);
