@@ -160,23 +160,18 @@ export async function handleTicketContent(this: IExecuteFunctions, i: number) {
     };
 
     if (operation === 'getTicketDocuments') {
-        // Gets all documents attached to a ticket
         url = `${baseURL}/backend/api/v1/tickets/${ticketId}/documents`;
     } else if (operation === 'getTicketDocument') {
-        // Generates a one-time download URL for a specific document
         const documentId = this.getNodeParameter('documentId', i, 0) as number;
         if (!documentId || documentId <= 0) throw new NodeOperationError(this.getNode(), 'Valid Document ID is required.');
         url = `${baseURL}/backend/api/v1/tickets/${ticketId}/documents/${documentId}`;
     } else if (operation === 'getTicketImages') {
-        // Gets all images (screenshots) attached to a ticket
         url = `${baseURL}/backend/api/v1/tickets/${ticketId}/screenshots`;
     } else if (operation === 'getTicketImage') {
-        // getTicketImage: one-time download url for a specific image
         const imageId = this.getNodeParameter('imageId', i, 0) as number;
         if (!imageId || imageId <= 0) throw new NodeOperationError(this.getNode(), 'Valid Image ID is required.');
         url = `${baseURL}/backend/api/v1/tickets/${ticketId}/screenshots/${imageId}`;
     } else {
-        // uploadTicketContent
         const binaryPropertyName = this.getNodeParameter('binaryPropertyName', i, 'data') as string;
         const descriptionsParam = this.getNodeParameter('descriptions', i, '') as string;
 
@@ -186,7 +181,6 @@ export async function handleTicketContent(this: IExecuteFunctions, i: number) {
             throw new NodeOperationError(this.getNode(), `No binary found on item index ${i} with property name "${binaryPropertyName}"`);
         }
 
-        // shape the binary data object
         const binaryEntry = item.binary[binaryPropertyName] as {
             fileName?: string;
             data: string;
@@ -197,7 +191,6 @@ export async function handleTicketContent(this: IExecuteFunctions, i: number) {
             throw new NodeOperationError(this.getNode(), 'Binary data malformed or missing.');
         }
 
-        // Use runtime Buffer via globalThis without requiring @types/node
         const BufferCtor = (globalThis as unknown as { Buffer?: { from: (data: string, encoding?: string) => Uint8Array } }).Buffer;
         if (BufferCtor === undefined) {
             throw new NodeOperationError(this.getNode(), 'Buffer is not available in this runtime.');
@@ -229,7 +222,6 @@ export async function handleTicketContent(this: IExecuteFunctions, i: number) {
         });
     }
 
-    // For non-upload operations, set url and perform request
     if (operation !== 'uploadTicketContent') {
         requestOptions.url = url;
     }

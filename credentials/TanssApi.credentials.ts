@@ -39,7 +39,7 @@ export class TanssApi implements ICredentialType {
 			description: 'The password to authenticate with the TANSS API.',
 		},
 		{
-			displayName: '2FA Secret (TOTP)',
+			displayName: '2FA Secret (optional)',
 			name: 'totpSecret',
 			type: 'string',
 			typeOptions: {

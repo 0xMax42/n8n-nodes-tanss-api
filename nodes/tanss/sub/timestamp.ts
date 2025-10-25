@@ -536,7 +536,6 @@ export async function handleTimestamps(this: IExecuteFunctions, i: number) {
         const initialBalance = this.getNodeParameter('initialBalance', i, 0) as number;
 
         if (!employeeIdInitial || employeeIdInitial <= 0) throw new NodeOperationError(this.getNode(), 'Valid employeeId is required.');
-        // balance may be zero or negative? validate number
         if (typeof initialBalance !== 'number') throw new NodeOperationError(this.getNode(), 'initialBalance must be a number.');
 
         const url = `${baseURL}/backend/api/v1/timestamps/employee/${employeeIdInitial}/initialBalance`;

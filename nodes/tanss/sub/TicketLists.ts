@@ -1,8 +1,5 @@
 import { IExecuteFunctions, INodeProperties, NodeOperationError } from 'n8n-workflow';
 
-/**
- * Ticket List Operation Options
- */
 export const ticketListOperations: INodeProperties[] = [
 	{
 		displayName: 'Operation',
@@ -158,9 +155,6 @@ export const ticketListFields: INodeProperties[] = [
 	},
 ];
 
-/**
- * Handler: Ticket List Operations
- */
 export async function handleTicketList(this: IExecuteFunctions, i: number) {
 	const operation = this.getNodeParameter('operation', i) as string;
 	const credentials = await this.getCredentials('tanssApi');
