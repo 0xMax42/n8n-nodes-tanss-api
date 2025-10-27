@@ -1,3 +1,12 @@
+A new **TANSS Node** was released on **October 27, 2025** [here](https://github.com/BuddiesD/n8n-nodes-tanss).  
+Please note that **existing credentials are not compatible** due to the introduction of **2FA (Two-Factor Authentication)**.
+
+You can install both versions, but **2FA functionality will only be visible after uninstalling** the old package:  
+[n8n-nodes-tanss-api](https://www.npmjs.com/package/n8n-nodes-tanss-api)
+
+New: https://www.npmjs.com/package/n8n-nodes-tanss
+
+
 **Status / Progress**  
 Progress: **70 / 256 (1 not in API Docs)** (27%)
 
