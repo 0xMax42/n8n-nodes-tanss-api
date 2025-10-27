@@ -1,4 +1,5 @@
 import {
+	Icon,
 	ICredentialType,
 	INodeProperties,
 } from 'n8n-workflow';
@@ -6,6 +7,8 @@ import {
 export class TanssApi implements ICredentialType {
 	name = 'tanssApi';
 	displayName = 'TANSS API';
+	icon: Icon = { light: 'file:../icons/tanss.svg', dark: 'file:../icons/tanss.svg' };
+	documentationUrl = 'https://api-doc.tanss.de/';
 	properties: INodeProperties[] = [
 		{
 			displayName: 'Base URL',
@@ -34,6 +37,18 @@ export class TanssApi implements ICredentialType {
 			},
 			required: true,
 			description: 'The password to authenticate with the TANSS API.',
+		},
+		{
+			displayName: '2FA Secret (optional)',
+			name: 'totpSecret',
+			type: 'string',
+			typeOptions: {
+				password: true,
+			},
+			default: '',
+			required: false,
+			description:
+				'Base32 secret for TOTP-based 2FA. The 6-digit code will be generated automatically from this secret.',
 		},
 	];
 }
