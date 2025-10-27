@@ -1,5 +1,5 @@
 **Status / Progress**  
-Progress: **70 / 255 +1 (not in API)** (27%)
+Progress: **70 / 256 (1 not in API Docs)** (27%)
 
 ## To-Do / Progress
 
@@ -48,7 +48,7 @@ Progress: **70 / 255 +1 (not in API)** (27%)
   - [x] [POST] upload a document/image
 </details>
 <details>
-<summary><strong>ticket states [4/4] - Working</strong></summary>
+<summary><strong>ticket states [4/4] - Done</strong></summary>
 
   - [x] [GET] Gets a list of all ticket states
   - [x] [POST] Creates a ticket state
@@ -470,7 +470,9 @@ You only need to provide:
 ## Compatibility
 
 Compatible with n8n@1.60.0 or later
+Tested with TANSS API. Version: 10.10.0
 
 ## Resources
 
 * [n8n community nodes documentation](https://docs.n8n.io/integrations/#community-nodes)
+* [Tanss API documentation](https://api-doc.tanss.de/)
