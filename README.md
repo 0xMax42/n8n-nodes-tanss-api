@@ -1,18 +1,16 @@
-## Upcoming Release: New TANSS Node  
+## Upcoming Release: New TANSS Node
 
-A new **TANSS Node** will be released in approximately **2 weeks**.  
+A new **TANSS Node** was released on **October 27, 2025**.  
+Please note that **existing credentials are not compatible** due to the introduction of **2FA (Two-Factor Authentication)**.
+
+You can install both versions, but **2FA functionality will only be visible after uninstalling** the old package:  
+[n8n-nodes-tanss-api](https://www.npmjs.com/package/n8n-nodes-tanss-api)
+
+The GitHub repositories will be **merged soon**.
 
 ---
 
-### API Progress Overview  
 
-**Total Tanss API Endpoints:** 256  
-**Fully Implemented:** ~60  
-**Currently in Testing:** 29  
-
-#### Progress
-🟩🟩🟩🟩⬜⬜⬜⬜⬜⬜ (~35%)
-*(≈ 89 endpoints done / 256 total)*  
 
 ---
 
