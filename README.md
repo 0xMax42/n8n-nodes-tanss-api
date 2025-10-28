@@ -8,7 +8,7 @@ New: https://www.npmjs.com/package/n8n-nodes-tanss
 
 
 **Status / Progress**  
-Progress: **70 / 256 (1 not in API Docs)** (27%)
+Progress: **74 / 256 (1 not in API Docs)** (28%)
 
 ## To-Do / Progress
 
@@ -184,20 +184,20 @@ Progress: **70 / 256 (1 not in API Docs)** (27%)
   - [ ] [DEL] Deletes an offer
 </details>
 <details>
-<summary><strong>availability [0/1] - ToDo</strong></summary>
+<summary><strong>availability [1/1] - Done</strong></summary>
 
-  - [ ] [GET] Fetches availability infos
+  - [x] [GET] Fetches availability infos
 </details>
 <details>
-<summary><strong>employees [0/2] - ToDo</strong></summary>
+<summary><strong>employees [2/2] - Done</strong></summary>
 
-  - [ ] [GET] Gets all technicians
-  - [ ] [POST] creates an employee
+  - [x] [GET] Gets all technicians
+  - [x] [POST] creates an employee
 </details>
 <details>
-<summary><strong>mails [0/1] - ToDo</strong></summary>
+<summary><strong>mails [1/1] - Done</strong></summary>
 
-  - [ ] [POST] Test email smtp settings
+  - [x] [POST] Test email smtp settings
 </details>
 <details>
 <summary><strong>tags [0/10] - ToDo</strong></summary>
@@ -257,7 +257,7 @@ Progress: **70 / 256 (1 not in API Docs)** (27%)
   - [ ] [PUT] Updates a timer fragment
 </details>
 <details>
-<summary><strong>pc [5/5] - DONE</strong></summary>
+<summary><strong>pc [5/5] - Done</strong></summary>
 
   - [x] [GET] Gets a pc by id
   - [x] [PUT] Updates a pc

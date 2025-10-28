@@ -6,6 +6,9 @@ import { handleTicketList, ticketListOperations, ticketListFields } from './sub/
 import { handleTicketContent, ticketContentOperations, ticketContentFields } from './sub/TicketContent';
 import { handleTicketStates, ticketStatesOperations, ticketStatesFields } from './sub/TicketSates';
 import { handleTimestamps, timestampOperations, timestampFields } from './sub/timestamp';
+import { handleAvailability, availabilityOperations, availabilityFields } from './sub/Availability';
+import { handleEmployees, employeesOperations, employeesFields } from './sub/Employees';
+import { handleMails, mailsOperations, mailsFields } from './sub/Mails';
 import { handleCalls, callsOperations, callsFields } from './sub/calls';
 import { handleCallsUser, callsUserOperations, callsUserFields } from './sub/callsuser';
 import { handleRemoteSupports, remoteSupportsOperations, remoteSupportsFields } from './sub/RemoteSupports';
@@ -40,8 +43,11 @@ export class Tanss implements INodeType {
 				noDataExpression: true,
 				options: [
 					{ name: 'Authentication', value: 'authentication' },
+					{ name: 'Availability', value: 'availability' },
 					{ name: 'Call', value: 'calls' },
 					{ name: 'Call User', value: 'callsuser' },
+					{ name: 'Employee', value: 'employees' },
+					{ name: 'Mail', value: 'mails' },
 					{ name: 'PC', value: 'pc' },
 					{ name: 'Remote Support', value: 'remoteSupports' },
 					{ name: 'Ticket', value: 'ticket' },
@@ -68,6 +74,12 @@ export class Tanss implements INodeType {
 			...ticketStatesFields,
 			...timestampOperations,
 			...timestampFields,
+			...availabilityOperations,
+			...availabilityFields,
+			...employeesOperations,
+			...employeesFields,
+			...mailsOperations,
+			...mailsFields,
 			...callsOperations,
 			...callsFields,
 			...callsUserOperations,
@@ -94,7 +106,10 @@ export class Tanss implements INodeType {
 			else if (resource === 'timestamps') responseData = await handleTimestamps.call(this, i);
 			else if (resource === 'calls') responseData = await handleCalls.call(this, i);
 			else if (resource === 'callsuser') responseData = await handleCallsUser.call(this, i);
+			else if (resource === 'employees') responseData = await handleEmployees.call(this, i);
+			else if (resource === 'mails') responseData = await handleMails.call(this, i);
 			else if (resource === 'remoteSupports') responseData = await handleRemoteSupports.call(this, i);
+			else if (resource === 'availability') responseData = await handleAvailability.call(this, i);
 			else throw new NodeOperationError(this.getNode(), `Unknown resource: ${resource}`, { itemIndex: i });
 
 			if (Array.isArray(responseData)) returnData.push(...responseData);
