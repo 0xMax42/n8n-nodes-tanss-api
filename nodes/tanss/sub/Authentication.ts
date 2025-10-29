@@ -50,14 +50,21 @@ export async function handleAuth(this: IExecuteFunctions, i: number) {
 		const totpSecret = (credentials as { totpSecret?: string | undefined }).totpSecret;
 
 		if (totpSecret) {
-			const triedWindows = [-2, -1, 0, 1, 2];
+			const triedWindows = [0, -1, 1];
+			const maxAttempts = 3;
+			let attempts = 0;
 			let lastError: unknown;
+
+			const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
 			for (const w of triedWindows) {
+				if (attempts >= maxAttempts) break;
+
 				let code: string;
 				try {
 					code = generateTOTP(totpSecret, w);
 					body.token = String(code);
-					console.log(`TOTP try window=${w} code=${code} typeof token=${typeof body.token}`);
+					attempts += 1;
 				} catch (err) {
 					lastError = err;
 					continue;
@@ -74,27 +81,26 @@ export async function handleAuth(this: IExecuteFunctions, i: number) {
 						},
 					};
 
-					console.log('LOGIN REQUEST JSON', JSON.stringify(body));
-
 					const responseData = await this.helpers.request(requestOptions);
-					console.log('LOGIN RESPONSE', responseData);
 					return responseData;
 				} catch (err: unknown) {
 					const e = err as { message?: string; status?: number; response?: { status?: number; data?: unknown } } | undefined;
-					console.error('LOGIN ERROR', {
-						window: w,
-						message: e?.message,
-						status: e?.status ?? e?.response?.status,
-						responseData: e?.response?.data ?? e?.response,
-					});
 					lastError = err;
-					const msg = JSON.stringify(e?.response?.data ?? e?.message ?? e);
+
+					const responseData = e?.response?.data ?? e?.message ?? e;
+					const msg = JSON.stringify(responseData);
+
+					if (msg.includes('LOGIN_ERROR_TOO_MANY_FAILED_LOGINS')) {
+						throw new NodeOperationError(this.getNode(), `Login blocked: too many failed logins. Server response: ${msg}`);
+					}
 					if (!msg.includes('LOGIN_ERROR_WRONG_LOGIN_TOKEN_CODE')) {
 						throw new NodeOperationError(this.getNode(), `Login failed: ${msg}`);
 					}
+					await sleep(500);
 				}
 			}
-			throw new NodeOperationError(this.getNode(), `Failed to login with generated TOTP. Last error: ${JSON.stringify(lastError)}`);
+
+			throw new NodeOperationError(this.getNode(), `Failed to login with generated TOTP after ${attempts} attempts. Last error: ${JSON.stringify(lastError)}`);
 		}
 
 		try {
