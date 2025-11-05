@@ -1,5 +1,4 @@
 import { IExecuteFunctions, INodeProperties, NodeOperationError, IDataObject } from 'n8n-workflow';
-import { Buffer } from 'buffer';
 
 export const ticketContentOperations: INodeProperties[] = [
     {
@@ -160,6 +159,8 @@ export async function handleTicketContent(this: IExecuteFunctions, i: number) {
         json: true,
     };
 
+    
+
     if (operation === 'getTicketDocuments') {
         url = `${baseURL}/backend/api/v1/tickets/${ticketId}/documents`;
     } else if (operation === 'getTicketDocument') {
@@ -192,30 +193,45 @@ export async function handleTicketContent(this: IExecuteFunctions, i: number) {
             throw new NodeOperationError(this.getNode(), 'Binary data malformed or missing.');
         }
 
-        const fileBuffer = Buffer.from(binaryEntry.data, 'base64');
+        const BufferCtor = (globalThis as unknown as { Buffer?: { from: (data: string, encoding?: string) => Uint8Array } }).Buffer;
+        if (BufferCtor === undefined) {
+            throw new NodeOperationError(this.getNode(), 'Buffer is not available in this runtime.');
+        }
+        const fileBuffer = BufferCtor.from(binaryEntry.data, 'base64');
 
         const fileName = binaryEntry.fileName ?? 'file';
         const contentType = binaryEntry.mimeType ?? 'application/octet-stream';
 
-        url = `${baseURL}/backend/api/v1/tickets/${ticketId}/upload`;
+    
 
-        const formData: IDataObject = {
-            files: {
-                value: fileBuffer,
-                options: {
-                    filename: fileName,
-                    contentType,
-                },
-            },
-            descriptions: descriptionsParam,
+        url = `${baseURL}/backend/api/v1/tickets/${ticketId}/upload`;
+        const boundary = `----n8nBoundary${Date.now()}`;
+        const crlf = '\r\n';
+        const delimiter = `--${boundary}${crlf}`;
+        const closeDelimiter = `${crlf}--${boundary}--${crlf}`;
+
+        const filePartHeader = `Content-Disposition: form-data; name="files"; filename="${fileName}"${crlf}` +
+            `Content-Type: ${contentType}${crlf}${crlf}`;
+
+        const descPartHeader = `${crlf}--${boundary}${crlf}Content-Disposition: form-data; name="descriptions"${crlf}${crlf}`;
+
+        const preamble = Buffer.from(delimiter + filePartHeader, 'utf8');
+        const postamble = Buffer.from(descPartHeader + descriptionsParam + closeDelimiter, 'utf8');
+
+        const bodyBuffer = Buffer.concat([preamble, fileBuffer, postamble]);
+
+        const headers: IDataObject = {
+            apiToken,
+            'Content-Type': `multipart/form-data; boundary=${boundary}`,
+            'Content-Length': String(bodyBuffer.length),
         };
 
         Object.assign(requestOptions, {
             method: 'POST',
             url,
-            headers: { apiToken },
-            formData,
-            json: true,
+            headers,
+            body: bodyBuffer,
+            json: false,
         });
     }
 
@@ -224,10 +240,24 @@ export async function handleTicketContent(this: IExecuteFunctions, i: number) {
     }
 
     try {
-    const response = await this.helpers.httpRequest(requestOptions as unknown as import('n8n-workflow').IHttpRequestOptions);
+        const response = await this.helpers.httpRequest(requestOptions as unknown as import('n8n-workflow').IHttpRequestOptions);
         return response;
     } catch (error: unknown) {
-        const message = error instanceof Error ? error.message : String(error);
-        throw new NodeOperationError(this.getNode(), `Failed to fetch ticket content: ${message}`);
+        const err = error as unknown as { response?: unknown; statusCode?: number; message?: string };
+        const resp = err.response as unknown as Record<string, unknown> | undefined;
+        const respBody = resp?.body ?? resp?.data ?? resp;
+        const status = resp?.status ?? err.statusCode ?? undefined;
+        const message = err?.message ?? (error instanceof Error ? error.message : String(error));
+        let extra = '';
+        try {
+            if (respBody !== undefined) {
+                const serialized = typeof respBody === 'string' ? respBody : JSON.stringify(respBody);
+                extra = ` ResponseBody: ${serialized}`;
+            }
+        } catch {
+            // nothing here
+        }
+        const statusTxt = status ? ` Status: ${status}.` : '';
+        throw new NodeOperationError(this.getNode(), `Failed to fetch ticket content: ${message}.${statusTxt}${extra}`);
     }
 }

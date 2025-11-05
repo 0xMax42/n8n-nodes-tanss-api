@@ -522,7 +522,7 @@ export async function handleTimestamps(this: IExecuteFunctions, i: number) {
         const requestOptions: IDataObject = { method: 'POST', url, headers: { apiToken, 'Content-Type': 'application/json' }, body: { tillDate, employeeIds: employeeIds as number[] }, json: true };
 
         try {
-            const response = await this.helpers.request(requestOptions);
+            const response = await this.helpers.httpRequest(requestOptions as unknown as import('n8n-workflow').IHttpRequestOptions);
             return response;
         } catch (error: unknown) {
             const message = error instanceof Error ? error.message : String(error);
@@ -542,7 +542,7 @@ export async function handleTimestamps(this: IExecuteFunctions, i: number) {
         const requestOptions: IDataObject = { method: 'POST', url, headers: { apiToken, 'Content-Type': 'application/json' }, body: { balance: initialBalance }, json: true };
 
         try {
-            const response = await this.helpers.request(requestOptions);
+            const response = await this.helpers.httpRequest(requestOptions as unknown as import('n8n-workflow').IHttpRequestOptions);
             return response;
         } catch (error: unknown) {
             const message = error instanceof Error ? error.message : String(error);
@@ -556,7 +556,7 @@ export async function handleTimestamps(this: IExecuteFunctions, i: number) {
         const requestOptions: IDataObject = { method: 'GET', url, headers: { apiToken, 'Content-Type': 'application/json' }, json: true };
 
         try {
-            const response = await this.helpers.request(requestOptions);
+            const response = await this.helpers.httpRequest(requestOptions as unknown as import('n8n-workflow').IHttpRequestOptions);
             return response;
         } catch (error: unknown) {
             const message = error instanceof Error ? error.message : String(error);
@@ -576,7 +576,7 @@ export async function handleTimestamps(this: IExecuteFunctions, i: number) {
         const requestOptions: IDataObject = { method: 'POST', url, headers: { apiToken, 'Content-Type': 'application/json' }, body: { fromMinutes, minimumPause }, json: true };
 
         try {
-            const response = await this.helpers.request(requestOptions);
+            const response = await this.helpers.httpRequest(requestOptions as unknown as import('n8n-workflow').IHttpRequestOptions);
             return response;
         } catch (error: unknown) {
             const message = error instanceof Error ? error.message : String(error);
@@ -598,7 +598,7 @@ export async function handleTimestamps(this: IExecuteFunctions, i: number) {
         const requestOptions: IDataObject = { method: 'PUT', url, headers: { apiToken, 'Content-Type': 'application/json' }, body: { fromMinutes, minimumPause }, json: true };
 
         try {
-            const response = await this.helpers.request(requestOptions);
+            const response = await this.helpers.httpRequest(requestOptions as unknown as import('n8n-workflow').IHttpRequestOptions);
             return response;
         } catch (error: unknown) {
             const message = error instanceof Error ? error.message : String(error);
@@ -615,7 +615,7 @@ export async function handleTimestamps(this: IExecuteFunctions, i: number) {
         const requestOptions: IDataObject = { method: 'DELETE', url, headers: { apiToken, 'Content-Type': 'application/json' }, json: true };
 
         try {
-            const response = await this.helpers.request(requestOptions);
+            const response = await this.helpers.httpRequest(requestOptions as unknown as import('n8n-workflow').IHttpRequestOptions);
             return response;
         } catch (error: unknown) {
             const message = error instanceof Error ? error.message : String(error);
