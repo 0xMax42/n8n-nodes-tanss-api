@@ -196,8 +196,6 @@ export async function handleTicketContent(this: IExecuteFunctions, i: number) {
         let BufferCtor: { from: (data: string, encoding?: string) => Uint8Array } | undefined;
         if (typeof Buffer !== 'undefined' && typeof (Buffer as unknown as { from?: unknown }).from === 'function') {
             BufferCtor = Buffer as unknown as { from: (data: string, encoding?: string) => Uint8Array };
-        } else if (typeof global !== 'undefined' && (global as unknown as { Buffer?: { from?: unknown } }).Buffer && typeof ((global as unknown as { Buffer?: { from?: unknown } }).Buffer!.from) === 'function') {
-            BufferCtor = (global as unknown as { Buffer?: { from: (data: string, encoding?: string) => Uint8Array } }).Buffer!;
         }
         if (BufferCtor === undefined) {
             throw new NodeOperationError(this.getNode(), 'Buffer is not available in this runtime.');
