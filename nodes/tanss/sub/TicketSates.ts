@@ -1,4 +1,4 @@
-import { IExecuteFunctions, INodeProperties, NodeOperationError, IDataObject } from 'n8n-workflow';
+import { IExecuteFunctions, INodeProperties, NodeOperationError, IDataObject, IHttpRequestOptions } from 'n8n-workflow';
 
 export const ticketStatesOperations: INodeProperties[] = [
     {
@@ -164,7 +164,7 @@ export async function handleTicketStates(this: IExecuteFunctions, i: number) {
             json: true,
         };
         try {
-            const response = await this.helpers.request(requestOptions);
+            const response = await this.helpers.httpRequest(requestOptions as unknown as IHttpRequestOptions);
             return response;
         } catch (error: unknown) {
             const message = error instanceof Error ? error.message : String(error);
@@ -199,7 +199,7 @@ export async function handleTicketStates(this: IExecuteFunctions, i: number) {
         };
 
         try {
-            const response = await this.helpers.request(requestOptions);
+            const response = await this.helpers.httpRequest(requestOptions as unknown as IHttpRequestOptions);
             return response;
         } catch (error: unknown) {
             const message = error instanceof Error ? error.message : String(error);
@@ -235,7 +235,7 @@ export async function handleTicketStates(this: IExecuteFunctions, i: number) {
         };
 
         try {
-            const response = await this.helpers.request(requestOptions);
+            const response = await this.helpers.httpRequest(requestOptions as unknown as IHttpRequestOptions);
             return response;
         } catch (error: unknown) {
             const message = error instanceof Error ? error.message : String(error);
@@ -255,7 +255,7 @@ export async function handleTicketStates(this: IExecuteFunctions, i: number) {
             json: true,
         };
         try {
-            const response = await this.helpers.request(requestOptions);
+            const response = await this.helpers.httpRequest(requestOptions as unknown as IHttpRequestOptions);
             return response;
         } catch (error: unknown) {
             const message = error instanceof Error ? error.message : String(error);

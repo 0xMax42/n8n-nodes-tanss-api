@@ -55,8 +55,6 @@ export async function handleAuth(this: IExecuteFunctions, i: number) {
 			let attempts = 0;
 			let lastError: unknown;
 
-			const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
-
 			for (const w of triedWindows) {
 				if (attempts >= maxAttempts) break;
 
@@ -81,7 +79,7 @@ export async function handleAuth(this: IExecuteFunctions, i: number) {
 						},
 					};
 
-					const responseData = await this.helpers.request(requestOptions);
+					const responseData = await this.helpers.httpRequest(requestOptions);
 					return responseData;
 				} catch (err: unknown) {
 					const e = err as { message?: string; status?: number; response?: { status?: number; data?: unknown } } | undefined;
@@ -96,7 +94,6 @@ export async function handleAuth(this: IExecuteFunctions, i: number) {
 					if (!msg.includes('LOGIN_ERROR_WRONG_LOGIN_TOKEN_CODE')) {
 						throw new NodeOperationError(this.getNode(), `Login failed: ${msg}`);
 					}
-					await sleep(500);
 				}
 			}
 
@@ -110,7 +107,7 @@ export async function handleAuth(this: IExecuteFunctions, i: number) {
 				body,
 				json: true,
 			};
-			const responseData = await this.helpers.request(requestOptions);
+			const responseData = await this.helpers.httpRequest(requestOptions);
 			return responseData;
 		} catch (error: unknown) {
 			const errorMessage = error instanceof Error ? error.message : String(error);

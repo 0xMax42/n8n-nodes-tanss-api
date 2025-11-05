@@ -1,4 +1,4 @@
-import { IExecuteFunctions, INodeProperties, NodeOperationError, IDataObject } from 'n8n-workflow';
+import { IExecuteFunctions, INodeProperties, NodeOperationError, IDataObject, IHttpRequestOptions } from 'n8n-workflow';
 
 export const mailsOperations: INodeProperties[] = [
     {
@@ -114,7 +114,7 @@ export async function handleMails(this: IExecuteFunctions, i: number) {
     }
 
     try {
-        const fullResponse = await this.helpers.request({ ...(requestOptions as unknown as IDataObject), simple: false, resolveWithFullResponse: true } as IDataObject);
+    const fullResponse = await this.helpers.httpRequest({ ...(requestOptions as unknown as IDataObject), simple: false, resolveWithFullResponse: true } as unknown as IHttpRequestOptions);
         if (fullResponse && fullResponse.statusCode === 201) {
             return { success: true, statusCode: 201, message: 'Test email sent', body: fullResponse.body } as unknown as IDataObject;
         }

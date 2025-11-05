@@ -1,4 +1,4 @@
-import { IExecuteFunctions, INodeProperties, NodeOperationError, IDataObject } from 'n8n-workflow';
+import { IExecuteFunctions, INodeProperties, NodeOperationError, IDataObject, IHttpRequestOptions } from 'n8n-workflow';
 
 export const timestampOperations: INodeProperties[] = [
     {
@@ -280,7 +280,7 @@ export async function handleTimestamps(this: IExecuteFunctions, i: number) {
         };
 
         try {
-            const response = await this.helpers.request(requestOptions);
+            const response = await this.helpers.httpRequest(requestOptions as unknown as IHttpRequestOptions);
             return response;
         } catch (error: unknown) {
             const message = error instanceof Error ? error.message : String(error);
@@ -308,7 +308,7 @@ export async function handleTimestamps(this: IExecuteFunctions, i: number) {
         };
 
         try {
-            const response = await this.helpers.request(requestOptions);
+            const response = await this.helpers.httpRequest(requestOptions as unknown as IHttpRequestOptions);
             return response;
         } catch (error: unknown) {
             const message = error instanceof Error ? error.message : String(error);
@@ -338,7 +338,7 @@ export async function handleTimestamps(this: IExecuteFunctions, i: number) {
         };
 
         try {
-            const response = await this.helpers.request(requestOptions);
+            const response = await this.helpers.httpRequest(requestOptions as unknown as IHttpRequestOptions);
             return response;
         } catch (error: unknown) {
             const message = error instanceof Error ? error.message : String(error);
@@ -365,7 +365,7 @@ export async function handleTimestamps(this: IExecuteFunctions, i: number) {
         const requestOptions: IDataObject = { method: 'POST', url, headers: { apiToken, 'Content-Type': 'application/json' }, body, json: true };
 
         try {
-            const response = await this.helpers.request(requestOptions);
+            const response = await this.helpers.httpRequest(requestOptions as unknown as IHttpRequestOptions);
             return response;
         } catch (error: unknown) {
             const message = error instanceof Error ? error.message : String(error);
@@ -393,7 +393,7 @@ export async function handleTimestamps(this: IExecuteFunctions, i: number) {
         const requestOptions: IDataObject = { method: 'PUT', url, headers: { apiToken, 'Content-Type': 'application/json' }, body, json: true };
 
         try {
-            const response = await this.helpers.request(requestOptions);
+            const response = await this.helpers.httpRequest(requestOptions as unknown as IHttpRequestOptions);
             return response;
         } catch (error: unknown) {
             const message = error instanceof Error ? error.message : String(error);
@@ -422,7 +422,7 @@ export async function handleTimestamps(this: IExecuteFunctions, i: number) {
         const requestOptions: IDataObject = { method: 'PUT', url, headers: { apiToken, 'Content-Type': 'application/json' }, body: timestampsArray as IDataObject[], json: true };
 
         try {
-            const response = await this.helpers.request(requestOptions);
+            const response = await this.helpers.httpRequest(requestOptions as unknown as IHttpRequestOptions);
             return response;
         } catch (error: unknown) {
             const message = error instanceof Error ? error.message : String(error);
@@ -452,7 +452,7 @@ export async function handleTimestamps(this: IExecuteFunctions, i: number) {
         const requestOptions: IDataObject = { method: 'POST', url, headers: { apiToken, 'Content-Type': 'application/json' }, body: payload as IDataObject[], json: true };
 
         try {
-            const response = await this.helpers.request(requestOptions);
+            const response = await this.helpers.httpRequest(requestOptions as unknown as IHttpRequestOptions);
             return response;
         } catch (error: unknown) {
             const message = error instanceof Error ? error.message : String(error);
@@ -482,7 +482,7 @@ export async function handleTimestamps(this: IExecuteFunctions, i: number) {
         const requestOptions: IDataObject = { method: 'DELETE', url, headers: { apiToken, 'Content-Type': 'application/json' }, body: payload as IDataObject[], json: true };
 
         try {
-            const response = await this.helpers.request(requestOptions);
+            const response = await this.helpers.httpRequest(requestOptions as unknown as IHttpRequestOptions);
             return response;
         } catch (error: unknown) {
             const message = error instanceof Error ? error.message : String(error);
@@ -496,7 +496,7 @@ export async function handleTimestamps(this: IExecuteFunctions, i: number) {
         const requestOptions: IDataObject = { method: 'GET', url, headers: { apiToken, 'Content-Type': 'application/json' }, json: true };
 
         try {
-            const response = await this.helpers.request(requestOptions);
+            const response = await this.helpers.httpRequest(requestOptions as unknown as IHttpRequestOptions);
             return response;
         } catch (error: unknown) {
             const message = error instanceof Error ? error.message : String(error);

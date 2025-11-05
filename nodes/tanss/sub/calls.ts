@@ -545,7 +545,7 @@ export async function handleCalls(this: IExecuteFunctions, i: number) {
         };
 
         try {
-            const response = await this.helpers.request(requestOptions);
+            const response = await this.helpers.httpRequest(requestOptions as unknown as import('n8n-workflow').IHttpRequestOptions);
             return response;
         } catch (error: unknown) {
             const message = error instanceof Error ? error.message : String(error);
@@ -605,7 +605,7 @@ export async function handleCalls(this: IExecuteFunctions, i: number) {
         };
 
         try {
-            const response = await this.helpers.request(requestOptions);
+            const response = await this.helpers.httpRequest(requestOptions as unknown as import('n8n-workflow').IHttpRequestOptions);
             return response;
         } catch (error: unknown) {
             const message = error instanceof Error ? error.message : String(error);
@@ -628,7 +628,7 @@ export async function handleCalls(this: IExecuteFunctions, i: number) {
         };
 
         try {
-            const response = await this.helpers.request(requestOptions);
+            const response = await this.helpers.httpRequest(requestOptions as unknown as import('n8n-workflow').IHttpRequestOptions);
             return response;
         } catch (error: unknown) {
             const message = error instanceof Error ? error.message : String(error);
@@ -761,7 +761,7 @@ export async function handleCalls(this: IExecuteFunctions, i: number) {
         };
 
         try {
-            const response = await this.helpers.request(requestOptions);
+            const response = await this.helpers.httpRequest(requestOptions as unknown as import('n8n-workflow').IHttpRequestOptions);
             return response;
         } catch (error: unknown) {
             const message = error instanceof Error ? error.message : String(error);
@@ -802,7 +802,7 @@ export async function handleCalls(this: IExecuteFunctions, i: number) {
         };
 
         try {
-            const response = await this.helpers.request(requestOptions);
+            const response = await this.helpers.httpRequest(requestOptions as unknown as import('n8n-workflow').IHttpRequestOptions);
             return response;
         } catch (error: unknown) {
             const message = error instanceof Error ? error.message : String(error);
@@ -824,7 +824,7 @@ export async function handleCalls(this: IExecuteFunctions, i: number) {
         };
 
         try {
-            const response = await this.helpers.request(requestOptions);
+            const response = await this.helpers.httpRequest(requestOptions as unknown as import('n8n-workflow').IHttpRequestOptions);
             return response;
         } catch (error: unknown) {
             const message = error instanceof Error ? error.message : String(error);
@@ -864,7 +864,7 @@ export async function handleCalls(this: IExecuteFunctions, i: number) {
         };
 
         try {
-            const response = await this.helpers.request(requestOptions);
+            const response = await this.helpers.httpRequest(requestOptions as unknown as import('n8n-workflow').IHttpRequestOptions);
             return response;
         } catch (error: unknown) {
             const message = error instanceof Error ? error.message : String(error);
@@ -904,7 +904,7 @@ export async function handleCalls(this: IExecuteFunctions, i: number) {
         };
 
         try {
-            const response = await this.helpers.request(requestOptions);
+            const response = await this.helpers.httpRequest(requestOptions as unknown as import('n8n-workflow').IHttpRequestOptions);
             return response;
         } catch (error: unknown) {
             const message = error instanceof Error ? error.message : String(error);

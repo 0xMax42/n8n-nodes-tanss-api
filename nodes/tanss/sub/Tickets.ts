@@ -359,7 +359,7 @@ export async function handleTicket(this: IExecuteFunctions, i: number) {
 	requestOptions.url = url;
 
 	try {
-		const responseData = await this.helpers.request(requestOptions);
+		const responseData = await this.helpers.httpRequest(requestOptions as unknown as import('n8n-workflow').IHttpRequestOptions);
 		return responseData;
 	} catch (error: unknown) {
 		const errorMessage = error instanceof Error ? error.message : String(error);

@@ -277,7 +277,7 @@ export async function handlePc(this: IExecuteFunctions, i: number) {
 	requestOptions.url = url;
 
 	try {
-		const responseData = await this.helpers.request(requestOptions);
+		const responseData = await this.helpers.httpRequest(requestOptions as unknown as import('n8n-workflow').IHttpRequestOptions);
 
 		if (operation === 'deletePc' && (responseData === undefined || responseData === null || responseData === '')) {
 			return { success: true, message: 'PC deleted successfully.' };

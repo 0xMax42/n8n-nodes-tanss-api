@@ -1,4 +1,5 @@
 import { IExecuteFunctions, INodeProperties, NodeOperationError, IDataObject } from 'n8n-workflow';
+import { Buffer } from 'buffer';
 
 export const ticketContentOperations: INodeProperties[] = [
     {
@@ -191,11 +192,7 @@ export async function handleTicketContent(this: IExecuteFunctions, i: number) {
             throw new NodeOperationError(this.getNode(), 'Binary data malformed or missing.');
         }
 
-        const BufferCtor = (globalThis as unknown as { Buffer?: { from: (data: string, encoding?: string) => Uint8Array } }).Buffer;
-        if (BufferCtor === undefined) {
-            throw new NodeOperationError(this.getNode(), 'Buffer is not available in this runtime.');
-        }
-        const fileBuffer = BufferCtor.from(binaryEntry.data, 'base64');
+        const fileBuffer = Buffer.from(binaryEntry.data, 'base64');
 
         const fileName = binaryEntry.fileName ?? 'file';
         const contentType = binaryEntry.mimeType ?? 'application/octet-stream';
@@ -227,7 +224,7 @@ export async function handleTicketContent(this: IExecuteFunctions, i: number) {
     }
 
     try {
-        const response = await this.helpers.request(requestOptions);
+    const response = await this.helpers.httpRequest(requestOptions as unknown as import('n8n-workflow').IHttpRequestOptions);
         return response;
     } catch (error: unknown) {
         const message = error instanceof Error ? error.message : String(error);

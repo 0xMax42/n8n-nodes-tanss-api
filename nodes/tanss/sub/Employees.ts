@@ -1,4 +1,4 @@
-import { IExecuteFunctions, INodeProperties, NodeOperationError, IDataObject } from 'n8n-workflow';
+import { IExecuteFunctions, INodeProperties, NodeOperationError, IDataObject, IHttpRequestOptions } from 'n8n-workflow';
 
 export const employeesOperations: INodeProperties[] = [
     {
@@ -212,7 +212,7 @@ export async function handleEmployees(this: IExecuteFunctions, i: number) {
     }
 
     try {
-        const response = await this.helpers.request(requestOptions as unknown as IDataObject);
+    const response = await this.helpers.httpRequest(requestOptions as unknown as IHttpRequestOptions);
         return response;
     } catch (err: unknown) {
         const message = err instanceof Error ? err.message : String(err);

@@ -286,7 +286,7 @@ export async function handleRemoteSupports(this: IExecuteFunctions, i: number) {
             requestOptions.body = body;
 
             try {
-                const fullResponse = await this.helpers.request({ ...(requestOptions as unknown as IDataObject), simple: false, resolveWithFullResponse: true } as IDataObject);
+                const fullResponse = await this.helpers.httpRequest({ ...(requestOptions as unknown as IDataObject), simple: false, resolveWithFullResponse: true } as unknown as import('n8n-workflow').IHttpRequestOptions);
                 if (fullResponse && fullResponse.statusCode === 204) {
                     return { success: true, statusCode: 204, message: 'Device assignment deleted' } as unknown as IDataObject;
                 }
@@ -383,7 +383,7 @@ export async function handleRemoteSupports(this: IExecuteFunctions, i: number) {
             requestOptions.url = url;
 
             try {
-                const fullResponse = await this.helpers.request({ ...(requestOptions as unknown as IDataObject), simple: false, resolveWithFullResponse: true } as IDataObject);
+                const fullResponse = await this.helpers.httpRequest({ ...(requestOptions as unknown as IDataObject), simple: false, resolveWithFullResponse: true } as unknown as import('n8n-workflow').IHttpRequestOptions);
                 if (fullResponse && fullResponse.statusCode === 204) {
                     return { success: true, statusCode: 204, message: 'Remote support deleted' } as unknown as IDataObject;
                 }
@@ -404,7 +404,7 @@ export async function handleRemoteSupports(this: IExecuteFunctions, i: number) {
     }
 
     try {
-        const responseData = await this.helpers.request(requestOptions);
+        const responseData = await this.helpers.httpRequest(requestOptions as unknown as import('n8n-workflow').IHttpRequestOptions);
         return responseData;
     } catch (error: unknown) {
         const message = error instanceof Error ? error.message : String(error);

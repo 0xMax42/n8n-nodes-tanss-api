@@ -1,4 +1,4 @@
-import { IExecuteFunctions, INodeProperties, NodeOperationError, IDataObject } from 'n8n-workflow';
+import { IExecuteFunctions, INodeProperties, NodeOperationError } from 'n8n-workflow';
 
 export const availabilityOperations: INodeProperties[] = [
     {
@@ -25,12 +25,12 @@ export const availabilityFields: INodeProperties[] = [
         displayOptions: { show: { resource: ['availability'] } },
     },
     {
-    displayName: 'Employee IDs (Comma Separated)',
+        displayName: 'Employee IDs (Comma Separated)',
         name: 'employeeIds',
         type: 'string' as const,
         required: true,
         default: '',
-    description: 'Comma-separated list of employee IDs to fetch availability for',
+        description: 'Comma-separated list of employee IDs to fetch availability for',
         displayOptions: { show: { resource: ['availability'], operation: ['getAvailability'] } },
     },
 ];
@@ -73,7 +73,7 @@ export async function handleAvailability(this: IExecuteFunctions, i: number) {
     requestOptions.url = `${url}?employeeIds=${encoded}`;
 
     try {
-        const response = await this.helpers.request(requestOptions as unknown as IDataObject);
+        const response = await this.helpers.httpRequest(requestOptions as unknown as import('n8n-workflow').IHttpRequestOptions);
         return response;
     } catch (err: unknown) {
         const message = err instanceof Error ? err.message : String(err);
