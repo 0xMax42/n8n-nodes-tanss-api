@@ -2,6 +2,7 @@ import {
 	Icon,
 	ICredentialType,
 	INodeProperties,
+	ICredentialTestRequest,
 } from 'n8n-workflow';
 
 export class TanssApi implements ICredentialType {
@@ -51,4 +52,12 @@ export class TanssApi implements ICredentialType {
 				'Base32 secret for TOTP-based 2FA. The 6-digit code will be generated automatically from this secret.',
 		},
 	];
+
+	test: ICredentialTestRequest = {
+		request: {
+			baseURL: '={{$credentials.baseURL}}',
+			url: '/',
+			method: 'GET',
+		},
+	};
 }
