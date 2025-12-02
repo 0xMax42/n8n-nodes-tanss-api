@@ -8,7 +8,7 @@ New: https://www.npmjs.com/package/n8n-nodes-tanss
 
 
 **Status / Progress**  
-Progress: **74 / 256 (1 not in API Docs)** (28%)
+Progress: **79 / 256 (1 not in API Docs)** (30%)
 
 ## To-Do / Progress
 
@@ -383,13 +383,13 @@ Progress: **74 / 256 (1 not in API Docs)** (28%)
   - [ ] [DEL] Deletes a manufacturer
 </details>
 <details>
-<summary><strong>cpus [0/5] - ToDo</strong></summary>
+<summary><strong>cpus [0/5] - Done</strong></summary>
 
-  - [ ] [POST] Creates a new cpu
-  - [ ] [GET] Get a list of all cpus
-  - [ ] [PUT] Updates a cpu
-  - [ ] [GET] Get a cpu
-  - [ ] [DEL] Deletes a cpu
+  - [x] [POST] Creates a new cpu
+  - [x] [GET] Get a list of all cpus
+  - [x] [PUT] Updates a cpu
+  - [x] [GET] Get a cpu
+  - [x] [DEL] Deletes a cpu
 </details>
 <details>
 <summary><strong>hddTypes [0/5] - ToDo</strong></summary>

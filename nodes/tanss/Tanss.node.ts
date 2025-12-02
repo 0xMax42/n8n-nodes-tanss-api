@@ -12,6 +12,7 @@ import { handleMails, mailsOperations, mailsFields } from './sub/Mails';
 import { handleCalls, callsOperations, callsFields } from './sub/calls';
 import { handleCallsUser, callsUserOperations, callsUserFields } from './sub/callsuser';
 import { handleRemoteSupports, remoteSupportsOperations, remoteSupportsFields } from './sub/RemoteSupports';
+import { handleCpu, cpuOperations, cpuFields } from './sub/CPUs';
 
 export class Tanss implements INodeType {
 	description: INodeTypeDescription = {
@@ -46,6 +47,7 @@ export class Tanss implements INodeType {
 					{ name: 'Availability', value: 'availability' },
 					{ name: 'Call', value: 'calls' },
 					{ name: 'Call User', value: 'callsuser' },
+					{ name: 'CPU', value: 'cpus' },
 					{ name: 'Employee', value: 'employees' },
 					{ name: 'Mail', value: 'mails' },
 					{ name: 'PC', value: 'pc' },
@@ -84,6 +86,8 @@ export class Tanss implements INodeType {
 			...callsFields,
 			...callsUserOperations,
 			...callsUserFields,
+			...cpuOperations,
+			...cpuFields,
 			...remoteSupportsOperations,
 			...remoteSupportsFields,
 		],
@@ -99,6 +103,7 @@ export class Tanss implements INodeType {
 			let responseData;
 			if (resource === 'authentication') responseData = await handleAuth.call(this, i);
 			else if (resource === 'pc') responseData = await handlePc.call(this, i);
+			else if (resource === 'cpus') responseData = await handleCpu.call(this, i);
 			else if (resource === 'ticket') responseData = await handleTicket.call(this, i);
 			else if (resource === 'ticketContent') responseData = await handleTicketContent.call(this, i);
 			else if (resource === 'ticketList') responseData = await handleTicketList.call(this, i);
