@@ -78,6 +78,7 @@ export async function handleCpu(this: IExecuteFunctions, i: number) {
 		json: boolean;
 		body?: Record<string, unknown>;
 		url: string;
+		returnFullResponse?: boolean;
 	} = {
 		method: 'GET',
 		headers: { apiToken, 'Content-Type': 'application/json' },
@@ -124,8 +125,13 @@ export async function handleCpu(this: IExecuteFunctions, i: number) {
 	requestOptions.url = url;
 
 	try {
-		const responseData = await this.helpers.httpRequest(requestOptions as unknown as import('n8n-workflow').IHttpRequestOptions);
-		return responseData;
+		type FullResponse = { statusCode: number; body?: unknown };
+		const options = { ...requestOptions, returnFullResponse: true } as unknown as import('n8n-workflow').IHttpRequestOptions;
+		const fullResponse = (await this.helpers.httpRequest(options)) as unknown as FullResponse;
+		if (requestOptions.method === 'DELETE') {
+			return { success: fullResponse.statusCode === 204, statusCode: fullResponse.statusCode };
+		}
+		return fullResponse.body ?? (fullResponse as unknown);
 	} catch (error: unknown) {
 		const errorMessage = error instanceof Error ? error.message : String(error);
 		throw new NodeOperationError(this.getNode(), `Failed to execute ${operation}: ${errorMessage}`);

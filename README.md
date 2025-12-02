@@ -8,7 +8,7 @@ New: https://www.npmjs.com/package/n8n-nodes-tanss
 
 
 **Status / Progress**  
-Progress: **79 / 256 (1 not in API Docs)** (30%)
+Progress: **84 / 256 (1 not in API Docs)** (32%)
 
 ## To-Do / Progress
 
@@ -383,7 +383,7 @@ Progress: **79 / 256 (1 not in API Docs)** (30%)
   - [ ] [DEL] Deletes a manufacturer
 </details>
 <details>
-<summary><strong>cpus [0/5] - Done</strong></summary>
+<summary><strong>cpus [5/5] - Done</strong></summary>
 
   - [x] [POST] Creates a new cpu
   - [x] [GET] Get a list of all cpus
@@ -392,13 +392,13 @@ Progress: **79 / 256 (1 not in API Docs)** (30%)
   - [x] [DEL] Deletes a cpu
 </details>
 <details>
-<summary><strong>hddTypes [0/5] - ToDo</strong></summary>
+<summary><strong>hddTypes [5/5] - Done</strong></summary>
 
-  - [ ] [POST] Creates a new hdd type
-  - [ ] [GET] Get a list of all hdd types
-  - [ ] [PUT] Updates a hdd type
-  - [ ] [GET] Get a hdd type
-  - [ ] [DEL] Deletes a hdd type
+  - [x] [POST] Creates a new hdd type
+  - [x] [GET] Get a list of all hdd types
+  - [x] [PUT] Updates a hdd type
+  - [x] [GET] Get a hdd type
+  - [x] [DEL] Deletes a hdd type
 </details>
 <details>
 <summary><strong>identify [0/1] - ToDo</strong></summary>

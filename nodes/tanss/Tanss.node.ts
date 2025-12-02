@@ -13,6 +13,7 @@ import { handleCalls, callsOperations, callsFields } from './sub/calls';
 import { handleCallsUser, callsUserOperations, callsUserFields } from './sub/callsuser';
 import { handleRemoteSupports, remoteSupportsOperations, remoteSupportsFields } from './sub/RemoteSupports';
 import { handleCpu, cpuOperations, cpuFields } from './sub/CPUs';
+import { handleHddTypes, hddTypesOperations, hddTypesFields } from './sub/hddTypes';
 
 export class Tanss implements INodeType {
 	description: INodeTypeDescription = {
@@ -49,6 +50,7 @@ export class Tanss implements INodeType {
 					{ name: 'Call User', value: 'callsuser' },
 					{ name: 'CPU', value: 'cpus' },
 					{ name: 'Employee', value: 'employees' },
+					{ name: 'HDD Type', value: 'hddTypes' },
 					{ name: 'Mail', value: 'mails' },
 					{ name: 'PC', value: 'pc' },
 					{ name: 'Remote Support', value: 'remoteSupports' },
@@ -88,6 +90,8 @@ export class Tanss implements INodeType {
 			...callsUserFields,
 			...cpuOperations,
 			...cpuFields,
+			...hddTypesOperations,
+			...hddTypesFields,
 			...remoteSupportsOperations,
 			...remoteSupportsFields,
 		],
@@ -115,6 +119,7 @@ export class Tanss implements INodeType {
 			else if (resource === 'mails') responseData = await handleMails.call(this, i);
 			else if (resource === 'remoteSupports') responseData = await handleRemoteSupports.call(this, i);
 			else if (resource === 'availability') responseData = await handleAvailability.call(this, i);
+			else if (resource === 'hddTypes') responseData = await handleHddTypes.call(this, i);
 			else throw new NodeOperationError(this.getNode(), `Unknown resource: ${resource}`, { itemIndex: i });
 
 			if (Array.isArray(responseData)) returnData.push(...responseData);
