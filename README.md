@@ -8,7 +8,7 @@ New: https://www.npmjs.com/package/n8n-nodes-tanss
 
 
 **Status / Progress**  
-Progress: **84 / 256 (1 not in API Docs)** (32%)
+Progress: **94 / 256 (1 not in API Docs)** (36%)
 
 ## To-Do / Progress
 
@@ -365,22 +365,22 @@ Progress: **84 / 256 (1 not in API Docs)** (32%)
   - [ ] [GET] Get global ticket panels
 </details>
 <details>
-<summary><strong>operating systems [0/5] - ToDo</strong></summary>
+<summary><strong>operating systems [5/5] - Done</strong></summary>
 
-  - [ ] [POST] Creates a new os
-  - [ ] [GET] Get a list of all os
-  - [ ] [PUT] Updates a os
-  - [ ] [GET] Get a specific os
-  - [ ] [DEL] Deletes a specific os
+  - [x] [POST] Creates a new os
+  - [x] [GET] Get a list of all os
+  - [x] [PUT] Updates a os
+  - [x] [GET] Get a specific os
+  - [x] [DEL] Deletes a specific os
 </details>
 <details>
-<summary><strong>manufacturer [0/5] - ToDo</strong></summary>
+<summary><strong>manufacturer [5/5] - Done</strong></summary>
 
-  - [ ] [POST] Creates a new manufacturer
-  - [ ] [GET] Get a list of all manufacturers
-  - [ ] [PUT] Updates a manufacturer
-  - [ ] [GET] Get a manufacturer
-  - [ ] [DEL] Deletes a manufacturer
+  - [x] [POST] Creates a new manufacturer
+  - [x] [GET] Get a list of all manufacturers
+  - [x] [PUT] Updates a manufacturer
+  - [x] [GET] Get a manufacturer
+  - [x] [DEL] Deletes a manufacturer
 </details>
 <details>
 <summary><strong>cpus [5/5] - Done</strong></summary>

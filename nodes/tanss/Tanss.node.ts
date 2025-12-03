@@ -14,6 +14,8 @@ import { handleCallsUser, callsUserOperations, callsUserFields } from './sub/cal
 import { handleRemoteSupports, remoteSupportsOperations, remoteSupportsFields } from './sub/RemoteSupports';
 import { handleCpu, cpuOperations, cpuFields } from './sub/CPUs';
 import { handleHddTypes, hddTypesOperations, hddTypesFields } from './sub/hddTypes';
+import { handleManufacturers, manufacturersOperations, manufacturersFields } from './sub/manufacturers';
+import { handleOperatingSystems, operatingSystemsOperations, operatingSystemsFields } from './sub/OperatingSystems';
 
 export class Tanss implements INodeType {
 	description: INodeTypeDescription = {
@@ -52,6 +54,8 @@ export class Tanss implements INodeType {
 					{ name: 'Employee', value: 'employees' },
 					{ name: 'HDD Type', value: 'hddTypes' },
 					{ name: 'Mail', value: 'mails' },
+					{ name: 'Manufacturer', value: 'manufacturers' },
+					{ name: 'Operating System', value: 'operatingSystems' },
 					{ name: 'PC', value: 'pc' },
 					{ name: 'Remote Support', value: 'remoteSupports' },
 					{ name: 'Ticket', value: 'ticket' },
@@ -92,6 +96,10 @@ export class Tanss implements INodeType {
 			...cpuFields,
 			...hddTypesOperations,
 			...hddTypesFields,
+			...manufacturersOperations,
+			...manufacturersFields,
+			...operatingSystemsOperations,
+			...operatingSystemsFields,
 			...remoteSupportsOperations,
 			...remoteSupportsFields,
 		],
@@ -120,6 +128,8 @@ export class Tanss implements INodeType {
 			else if (resource === 'remoteSupports') responseData = await handleRemoteSupports.call(this, i);
 			else if (resource === 'availability') responseData = await handleAvailability.call(this, i);
 			else if (resource === 'hddTypes') responseData = await handleHddTypes.call(this, i);
+			else if (resource === 'manufacturers') responseData = await handleManufacturers.call(this, i);
+			else if (resource === 'operatingSystems') responseData = await handleOperatingSystems.call(this, i);
 			else throw new NodeOperationError(this.getNode(), `Unknown resource: ${resource}`, { itemIndex: i });
 
 			if (Array.isArray(responseData)) returnData.push(...responseData);
