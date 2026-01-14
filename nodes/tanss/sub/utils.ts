@@ -5,6 +5,7 @@ import { IExecuteFunctions, NodeOperationError } from 'n8n-workflow';
  * @param executeFunctions The execution functions context
  * @param baseURL The base URL to which the API postfix path will be appended (e.g., https://example.com)
  * @param endpoint The specific API endpoint to append to the base URL (e.g., 'login', 'data/items')
+ * @param apiPostfix The API postfix path to append between the base URL and endpoint (default is 'backend/api/v1')
  * @returns The full API URL
  * @throws The {@link NodeOperationError} exception is thrown if the baseURL is not provided.
  */
@@ -12,6 +13,7 @@ export function generateAPIEndpointURL(
 	executeFunctions: IExecuteFunctions,
 	baseURL: unknown,
 	endpoint: string,
+	apiPostfix = 'backend/api/v1',
 ): string {
 	if (!baseURL || typeof baseURL !== 'string') {
 		throw new NodeOperationError(
@@ -20,18 +22,40 @@ export function generateAPIEndpointURL(
 		);
 	}
 
-	return `${baseURL.replace(/\/+$/, '')}/backend/api/v1/${endpoint.replace(/^\/+/, '').replace(/\/+$/, '')}`;
+	return concatURLAndPath(baseURL, apiPostfix, endpoint);
+}
+
+function removeTrailingSlash(url: string): string {
+	return url.replace(/\/+$/, '');
+}
+
+function removeLeadingSlash(path: string): string {
+	return path.replace(/^\/+/, '');
+}
+
+function removeBothSlashes(path: string): string {
+	return removeLeadingSlash(removeTrailingSlash(path));
+}
+
+/**
+ * Concatenates a base URL with one or more path segments, ensuring proper slashes.
+ * @param url The base URL to which path segments will be appended
+ * @param path One or more path segments to append to the base URL
+ * @returns The concatenated URL with proper slashes
+ */
+export function concatURLAndPath(url: string, ...path: string[]): string {
+	return `${removeTrailingSlash(url)}/${path.map(removeBothSlashes).join('/')}`;
 }
 
 /**
  * Appends a query path to a given URL.
  * @param url The base URL to which the query path will be added
  * @param queryPath The query path to append to the URL
- * @returns
+ * @returns The URL with the appended query path
  */
 export function addQueryPathToURL(url: string, queryPath: string): string {
 	const urlObj = new URL(url);
-	urlObj.pathname = urlObj.pathname.replace(/\/+$/, '') + '/' + queryPath.replace(/^\/+/, '');
+	urlObj.pathname = concatURLAndPath(urlObj.pathname, queryPath);
 	return urlObj.toString();
 }
 
