@@ -126,3 +126,23 @@ export function nonZeroNumberGuard(
 	}
 	return value;
 }
+
+/**
+ * A Validator function that ensures a record parameter is not empty
+ * for use with {@link getNodeParameter}.
+ * @param executeFunctions The execution functions context
+ * @param value The record value to validate
+ * @param name The name of the parameter being validated
+ * @returns The validated record value
+ * @throws The {@link NodeOperationError} exception is thrown if the record is empty.
+ */
+export function nonEmptyRecordGuard(
+	executeFunctions: IExecuteFunctions,
+	value: Record<string, unknown>,
+	name: string,
+): Record<string, unknown> {
+	if (Object.keys(value).length === 0) {
+		throw new NodeOperationError(executeFunctions.getNode(), `${name} cannot be empty`);
+	}
+	return value;
+}
