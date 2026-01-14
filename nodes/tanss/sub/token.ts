@@ -132,6 +132,5 @@ export function addAuthorizationHeader(requestOptions: IHttpRequestOptions, toke
 	if (!requestOptions.headers) {
 		requestOptions.headers = {};
 	}
-	requestOptions.headers.Authorization = normalizedToken;
 	requestOptions.headers.apiToken = normalizedToken;
 }
