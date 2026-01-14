@@ -10,10 +10,10 @@ import { IExecuteFunctions, NodeOperationError } from 'n8n-workflow';
  */
 export function generateAPIEndpointURL(
 	executeFunctions: IExecuteFunctions,
-	baseURL: string,
+	baseURL: unknown,
 	endpoint: string,
 ): string {
-	if (!baseURL) {
+	if (!baseURL || typeof baseURL !== 'string') {
 		throw new NodeOperationError(
 			executeFunctions.getNode(),
 			'Base URL is required in credentials!',
