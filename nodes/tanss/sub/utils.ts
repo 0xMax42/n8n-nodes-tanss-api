@@ -53,3 +53,44 @@ export function addQueryParams(
 ): void {
 	requestOptions.url = addQueryParamsToURL(requestOptions.url, queryParams);
 }
+
+/**
+ * Wrapper around n8n's getNodeParameter for reusable handling of typing and validation.
+ * @param executeFunctions The execution functions context
+ * @param name The name of the parameter to retrieve
+ * @param itemIndex The index of the item for which the parameter is retrieved
+ * @param defaultValue The default value to use if the parameter is not found
+ * @param validator An optional function to validate or transform the retrieved value
+ * @returns The retrieved and optionally validated parameter value
+ * @throws The {@link NodeOperationError} exception can be thrown by the validator function if validation fails.
+ */
+export function getNodeParameter<T>(
+	executeFunctions: IExecuteFunctions,
+	name: string,
+	itemIndex: number,
+	defaultValue: T,
+	validator?: (executeFunctions: IExecuteFunctions, value: T, name: string) => T,
+): T {
+	const value = executeFunctions.getNodeParameter(name, itemIndex, defaultValue) as T;
+	return validator ? validator(executeFunctions, value, name) : value;
+}
+
+/**
+ * A Validator function that ensures a string parameter is not empty or whitespace only
+ * for use with {@link getNodeParameter}.
+ * @param executeFunctions The execution functions context
+ * @param value The string value to validate
+ * @param name The name of the parameter being validated
+ * @returns The validated string value
+ * @throws The {@link NodeOperationError} exception is thrown if the string is empty or whitespace only.
+ */
+export function nonEmptyStringGuard(
+	executeFunctions: IExecuteFunctions,
+	value: string,
+	name: string,
+): string {
+	if (value.trim() === '') {
+		throw new NodeOperationError(executeFunctions.getNode(), `${name} cannot be empty`);
+	}
+	return value;
+}
