@@ -107,3 +107,31 @@ export async function obtainToken(
 		);
 	}
 }
+
+/**
+ * Normalizes the provided token by ensuring it starts with 'Bearer '
+ * for proper authorization header formatting.
+ * @param token The API token to normalize
+ * @returns The normalized token string
+ */
+function normalizeToken(token: string): string {
+	if (String(token).startsWith('Bearer ')) {
+		return String(token);
+	}
+	return `Bearer ${String(token)}`;
+}
+
+/**
+ * Adds the Authorization header to the provided request options.
+ * @param requestOptions The HTTP request options to which the Authorization header will be added
+ * @param token The API token to be used for authorization
+ * @returns void; The requestOptions object is modified in place
+ */
+export function addAuthorizationHeader(requestOptions: IHttpRequestOptions, token: string): void {
+	const normalizedToken = normalizeToken(token);
+	if (!requestOptions.headers) {
+		requestOptions.headers = {};
+	}
+	requestOptions.headers.Authorization = normalizedToken;
+	requestOptions.headers.apiToken = normalizedToken;
+}
