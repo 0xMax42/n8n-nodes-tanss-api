@@ -24,6 +24,18 @@ export function generateAPIEndpointURL(
 }
 
 /**
+ * Appends a query path to a given URL.
+ * @param url The base URL to which the query path will be added
+ * @param queryPath The query path to append to the URL
+ * @returns
+ */
+export function addQueryPathToURL(url: string, queryPath: string): string {
+	const urlObj = new URL(url);
+	urlObj.pathname = urlObj.pathname.replace(/\/+$/, '') + '/' + queryPath.replace(/^\/+/, '');
+	return urlObj.toString();
+}
+
+/**
  * Adds query parameters to a given URL.
  * @param url The base URL to which query parameters will be added
  * @param queryParams An object representing the query parameters to add
@@ -91,6 +103,26 @@ export function nonEmptyStringGuard(
 ): string {
 	if (value.trim() === '') {
 		throw new NodeOperationError(executeFunctions.getNode(), `${name} cannot be empty`);
+	}
+	return value;
+}
+
+/**
+ * A Validator function that ensures a number parameter is not zero
+ * for use with {@link getNodeParameter}.
+ * @param executeFunctions The execution functions context
+ * @param value The number value to validate
+ * @param name The name of the parameter being validated
+ * @returns The validated number value
+ * @throws The {@link NodeOperationError} exception is thrown if the number is zero.
+ */
+export function nonZeroNumberGuard(
+	executeFunctions: IExecuteFunctions,
+	value: number,
+	name: string,
+): number {
+	if (value === 0) {
+		throw new NodeOperationError(executeFunctions.getNode(), `${name} cannot be zero`);
 	}
 	return value;
 }
