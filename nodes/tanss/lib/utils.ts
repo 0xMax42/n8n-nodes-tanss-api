@@ -52,6 +52,13 @@ export function concatURLAndPath(url: string, ...path: string[]): string {
  * @param url The base URL to which the query path will be added
  * @param queryPath The query path to append to the URL
  * @returns The URL with the appended query path
+ * @example
+ * ```typescript
+ * const url = 'https://example.com/api';
+ * const queryPath = '/items/123';
+ * const fullURL = addQueryPathToURL(url, queryPath);
+ * // fullURL will be 'https://example.com/api/items/123'
+ * ```
  */
 export function addQueryPathToURL(url: string, queryPath: string): string {
 	const urlObj = new URL(url);
