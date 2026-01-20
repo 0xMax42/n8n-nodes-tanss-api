@@ -4,7 +4,7 @@ import {
 	INodeProperties,
 	NodeOperationError,
 } from 'n8n-workflow';
-import { generateTOTP } from './2fa';
+import { generateTOTP } from '../lib';
 
 export const authOperations: INodeProperties[] = [
 	{
