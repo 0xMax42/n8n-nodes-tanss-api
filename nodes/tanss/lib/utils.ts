@@ -103,7 +103,7 @@ export function addQueryParams(
  * @param name The name of the parameter to retrieve
  * @param itemIndex The index of the item for which the parameter is retrieved
  * @param defaultValue The default value to use if the parameter is not found
- * @param validator An optional function to validate or transform the retrieved value
+ * @param validator A function to validate or transform the retrieved value
  * @returns The retrieved and optionally validated parameter value
  * @throws The {@link NodeOperationError} exception can be thrown by the validator function if validation fails.
  */
@@ -112,10 +112,30 @@ export function getNodeParameter<T>(
 	name: string,
 	itemIndex: number,
 	defaultValue: T,
-	validator?: (executeFunctions: IExecuteFunctions, value: T, name: string) => T,
+	validator: (executeFunctions: IExecuteFunctions, value: unknown, name: string) => T,
 ): T {
 	const value = executeFunctions.getNodeParameter(name, itemIndex, defaultValue) as T;
 	return validator ? validator(executeFunctions, value, name) : value;
+}
+
+/**
+ * A Validator function that ensures a parameter is of type string
+ * for use with {@link getNodeParameter}.
+ * @param executeFunctions The execution functions context
+ * @param value The value to validate
+ * @param name The name of the parameter being validated
+ * @returns The validated string value
+ * @throws The {@link NodeOperationError} exception is thrown if the value is not a string.
+ */
+export function stringGuard(
+	executeFunctions: IExecuteFunctions,
+	value: unknown,
+	name: string,
+): string {
+	if (typeof value !== 'string') {
+		throw new NodeOperationError(executeFunctions.getNode(), `${name} must be a string`);
+	}
+	return value;
 }
 
 /**
@@ -129,11 +149,34 @@ export function getNodeParameter<T>(
  */
 export function nonEmptyStringGuard(
 	executeFunctions: IExecuteFunctions,
-	value: string,
+	value: unknown,
 	name: string,
 ): string {
+	if (typeof value !== 'string') {
+		throw new NodeOperationError(executeFunctions.getNode(), `${name} must be a string`);
+	}
 	if (value.trim() === '') {
 		throw new NodeOperationError(executeFunctions.getNode(), `${name} cannot be empty`);
+	}
+	return value;
+}
+
+/**
+ * A Validator function that ensures a parameter is of type number
+ * for use with {@link getNodeParameter}.
+ * @param executeFunctions The execution functions context
+ * @param value The value to validate
+ * @param name The name of the parameter being validated
+ * @returns The validated number value
+ * @throws The {@link NodeOperationError} exception is thrown if the value is not a number.
+ */
+export function numberGuard(
+	executeFunctions: IExecuteFunctions,
+	value: unknown,
+	name: string,
+): number {
+	if (typeof value !== 'number' || isNaN(value)) {
+		throw new NodeOperationError(executeFunctions.getNode(), `${name} must be a number`);
 	}
 	return value;
 }
@@ -149,9 +192,12 @@ export function nonEmptyStringGuard(
  */
 export function nonZeroNumberGuard(
 	executeFunctions: IExecuteFunctions,
-	value: number,
+	value: unknown,
 	name: string,
 ): number {
+	if (typeof value !== 'number' || isNaN(value)) {
+		throw new NodeOperationError(executeFunctions.getNode(), `${name} must be a number`);
+	}
 	if (value === 0) {
 		throw new NodeOperationError(executeFunctions.getNode(), `${name} cannot be zero`);
 	}
@@ -169,11 +215,25 @@ export function nonZeroNumberGuard(
  */
 export function nonEmptyRecordGuard(
 	executeFunctions: IExecuteFunctions,
-	value: Record<string, unknown>,
+	value: unknown,
 	name: string,
 ): Record<string, unknown> {
+	if (!isPlainRecord(value)) {
+		throw new NodeOperationError(executeFunctions.getNode(), `${name} must be a non-empty record`);
+	}
 	if (Object.keys(value).length === 0) {
 		throw new NodeOperationError(executeFunctions.getNode(), `${name} cannot be empty`);
 	}
 	return value;
+}
+
+/**
+ * Type guard to check if a value is a plain object (Record<string, unknown>)
+ * @param value The value to check
+ * @returns True if the value is a plain object, false otherwise
+ */
+function isPlainRecord(value: unknown): value is Record<string, unknown> {
+	if (typeof value !== 'object' || value === null || Array.isArray(value)) return false;
+	const proto = Object.getPrototypeOf(value);
+	return proto === Object.prototype || proto === null;
 }
