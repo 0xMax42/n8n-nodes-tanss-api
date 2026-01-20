@@ -1,6 +1,6 @@
 import { IExecuteFunctions, IHttpRequestOptions, NodeOperationError } from 'n8n-workflow';
-import { generateAPIEndpointURL } from './utils';
 import { generateTOTP } from './2fa';
+import { generateAPIEndpointURL } from './utils';
 
 interface ICredentials {
 	baseURL: string;
