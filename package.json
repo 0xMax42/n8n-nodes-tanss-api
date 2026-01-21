@@ -26,7 +26,12 @@
         "format": "prettier --check .",
         "format:fix": "prettier --write .",
         "release": "n8n-node release",
-        "prepublishOnly": "n8n-node prerelease"
+        "prepublishOnly": "n8n-node prerelease",
+        "test": "jest",
+        "test:watch": "jest --watch",
+        "test:ci": "jest --ci",
+        "test:one": "jest -t",
+        "test:coverage": "jest --coverage"
     },
     "files": [
         "dist"
@@ -42,10 +47,13 @@
     },
     "devDependencies": {
         "@n8n/node-cli": "*",
+        "@types/jest": "^30.0.0",
         "@types/node": "^24.9.1",
         "eslint": "9.32.0",
+        "jest": "^30.2.0",
         "prettier": "3.6.2",
         "release-it": "^19.0.4",
+        "ts-jest": "^29.4.6",
         "typescript": "5.9.2"
     },
     "peerDependencies": {
