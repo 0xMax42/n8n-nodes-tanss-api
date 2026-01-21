@@ -142,6 +142,17 @@ function createRecordFromFields(
 	for (const field of fields.filter((f) => f.location === type)) {
 		const value = getNodeParameter(this, field.name, i, field.defaultValue, field.validator);
 		const recordKey = field.locationName ?? field.name;
+		if (field.spread) {
+			if (typeof value === 'object' && value !== null) {
+				Object.assign(record, value as Record<string, unknown>);
+				continue;
+			} else {
+				throw new NodeOperationError(
+					this.getNode(),
+					`Field "${field.name}" is marked to be spread but its value is not an object.`,
+				);
+			}
+		}
 		record[recordKey] = value;
 	}
 	return Object.keys(record).length > 0 ? record : undefined;

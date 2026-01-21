@@ -38,6 +38,7 @@ export type CrudFieldLocation = 'query' | 'path' | 'body';
 export type CrudField<T = unknown> = {
 	name: string;
 	locationName?: string;
+	spread?: boolean;
 	location: CrudFieldLocation;
 	defaultValue: T;
 	validator: NodeParameterValidator<T>;
