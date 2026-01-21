@@ -1,4 +1,20 @@
-import { IExecuteFunctions, INodeProperties, NodeOperationError } from 'n8n-workflow';
+import {
+	IExecuteFunctions,
+	IHttpRequestMethods,
+	IHttpRequestOptions,
+	INodeProperties,
+	NodeOperationError,
+} from 'n8n-workflow';
+import {
+	addAuthorizationHeader,
+	obtainToken,
+	generateAPIEndpointURL,
+	getNodeParameter,
+	nonEmptyRecordGuard,
+	nonEmptyStringGuard,
+	numberGuard,
+	httpRequest,
+} from '../lib';
 
 export const manufacturersOperations: INodeProperties[] = [
 	{
@@ -45,16 +61,6 @@ export const manufacturersOperations: INodeProperties[] = [
 
 export const manufacturersFields: INodeProperties[] = [
 	{
-		displayName: 'API Token',
-		name: 'apiToken',
-		type: 'string' as const,
-		required: true,
-		typeOptions: { password: true },
-		default: '',
-		description: 'API token obtained from the TANSS API login',
-		displayOptions: { show: { resource: ['manufacturers'] } },
-	},
-	{
 		displayName: 'Manufacturer ID',
 		name: 'manufacturerId',
 		type: 'number' as const,
@@ -94,71 +100,52 @@ export const manufacturersFields: INodeProperties[] = [
 ];
 
 export async function handleManufacturers(this: IExecuteFunctions, i: number) {
-	const operation = this.getNodeParameter('operation', i) as string;
-	const credentials = await this.getCredentials('tanssApi');
-	if (!credentials) throw new NodeOperationError(this.getNode(), 'No credentials returned!');
+	const operation = getNodeParameter(this, 'operation', i, '', nonEmptyStringGuard);
+	const apiToken = await obtainToken(this, await this.getCredentials('tanssApi'));
+	const manufacturerId = getNodeParameter(this, 'manufacturerId', i, 0, numberGuard);
 
-	const apiToken = this.getNodeParameter('apiToken', i, '') as string;
-	const manufacturerId = this.getNodeParameter('manufacturerId', i, 0) as number;
-
-	let url = '';
-	const requestOptions: {
-		method: 'GET' | 'POST' | 'PUT' | 'DELETE';
-		headers: { apiToken: string; 'Content-Type': string };
-		json: boolean;
-		body?: Record<string, unknown>;
-		url: string;
-		returnFullResponse?: boolean;
-	} = {
-		method: 'GET',
-		headers: { apiToken, 'Content-Type': 'application/json' },
-		json: true,
-		url,
-	};
+	let subPath: string | undefined;
+	let method: IHttpRequestMethods | undefined;
+	let body: Record<string, unknown> | undefined;
 
 	switch (operation) {
 		case 'createManufacturer': {
-			url = `${credentials.baseURL}/backend/api/v1/manufacturers`;
-			requestOptions.method = 'POST';
-			const createManufacturerFields = this.getNodeParameter(
+			subPath = 'manufacturers';
+			method = 'POST';
+			body = getNodeParameter<Record<string, unknown>>(
+				this,
 				'createManufacturerFields',
 				i,
 				{},
-			) as Record<string, unknown>;
-			if (Object.keys(createManufacturerFields).length === 0)
-				throw new NodeOperationError(
-					this.getNode(),
-					'No fields provided for manufacturer creation.',
-				);
-			requestOptions.body = createManufacturerFields;
+				nonEmptyRecordGuard,
+			);
 			break;
 		}
 		case 'deleteManufacturer': {
-			url = `${credentials.baseURL}/backend/api/v1/manufacturers/${manufacturerId}`;
-			requestOptions.method = 'DELETE';
+			subPath = `manufacturers/${manufacturerId}`;
+			method = 'DELETE';
 			break;
 		}
 		case 'getAllManufacturers': {
-			url = `${credentials.baseURL}/backend/api/v1/manufacturers`;
-			requestOptions.method = 'GET';
+			subPath = 'manufacturers';
+			method = 'GET';
 			break;
 		}
 		case 'getManufacturerById': {
-			url = `${credentials.baseURL}/backend/api/v1/manufacturers/${manufacturerId}`;
-			requestOptions.method = 'GET';
+			subPath = `manufacturers/${manufacturerId}`;
+			method = 'GET';
 			break;
 		}
 		case 'updateManufacturer': {
-			url = `${credentials.baseURL}/backend/api/v1/manufacturers/${manufacturerId}`;
-			requestOptions.method = 'PUT';
-			const updateManufacturerFields = this.getNodeParameter(
+			subPath = `manufacturers/${manufacturerId}`;
+			method = 'PUT';
+			body = getNodeParameter<Record<string, unknown>>(
+				this,
 				'updateManufacturerFields',
 				i,
 				{},
-			) as Record<string, unknown>;
-			if (Object.keys(updateManufacturerFields).length === 0)
-				throw new NodeOperationError(this.getNode(), 'No fields provided for manufacturer update.');
-			requestOptions.body = updateManufacturerFields;
+				nonEmptyRecordGuard,
+			);
 			break;
 		}
 		default:
@@ -168,21 +155,50 @@ export async function handleManufacturers(this: IExecuteFunctions, i: number) {
 			);
 	}
 
-	requestOptions.url = url;
+	if (!subPath || !method) {
+		throw new NodeOperationError(
+			this.getNode(),
+			'Failed to determine API endpoint or method for the Manufacturers operation.',
+		);
+	}
 
-	try {
-		type FullResponse = { statusCode: number; body?: unknown };
-		const options = {
-			...requestOptions,
-			returnFullResponse: true,
-		} as unknown as import('n8n-workflow').IHttpRequestOptions;
-		const fullResponse = (await this.helpers.httpRequest(options)) as unknown as FullResponse;
-		if (requestOptions.method === 'DELETE') {
-			return { success: fullResponse.statusCode === 204, statusCode: fullResponse.statusCode };
-		}
-		return fullResponse.body ?? (fullResponse as unknown);
-	} catch (error: unknown) {
-		const errorMessage = error instanceof Error ? error.message : String(error);
-		throw new NodeOperationError(this.getNode(), `Failed to execute ${operation}: ${errorMessage}`);
+	const url = generateAPIEndpointURL(
+		this,
+		(await this.getCredentials('tanssApi'))?.baseURL,
+		subPath,
+	);
+
+	const requestOptions: IHttpRequestOptions = {
+		method: method,
+		headers: { Accept: 'application/json' },
+		json: true,
+		url: url,
+		body: body,
+		returnFullResponse: true,
+	};
+	addAuthorizationHeader(requestOptions, apiToken);
+
+	const response = await httpRequest(this, requestOptions);
+
+	switch (response.kind) {
+		case 'success':
+			return {
+				success: true,
+				statusCode: response.statusCode,
+				message: 'Operation executed successfully',
+				body: response.body,
+			};
+		case 'http-error':
+			return {
+				success: false,
+				statusCode: response.statusCode,
+				message: 'HTTP error occurred during operation',
+				body: response.body,
+			};
+		case 'network-error':
+			throw new NodeOperationError(
+				this.getNode(),
+				`Network error while executing ${operation}: ${response.body}`,
+			);
 	}
 }
