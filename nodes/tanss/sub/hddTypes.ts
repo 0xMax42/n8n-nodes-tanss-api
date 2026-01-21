@@ -1,4 +1,20 @@
-import { IExecuteFunctions, INodeProperties, NodeOperationError } from 'n8n-workflow';
+import {
+	IExecuteFunctions,
+	IHttpRequestMethods,
+	IHttpRequestOptions,
+	INodeProperties,
+	NodeOperationError,
+} from 'n8n-workflow';
+import {
+	generateAPIEndpointURL,
+	getNodeParameter,
+	nonEmptyRecordGuard,
+	nonEmptyStringGuard,
+	numberGuard,
+	addAuthorizationHeader,
+	obtainToken,
+	httpRequest,
+} from '../lib';
 
 export const hddTypesOperations: INodeProperties[] = [
 	{
@@ -45,16 +61,6 @@ export const hddTypesOperations: INodeProperties[] = [
 
 export const hddTypesFields: INodeProperties[] = [
 	{
-		displayName: 'API Token',
-		name: 'apiToken',
-		type: 'string' as const,
-		required: true,
-		typeOptions: { password: true },
-		default: '',
-		description: 'API token obtained from the TANSS API login',
-		displayOptions: { show: { resource: ['hddTypes'] } },
-	},
-	{
 		displayName: 'HDD Type ID',
 		name: 'hddTypeId',
 		type: 'number' as const,
@@ -94,66 +100,52 @@ export const hddTypesFields: INodeProperties[] = [
 ];
 
 export async function handleHddTypes(this: IExecuteFunctions, i: number) {
-	const operation = this.getNodeParameter('operation', i) as string;
-	const credentials = await this.getCredentials('tanssApi');
-	if (!credentials) throw new NodeOperationError(this.getNode(), 'No credentials returned!');
+	const operation = getNodeParameter(this, 'operation', i, '', nonEmptyStringGuard);
+	const apiToken = await obtainToken(this, await this.getCredentials('tanssApi'));
+	const hddTypeId = getNodeParameter(this, 'hddTypeId', i, 0, numberGuard);
 
-	const apiToken = this.getNodeParameter('apiToken', i, '') as string;
-	const hddTypeId = this.getNodeParameter('hddTypeId', i, 0) as number;
-
-	let url = '';
-	const requestOptions: {
-		method: 'GET' | 'POST' | 'PUT' | 'DELETE';
-		headers: { apiToken: string; 'Content-Type': string };
-		json: boolean;
-		body?: Record<string, unknown>;
-		url: string;
-		returnFullResponse?: boolean;
-	} = {
-		method: 'GET',
-		headers: { apiToken, 'Content-Type': 'application/json' },
-		json: true,
-		url,
-	};
+	let subPath: string | undefined;
+	let method: IHttpRequestMethods | undefined;
+	let body: Record<string, unknown> | undefined;
 
 	switch (operation) {
 		case 'createHddType': {
-			url = `${credentials.baseURL}/backend/api/v1/hddTypes`;
-			requestOptions.method = 'POST';
-			const createHddTypeFields = this.getNodeParameter('createHddTypeFields', i, {}) as Record<
-				string,
-				unknown
-			>;
-			if (Object.keys(createHddTypeFields).length === 0)
-				throw new NodeOperationError(this.getNode(), 'No fields provided for HDD type creation.');
-			requestOptions.body = createHddTypeFields;
+			subPath = 'hddTypes';
+			method = 'POST';
+			body = getNodeParameter<Record<string, unknown>>(
+				this,
+				'createHddTypeFields',
+				i,
+				{},
+				nonEmptyRecordGuard,
+			);
 			break;
 		}
 		case 'deleteHddType': {
-			url = `${credentials.baseURL}/backend/api/v1/hddTypes/${hddTypeId}`;
-			requestOptions.method = 'DELETE';
+			subPath = `hddTypes/${hddTypeId}`;
+			method = 'DELETE';
 			break;
 		}
 		case 'getAllHddTypes': {
-			url = `${credentials.baseURL}/backend/api/v1/hddTypes`;
-			requestOptions.method = 'GET';
+			subPath = 'hddTypes';
+			method = 'GET';
 			break;
 		}
 		case 'getHddTypeById': {
-			url = `${credentials.baseURL}/backend/api/v1/hddTypes/${hddTypeId}`;
-			requestOptions.method = 'GET';
+			subPath = `hddTypes/${hddTypeId}`;
+			method = 'GET';
 			break;
 		}
 		case 'updateHddType': {
-			url = `${credentials.baseURL}/backend/api/v1/hddTypes/${hddTypeId}`;
-			requestOptions.method = 'PUT';
-			const updateHddTypeFields = this.getNodeParameter('updateHddTypeFields', i, {}) as Record<
-				string,
-				unknown
-			>;
-			if (Object.keys(updateHddTypeFields).length === 0)
-				throw new NodeOperationError(this.getNode(), 'No fields provided for HDD type update.');
-			requestOptions.body = updateHddTypeFields;
+			subPath = `hddTypes/${hddTypeId}`;
+			method = 'PUT';
+			body = getNodeParameter<Record<string, unknown>>(
+				this,
+				'updateHddTypeFields',
+				i,
+				{},
+				nonEmptyRecordGuard,
+			);
 			break;
 		}
 		default:
@@ -162,22 +154,50 @@ export async function handleHddTypes(this: IExecuteFunctions, i: number) {
 				`The operation "${operation}" is not recognized for HDD Types.`,
 			);
 	}
+	if (!subPath || !method) {
+		throw new NodeOperationError(
+			this.getNode(),
+			'Failed to determine API endpoint or method for the HDD Types operation.',
+		);
+	}
 
-	requestOptions.url = url;
+	const url = generateAPIEndpointURL(
+		this,
+		(await this.getCredentials('tanssApi'))?.baseURL,
+		subPath,
+	);
 
-	try {
-		type FullResponse = { statusCode: number; body?: unknown };
-		const options = {
-			...requestOptions,
-			returnFullResponse: true,
-		} as unknown as import('n8n-workflow').IHttpRequestOptions;
-		const fullResponse = (await this.helpers.httpRequest(options)) as unknown as FullResponse;
-		if (requestOptions.method === 'DELETE') {
-			return { success: fullResponse.statusCode === 204, statusCode: fullResponse.statusCode };
-		}
-		return fullResponse.body ?? (fullResponse as unknown);
-	} catch (error: unknown) {
-		const errorMessage = error instanceof Error ? error.message : String(error);
-		throw new NodeOperationError(this.getNode(), `Failed to execute ${operation}: ${errorMessage}`);
+	const requestOptions: IHttpRequestOptions = {
+		method: method,
+		headers: { Accept: 'application/json' },
+		json: true,
+		url: url,
+		body: body,
+		returnFullResponse: true,
+	};
+	addAuthorizationHeader(requestOptions, apiToken);
+
+	const response = await httpRequest(this, requestOptions);
+
+	switch (response.kind) {
+		case 'success':
+			return {
+				success: true,
+				statusCode: response.statusCode,
+				message: 'Operation executed successfully',
+				body: response.body,
+			};
+		case 'http-error':
+			return {
+				success: false,
+				statusCode: response.statusCode,
+				message: 'HTTP error occurred during operation',
+				body: response.body,
+			};
+		case 'network-error':
+			throw new NodeOperationError(
+				this.getNode(),
+				`Network error while executing ${operation}: ${response.body}`,
+			);
 	}
 }
