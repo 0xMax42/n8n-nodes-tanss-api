@@ -15,6 +15,30 @@ import { httpRequest } from '../httpRequest';
  * Creates a CRUD handler function for n8n nodes based on the provided configuration.
  * @param config The CRUD operations configuration
  * @returns A node handler function to process CRUD operations
+ * @example
+ * ```ts
+ * export const handleAvailability = createCrudHandler({
+ *   operationField: {
+ *     name: 'operation',
+ *   },
+ *   operations: [
+ *     crudOperation({
+ *       type: 'read',
+ *       operationName: 'getAvailability',
+ *       fields: [
+ *         crudField({
+ *           name: 'employeeIds',
+ *           location: 'query',
+ *           defaultValue: '',
+ *           validator: nonEmptyStringGuard,
+ *         }),
+ *       ],
+ *       httpMethod: 'GET',
+ *       subPath: 'availability',
+ *     }),
+ *   ],
+ * });
+ * ```
  */
 export function createCrudHandler(config: CrudOperationsConfig): NodeHandler {
 	return async function handleCrud(this: IExecuteFunctions, i: number) {
