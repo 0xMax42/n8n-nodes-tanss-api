@@ -90,6 +90,7 @@ export const handleMails = createCrudHandler({
 				crudField({
 					name: 'mailObject',
 					location: 'body',
+					spread: true,
 					defaultValue: {},
 					validator: nonEmptyRecordGuard,
 				}),
