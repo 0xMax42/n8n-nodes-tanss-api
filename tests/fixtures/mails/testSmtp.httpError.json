@@ -1,0 +1,44 @@
+{
+  "name": "testSmtp returns http-error wrapper",
+  "itemIndex": 0,
+  "parameters": {
+    "operation": "testSmtp",
+    "receiver": "user@example.invalid",
+    "mailObject": {
+      "smtpAddress": "smtp.example.invalid",
+      "smtpHost": "smtp.example.invalid"
+    }
+  },
+  "credentials": {
+    "tanssApi": {
+      "baseURL": "https://example.invalid",
+      "authentication": "apiToken",
+      "apiToken": "TOKEN-123"
+    }
+  },
+  "http": [
+    {
+      "expect": {
+        "method": "POST",
+        "url": "https://example.invalid/backend/api/v1/mails/test/smtp?receiver=user%40example.invalid"
+      },
+      "throw": {
+        "kind": "axios",
+        "statusCode": 502,
+        "data": {
+          "message": "bad gateway"
+        }
+      }
+    }
+  ],
+  "expected": {
+    "kind": "returns",
+    "matchObject": {
+      "success": false,
+      "statusCode": 502,
+      "body": {
+        "message": "bad gateway"
+      }
+    }
+  }
+}

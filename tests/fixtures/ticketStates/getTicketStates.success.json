@@ -1,0 +1,52 @@
+{
+  "name": "getTicketStates returns success wrapper",
+  "itemIndex": 0,
+  "parameters": {
+    "operation": "getTicketStates"
+  },
+  "credentials": {
+    "tanssApi": {
+      "baseURL": "https://example.invalid",
+      "authentication": "apiToken",
+      "apiToken": "TOKEN-123"
+    }
+  },
+  "http": [
+    {
+      "expect": {
+        "method": "GET",
+        "url": "https://example.invalid/backend/api/v1/admin/ticketStates",
+        "json": true,
+        "headers": {
+          "Accept": "application/json",
+          "apiToken": "Bearer TOKEN-123"
+        }
+      },
+      "reply": {
+        "statusCode": 200,
+        "body": [
+          {
+            "id": 1,
+            "name": "Open",
+            "active": true
+          },
+          {
+            "id": 2,
+            "name": "Closed",
+            "active": true
+          }
+        ],
+        "headers": {
+          "content-type": "application/json"
+        }
+      }
+    }
+  ],
+  "expected": {
+    "kind": "returns",
+    "matchObject": {
+      "success": true,
+      "statusCode": 200
+    }
+  }
+}

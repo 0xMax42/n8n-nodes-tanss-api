@@ -1,0 +1,40 @@
+{
+  "name": "getManufacturerById returns http-error wrapper",
+  "itemIndex": 0,
+  "parameters": {
+    "operation": "getManufacturerById",
+    "manufacturerId": 7
+  },
+  "credentials": {
+    "tanssApi": {
+      "baseURL": "https://example.invalid",
+      "authentication": "apiToken",
+      "apiToken": "TOKEN-123"
+    }
+  },
+  "http": [
+    {
+      "expect": {
+        "method": "GET",
+        "url": "https://example.invalid/backend/api/v1/manufacturers/7"
+      },
+      "throw": {
+        "kind": "axios",
+        "statusCode": 404,
+        "data": {
+          "message": "not found"
+        }
+      }
+    }
+  ],
+  "expected": {
+    "kind": "returns",
+    "matchObject": {
+      "success": false,
+      "statusCode": 404,
+      "body": {
+        "message": "not found"
+      }
+    }
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "name": "updateHddType throws NodeOperationError on missing updateHddTypeFields",
+  "itemIndex": 0,
+  "parameters": {
+    "operation": "updateHddType",
+    "hddTypeId": 5,
+    "updateHddTypeFields": {}
+  },
+  "credentials": {
+    "tanssApi": {
+      "baseURL": "https://example.invalid",
+      "authentication": "apiToken",
+      "apiToken": "TOKEN-123"
+    }
+  },
+  "http": [],
+  "expected": {
+    "kind": "throws",
+    "matchError": {
+      "name": "NodeOperationError",
+      "messageIncludes": "updateHddTypeFields cannot be empty"
+    }
+  }
+}

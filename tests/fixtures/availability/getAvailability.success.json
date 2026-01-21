@@ -1,0 +1,41 @@
+{
+  "name": "getAvailability returns success wrapper",
+  "itemIndex": 0,
+  "parameters": {
+    "operation": "getAvailability",
+    "employeeIds": "1,2"
+  },
+  "credentials": {
+    "tanssApi": {
+      "baseURL": "https://example.invalid",
+      "authentication": "apiToken",
+      "apiToken": "TOKEN-123"
+    }
+  },
+  "http": [
+    {
+      "expect": {
+        "method": "GET",
+        "url": "https://example.invalid/backend/api/v1/availability?employeeIds=1%2C2",
+        "json": true,
+        "headers": {
+          "Accept": "application/json",
+          "apiToken": "Bearer TOKEN-123"
+        }
+      },
+      "reply": {
+        "statusCode": 200,
+        "body": { "ok": true },
+        "headers": { "content-type": "application/json" }
+      }
+    }
+  ],
+  "expected": {
+    "kind": "returns",
+    "matchObject": {
+      "success": true,
+      "statusCode": 200,
+      "body": { "ok": true }
+    }
+  }
+}

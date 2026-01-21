@@ -1,0 +1,36 @@
+{
+  "name": "getAvailability returns http-error wrapper",
+  "itemIndex": 0,
+  "parameters": {
+    "operation": "getAvailability",
+    "employeeIds": "1,2"
+  },
+  "credentials": {
+    "tanssApi": {
+      "baseURL": "https://example.invalid",
+      "authentication": "apiToken",
+      "apiToken": "TOKEN-123"
+    }
+  },
+  "http": [
+    {
+      "expect": {
+        "method": "GET",
+        "url": "https://example.invalid/backend/api/v1/availability?employeeIds=1%2C2"
+      },
+      "throw": {
+        "kind": "axios",
+        "statusCode": 404,
+        "data": { "message": "not found" }
+      }
+    }
+  ],
+  "expected": {
+    "kind": "returns",
+    "matchObject": {
+      "success": false,
+      "statusCode": 404,
+      "body": { "message": "not found" }
+    }
+  }
+}
