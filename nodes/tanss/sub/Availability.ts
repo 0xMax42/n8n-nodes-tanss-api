@@ -1,4 +1,18 @@
-import { IExecuteFunctions, INodeProperties, NodeOperationError } from 'n8n-workflow';
+import {
+	IExecuteFunctions,
+	IHttpRequestOptions,
+	INodeProperties,
+	NodeOperationError,
+} from 'n8n-workflow';
+import {
+	addAuthorizationHeader,
+	obtainToken,
+	addQueryParams,
+	generateAPIEndpointURL,
+	getNodeParameter,
+	nonEmptyStringGuard,
+	httpRequest,
+} from '../lib';
 
 export const availabilityOperations: INodeProperties[] = [
 	{
@@ -21,15 +35,6 @@ export const availabilityOperations: INodeProperties[] = [
 
 export const availabilityFields: INodeProperties[] = [
 	{
-		displayName: 'API Token',
-		name: 'apiToken',
-		type: 'string' as const,
-		typeOptions: { password: true },
-		default: '',
-		description: 'API token obtained from the TANSS API login',
-		displayOptions: { show: { resource: ['availability'] } },
-	},
-	{
 		displayName: 'Employee IDs (Comma Separated)',
 		name: 'employeeIds',
 		type: 'string' as const,
@@ -41,51 +46,45 @@ export const availabilityFields: INodeProperties[] = [
 ];
 
 export async function handleAvailability(this: IExecuteFunctions, i: number) {
-	const credentials = await this.getCredentials('tanssApi');
-	if (!credentials) throw new NodeOperationError(this.getNode(), 'No credentials returned!');
+	const apiToken = await obtainToken(this, await this.getCredentials('tanssApi'));
+	const url = generateAPIEndpointURL(
+		this,
+		(await this.getCredentials('tanssApi'))?.baseURL,
+		'availability',
+	);
 
-	const apiToken = this.getNodeParameter('apiToken', i, '') as string;
-	const employeeIds = this.getNodeParameter('employeeIds', i) as string;
+	const employeeIds = getNodeParameter(this, 'employeeIds', i, '', nonEmptyStringGuard);
 
-	if (!employeeIds || String(employeeIds).trim() === '') {
-		throw new NodeOperationError(this.getNode(), 'employeeIds is required');
-	}
-
-	const base = credentials.baseURL as string;
-	if (!base) throw new NodeOperationError(this.getNode(), 'No baseURL in credentials');
-
-	const url = `${base}/backend/api/v1/availability`;
-
-	const requestOptions: {
-		method: 'GET' | 'POST' | 'PUT' | 'DELETE';
-		headers: { [key: string]: string };
-		json: boolean;
-		url: string;
-	} = {
+	const requestOptions: IHttpRequestOptions = {
 		method: 'GET',
 		headers: { Accept: 'application/json' },
 		json: true,
 		url,
 	};
+	addAuthorizationHeader(requestOptions, apiToken);
+	addQueryParams(requestOptions, { employeeIds: employeeIds });
 
-	if (apiToken && String(apiToken).trim() !== '') {
-		const tokenValue = String(apiToken).startsWith('Bearer ')
-			? String(apiToken)
-			: `Bearer ${String(apiToken)}`;
-		requestOptions.headers.Authorization = tokenValue;
-		requestOptions.headers.apiToken = tokenValue;
-	}
+	const response = await httpRequest(this, requestOptions);
 
-	const encoded = encodeURIComponent(String(employeeIds).trim());
-	requestOptions.url = `${url}?employeeIds=${encoded}`;
-
-	try {
-		const response = await this.helpers.httpRequest(
-			requestOptions as unknown as import('n8n-workflow').IHttpRequestOptions,
-		);
-		return response;
-	} catch (err: unknown) {
-		const message = err instanceof Error ? err.message : String(err);
-		throw new NodeOperationError(this.getNode(), `Failed to fetch availability: ${message}`);
+	switch (response.kind) {
+		case 'success':
+			return {
+				success: true,
+				statusCode: response.statusCode,
+				message: 'Operation executed successfully',
+				body: response.body,
+			};
+		case 'http-error':
+			return {
+				success: false,
+				statusCode: response.statusCode,
+				message: 'HTTP error occurred during operation',
+				body: response.body,
+			};
+		case 'network-error':
+			throw new NodeOperationError(
+				this.getNode(),
+				`Network error while executing getAvailability: ${response.body}`,
+			);
 	}
 }
