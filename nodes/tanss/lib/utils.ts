@@ -98,6 +98,21 @@ export function addQueryParams(
 }
 
 /**
+ * A Validator function type for validating node parameters.
+ * @template T The expected type of the parameter value after validation
+ * @param executeFunctions The execution functions context
+ * @param value The value to validate
+ * @param name The name of the parameter being validated
+ * @returns The validated parameter value of type T
+ * @throws The {@link NodeOperationError} exception can be thrown if validation fails.
+ */
+export type NodeParameterValidator<T> = (
+	executeFunctions: IExecuteFunctions,
+	value: unknown,
+	name: string,
+) => T;
+
+/**
  * Wrapper around n8n's getNodeParameter for reusable handling of typing and validation.
  * @param executeFunctions The execution functions context
  * @param name The name of the parameter to retrieve
@@ -112,7 +127,7 @@ export function getNodeParameter<T>(
 	name: string,
 	itemIndex: number,
 	defaultValue: T,
-	validator: (executeFunctions: IExecuteFunctions, value: unknown, name: string) => T,
+	validator: NodeParameterValidator<T>,
 ): T {
 	const value = executeFunctions.getNodeParameter(name, itemIndex, defaultValue) as T;
 	return validator ? validator(executeFunctions, value, name) : value;
