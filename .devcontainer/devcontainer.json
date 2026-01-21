@@ -4,10 +4,12 @@
 	"workspaceFolder": "/workspace",
 	"remoteUser": "node",
 	"updateRemoteUserUID": false,
-	"mounts": ["source=${localWorkspaceFolder},target=/workspace,type=bind"],
+	"mounts": [ "source=${localWorkspaceFolder},target=/workspace,type=bind" ],
 	"customizations": {
 		"vscode": {
-			"extensions": ["prettier.prettier-vscode"]
+			"extensions": [
+				"esbenp.prettier-vscode"
+			]
 		}
 	}
 }
