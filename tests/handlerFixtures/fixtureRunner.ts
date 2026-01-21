@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* tests/handlerFixtures/fixtureRunner.ts */
 import { HandlerFixture, HttpMock, NodeStub } from './fixtureTypes';
 
