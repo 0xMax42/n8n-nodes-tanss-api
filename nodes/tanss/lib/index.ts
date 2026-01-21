@@ -13,4 +13,5 @@ export {
 	numberGuard,
 	nonZeroNumberGuard,
 	nonEmptyRecordGuard,
+	booleanGuard,
 } from './utils';

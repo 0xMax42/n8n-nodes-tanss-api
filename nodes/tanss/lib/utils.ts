@@ -237,3 +237,22 @@ function isPlainRecord(value: unknown): value is Record<string, unknown> {
 	const proto = Object.getPrototypeOf(value);
 	return proto === Object.prototype || proto === null;
 }
+
+/**
+ * A Validator function that ensures a parameter is of type boolean
+ * for use with {@link getNodeParameter}.
+ * @param executeFunctions The execution functions context
+ * @param value The value to validate
+ * @param name The name of the parameter being validated
+ * @returns The validated boolean value
+ */
+export function booleanGuard(
+	executeFunctions: IExecuteFunctions,
+	value: unknown,
+	name: string,
+): boolean {
+	if (typeof value !== 'boolean') {
+		throw new NodeOperationError(executeFunctions.getNode(), `${name} must be a boolean`);
+	}
+	return value;
+}
