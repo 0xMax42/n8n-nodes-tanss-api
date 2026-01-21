@@ -1,19 +1,7 @@
-import {
-	IExecuteFunctions,
-	INodeProperties,
-	NodeOperationError,
-	IHttpRequestOptions,
-} from 'n8n-workflow';
-import {
-	addAuthorizationHeader,
-	obtainToken,
-	addQueryParams,
-	generateAPIEndpointURL,
-	getNodeParameter,
-	nonEmptyRecordGuard,
-	nonEmptyStringGuard,
-	httpRequest,
-} from '../lib';
+import { INodeProperties } from 'n8n-workflow';
+import { nonEmptyRecordGuard, nonEmptyStringGuard } from '../lib';
+import { createCrudHandler } from '../lib/crud/crud';
+import { crudField, crudOperation } from '../lib/crud';
 
 export const mailsOperations: INodeProperties[] = [
 	{
@@ -84,67 +72,30 @@ export const mailsFields: INodeProperties[] = [
 	},
 ];
 
-export async function handleMails(this: IExecuteFunctions, i: number) {
-	const operation = getNodeParameter(this, 'operation', i, '', nonEmptyStringGuard);
-	const apiToken = await obtainToken(this, await this.getCredentials('tanssApi'), 'system');
-	const receiver = getNodeParameter(this, 'receiver', i, '', nonEmptyStringGuard);
-
-	let reqBody: Record<string, unknown> | undefined;
-	switch (operation) {
-		case 'testSmtp': {
-			reqBody = getNodeParameter(this, 'mailObject', i, {}, nonEmptyRecordGuard);
-			break;
-		}
-
-		default:
-			throw new NodeOperationError(
-				this.getNode(),
-				`The operation "${operation}" is not recognized.`,
-			);
-	}
-
-	if (!reqBody) {
-		throw new NodeOperationError(
-			this.getNode(),
-			`The operation "${operation}" is missing required data.`,
-		);
-	}
-
-	const url = generateAPIEndpointURL(
-		this,
-		(await this.getCredentials('tanssApi'))?.baseURL,
-		'mails/test/smtp',
-	);
-	const requestOptions: IHttpRequestOptions = {
-		method: 'POST',
-		headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
-		json: true,
-		url,
-		body: reqBody,
-	};
-	addAuthorizationHeader(requestOptions, apiToken);
-	addQueryParams(requestOptions, { receiver: receiver });
-
-	const response = await httpRequest(this, requestOptions);
-	switch (response.kind) {
-		case 'success':
-			return {
-				success: true,
-				statusCode: response.statusCode,
-				message: 'Test email sent',
-				body: response.body,
-			};
-		case 'http-error':
-			return {
-				success: false,
-				statusCode: response.statusCode,
-				message: 'Server error while sending test email',
-				body: response.body,
-			};
-		case 'network-error':
-			throw new NodeOperationError(
-				this.getNode(),
-				`Network error while executing ${operation}: ${response.body}`,
-			);
-	}
-}
+export const handleMails = createCrudHandler({
+	operationField: {
+		name: 'operation',
+	},
+	operations: [
+		crudOperation({
+			type: 'create',
+			operationName: 'testSmtp',
+			fields: [
+				crudField({
+					name: 'receiver',
+					location: 'query',
+					defaultValue: '',
+					validator: nonEmptyStringGuard,
+				}),
+				crudField({
+					name: 'mailObject',
+					location: 'body',
+					defaultValue: {},
+					validator: nonEmptyRecordGuard,
+				}),
+			],
+			httpMethod: 'POST',
+			subPath: 'mails/test/smtp',
+		}),
+	],
+});

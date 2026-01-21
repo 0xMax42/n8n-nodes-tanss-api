@@ -1,21 +1,6 @@
-import {
-	IExecuteFunctions,
-	INodeProperties,
-	NodeOperationError,
-	IHttpRequestOptions,
-	IHttpRequestMethods,
-} from 'n8n-workflow';
-import {
-	addAuthorizationHeader,
-	booleanGuard,
-	generateAPIEndpointURL,
-	getNodeParameter,
-	httpRequest,
-	nonEmptyStringGuard,
-	numberGuard,
-	obtainToken,
-	stringGuard,
-} from '../lib';
+import { INodeProperties } from 'n8n-workflow';
+import { booleanGuard, nonEmptyStringGuard, numberGuard, stringGuard } from '../lib';
+import { createCrudHandler, crudField, crudOperation } from '../lib/crud';
 
 export const ticketStatesOperations: INodeProperties[] = [
 	{
@@ -142,120 +127,113 @@ export const ticketStatesFields: INodeProperties[] = [
 	},
 ];
 
-export async function handleTicketStates(this: IExecuteFunctions, i: number) {
-	const operation = getNodeParameter(this, 'operation', i, '', nonEmptyStringGuard);
-	const apiToken = await obtainToken(this, await this.getCredentials('tanssApi'));
-
-	let subPath: string | undefined;
-	let method: IHttpRequestMethods | undefined;
-	let body: Record<string, unknown> | undefined;
-
-	switch (operation) {
-		case 'getTicketStates':
-			subPath = 'admin/ticketStates';
-			method = 'GET';
-			break;
-
-		case 'createTicketState':
-			{
-				const name = getNodeParameter(this, 'name', i, '', nonEmptyStringGuard);
-				const image = getNodeParameter(this, 'image', i, '', stringGuard);
-				const waitState = getNodeParameter(this, 'waitState', i, false, booleanGuard);
-				const rank = getNodeParameter(this, 'rank', i, 0, numberGuard);
-				const active = getNodeParameter(this, 'active', i, true, booleanGuard);
-
-				body = {
-					name,
-					image,
-					waitState,
-					rank,
-					active,
-				};
-				subPath = 'admin/ticketStates';
-				method = 'POST';
-			}
-			break;
-
-		case 'updateTicketState':
-			{
-				const id = getNodeParameter(this, 'id', i, undefined, numberGuard);
-				const name = getNodeParameter(this, 'name', i, '', stringGuard);
-				const image = getNodeParameter(this, 'image', i, '', stringGuard);
-				const waitState = getNodeParameter(this, 'waitState', i, false, booleanGuard);
-				const rank = getNodeParameter(this, 'rank', i, 0, numberGuard);
-				const active = getNodeParameter(this, 'active', i, true, booleanGuard);
-
-				body = {
-					name,
-					image,
-					waitState,
-					rank,
-					active,
-				};
-				subPath = `admin/ticketStates/${id}`;
-				method = 'PUT';
-			}
-			break;
-
-		case 'deleteTicketState':
-			{
-				const delId = getNodeParameter(this, 'id', i, undefined, numberGuard);
-				subPath = `admin/ticketStates/${delId}`;
-				method = 'DELETE';
-			}
-			break;
-
-		default:
-			throw new NodeOperationError(
-				this.getNode(),
-				`The operation "${operation}" is not recognized.`,
-			);
-	}
-
-	if (!subPath || !method) {
-		throw new NodeOperationError(
-			this.getNode(),
-			'Failed to determine API endpoint or method for the TicketStates operation.',
-		);
-	}
-
-	const url = generateAPIEndpointURL(
-		this,
-		(await this.getCredentials('tanssApi'))?.baseURL,
-		subPath,
-	);
-
-	const requestOptions: IHttpRequestOptions = {
-		method: method,
-		headers: { Accept: 'application/json' },
-		json: true,
-		url: url,
-		body: body,
-		returnFullResponse: true,
-	};
-	addAuthorizationHeader(requestOptions, apiToken);
-
-	const response = await httpRequest(this, requestOptions);
-
-	switch (response.kind) {
-		case 'success':
-			return {
-				success: true,
-				statusCode: response.statusCode,
-				message: 'Operation executed successfully',
-				body: response.body,
-			};
-		case 'http-error':
-			return {
-				success: false,
-				statusCode: response.statusCode,
-				message: 'HTTP error occurred during operation',
-				body: response.body,
-			};
-		case 'network-error':
-			throw new NodeOperationError(
-				this.getNode(),
-				`Network error while executing ${operation}: ${response.body}`,
-			);
-	}
-}
+export const handleTicketStates = createCrudHandler({
+	operationField: {
+		name: 'operation',
+	},
+	operations: [
+		crudOperation({
+			type: 'read',
+			operationName: 'getTicketStates',
+			fields: [],
+			httpMethod: 'GET',
+			subPath: 'admin/ticketStates',
+		}),
+		crudOperation({
+			type: 'create',
+			operationName: 'createTicketState',
+			fields: [
+				crudField({
+					name: 'name',
+					location: 'body',
+					defaultValue: '',
+					validator: nonEmptyStringGuard,
+				}),
+				crudField({
+					name: 'image',
+					location: 'body',
+					defaultValue: '',
+					validator: stringGuard,
+				}),
+				crudField({
+					name: 'waitState',
+					location: 'body',
+					defaultValue: false,
+					validator: booleanGuard,
+				}),
+				crudField({
+					name: 'rank',
+					location: 'body',
+					defaultValue: 0,
+					validator: numberGuard,
+				}),
+				crudField({
+					name: 'active',
+					location: 'body',
+					defaultValue: true,
+					validator: booleanGuard,
+				}),
+			],
+			httpMethod: 'POST',
+			subPath: 'admin/ticketStates',
+		}),
+		crudOperation({
+			type: 'update',
+			operationName: 'updateTicketState',
+			fields: [
+				crudField({
+					name: 'id',
+					location: 'path',
+					defaultValue: undefined,
+					validator: numberGuard,
+				}),
+				crudField({
+					name: 'name',
+					location: 'body',
+					defaultValue: '',
+					validator: stringGuard,
+				}),
+				crudField({
+					name: 'image',
+					location: 'body',
+					defaultValue: '',
+					validator: stringGuard,
+				}),
+				crudField({
+					name: 'waitState',
+					location: 'body',
+					defaultValue: false,
+					validator: booleanGuard,
+				}),
+				crudField({
+					name: 'rank',
+					location: 'body',
+					defaultValue: 0,
+					validator: numberGuard,
+				}),
+				crudField({
+					name: 'active',
+					location: 'body',
+					defaultValue: true,
+					validator: booleanGuard,
+				}),
+			],
+			httpMethod: 'PUT',
+			subPath: 'admin/ticketStates/{id}',
+		}),
+		crudOperation({
+			type: 'delete',
+			operationName: 'deleteTicketState',
+			fields: [
+				crudField({
+					name: 'id',
+					location: 'path',
+					defaultValue: undefined,
+					validator: numberGuard,
+				}),
+			],
+			httpMethod: 'DELETE',
+			subPath: 'admin/ticketStates/{id}',
+		}),
+	],
+});

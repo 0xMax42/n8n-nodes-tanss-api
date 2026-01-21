@@ -1,18 +1,6 @@
-import {
-	IExecuteFunctions,
-	IHttpRequestOptions,
-	INodeProperties,
-	NodeOperationError,
-} from 'n8n-workflow';
-import {
-	addAuthorizationHeader,
-	obtainToken,
-	addQueryParams,
-	generateAPIEndpointURL,
-	getNodeParameter,
-	nonEmptyStringGuard,
-	httpRequest,
-} from '../lib';
+import { INodeProperties } from 'n8n-workflow';
+import { nonEmptyStringGuard } from '../lib';
+import { createCrudHandler, crudField, crudOperation } from '../lib/crud';
 
 export const availabilityOperations: INodeProperties[] = [
 	{
@@ -45,46 +33,24 @@ export const availabilityFields: INodeProperties[] = [
 	},
 ];
 
-export async function handleAvailability(this: IExecuteFunctions, i: number) {
-	const apiToken = await obtainToken(this, await this.getCredentials('tanssApi'));
-	const url = generateAPIEndpointURL(
-		this,
-		(await this.getCredentials('tanssApi'))?.baseURL,
-		'availability',
-	);
-
-	const employeeIds = getNodeParameter(this, 'employeeIds', i, '', nonEmptyStringGuard);
-
-	const requestOptions: IHttpRequestOptions = {
-		method: 'GET',
-		headers: { Accept: 'application/json' },
-		json: true,
-		url,
-	};
-	addAuthorizationHeader(requestOptions, apiToken);
-	addQueryParams(requestOptions, { employeeIds: employeeIds });
-
-	const response = await httpRequest(this, requestOptions);
-
-	switch (response.kind) {
-		case 'success':
-			return {
-				success: true,
-				statusCode: response.statusCode,
-				message: 'Operation executed successfully',
-				body: response.body,
-			};
-		case 'http-error':
-			return {
-				success: false,
-				statusCode: response.statusCode,
-				message: 'HTTP error occurred during operation',
-				body: response.body,
-			};
-		case 'network-error':
-			throw new NodeOperationError(
-				this.getNode(),
-				`Network error while executing getAvailability: ${response.body}`,
-			);
-	}
-}
+export const handleAvailability = createCrudHandler({
+	operationField: {
+		name: 'operation',
+	},
+	operations: [
+		crudOperation({
+			type: 'read',
+			operationName: 'getAvailability',
+			fields: [
+				crudField({
+					name: 'employeeIds',
+					location: 'query',
+					defaultValue: '',
+					validator: nonEmptyStringGuard,
+				}),
+			],
+			httpMethod: 'GET',
+			subPath: 'availability',
+		}),
+	],
+});

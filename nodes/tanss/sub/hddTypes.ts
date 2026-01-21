@@ -1,20 +1,6 @@
-import {
-	IExecuteFunctions,
-	IHttpRequestMethods,
-	IHttpRequestOptions,
-	INodeProperties,
-	NodeOperationError,
-} from 'n8n-workflow';
-import {
-	generateAPIEndpointURL,
-	getNodeParameter,
-	nonEmptyRecordGuard,
-	nonEmptyStringGuard,
-	numberGuard,
-	addAuthorizationHeader,
-	obtainToken,
-	httpRequest,
-} from '../lib';
+import { INodeProperties } from 'n8n-workflow';
+import { nonEmptyRecordGuard, numberGuard } from '../lib';
+import { createCrudHandler, crudField, crudOperation } from '../lib/crud';
 
 export const hddTypesOperations: INodeProperties[] = [
 	{
@@ -99,105 +85,79 @@ export const hddTypesFields: INodeProperties[] = [
 	},
 ];
 
-export async function handleHddTypes(this: IExecuteFunctions, i: number) {
-	const operation = getNodeParameter(this, 'operation', i, '', nonEmptyStringGuard);
-	const apiToken = await obtainToken(this, await this.getCredentials('tanssApi'));
-	const hddTypeId = getNodeParameter(this, 'hddTypeId', i, 0, numberGuard);
-
-	let subPath: string | undefined;
-	let method: IHttpRequestMethods | undefined;
-	let body: Record<string, unknown> | undefined;
-
-	switch (operation) {
-		case 'createHddType': {
-			subPath = 'hddTypes';
-			method = 'POST';
-			body = getNodeParameter<Record<string, unknown>>(
-				this,
-				'createHddTypeFields',
-				i,
-				{},
-				nonEmptyRecordGuard,
-			);
-			break;
-		}
-		case 'deleteHddType': {
-			subPath = `hddTypes/${hddTypeId}`;
-			method = 'DELETE';
-			break;
-		}
-		case 'getAllHddTypes': {
-			subPath = 'hddTypes';
-			method = 'GET';
-			break;
-		}
-		case 'getHddTypeById': {
-			subPath = `hddTypes/${hddTypeId}`;
-			method = 'GET';
-			break;
-		}
-		case 'updateHddType': {
-			subPath = `hddTypes/${hddTypeId}`;
-			method = 'PUT';
-			body = getNodeParameter<Record<string, unknown>>(
-				this,
-				'updateHddTypeFields',
-				i,
-				{},
-				nonEmptyRecordGuard,
-			);
-			break;
-		}
-		default:
-			throw new NodeOperationError(
-				this.getNode(),
-				`The operation "${operation}" is not recognized for HDD Types.`,
-			);
-	}
-	if (!subPath || !method) {
-		throw new NodeOperationError(
-			this.getNode(),
-			'Failed to determine API endpoint or method for the HDD Types operation.',
-		);
-	}
-
-	const url = generateAPIEndpointURL(
-		this,
-		(await this.getCredentials('tanssApi'))?.baseURL,
-		subPath,
-	);
-
-	const requestOptions: IHttpRequestOptions = {
-		method: method,
-		headers: { Accept: 'application/json' },
-		json: true,
-		url: url,
-		body: body,
-		returnFullResponse: true,
-	};
-	addAuthorizationHeader(requestOptions, apiToken);
-
-	const response = await httpRequest(this, requestOptions);
-
-	switch (response.kind) {
-		case 'success':
-			return {
-				success: true,
-				statusCode: response.statusCode,
-				message: 'Operation executed successfully',
-				body: response.body,
-			};
-		case 'http-error':
-			return {
-				success: false,
-				statusCode: response.statusCode,
-				message: 'HTTP error occurred during operation',
-				body: response.body,
-			};
-		case 'network-error':
-			throw new NodeOperationError(
-				this.getNode(),
-				`Network error while executing ${operation}: ${response.body}`,
-			);
-	}
-}
+export const handleHddTypes = createCrudHandler({
+	operationField: {
+		name: 'operation',
+	},
+	operations: [
+		crudOperation({
+			type: 'create',
+			operationName: 'createHddType',
+			fields: [
+				crudField({
+					name: 'createHddTypeFields',
+					location: 'body',
+					defaultValue: {},
+					validator: nonEmptyRecordGuard,
+				}),
+			],
+			httpMethod: 'POST',
+			subPath: 'hddTypes',
+		}),
+		crudOperation({
+			type: 'delete',
+			operationName: 'deleteHddType',
+			fields: [
+				crudField({
+					name: 'hddTypeId',
+					location: 'path',
+					defaultValue: 0,
+					validator: numberGuard,
+				}),
+			],
+			httpMethod: 'DELETE',
+			subPath: 'hddTypes/{hddTypeId}',
+		}),
+		crudOperation({
+			type: 'read',
+			operationName: 'getAllHddTypes',
+			fields: [],
+			httpMethod: 'GET',
+			subPath: 'hddTypes',
+		}),
+		crudOperation({
+			type: 'read',
+			operationName: 'getHddTypeById',
+			fields: [
+				crudField({
+					name: 'hddTypeId',
+					location: 'path',
+					defaultValue: 0,
+					validator: numberGuard,
+				}),
+			],
+			httpMethod: 'GET',
+			subPath: 'hddTypes/{hddTypeId}',
+		}),
+		crudOperation({
+			type: 'update',
+			operationName: 'updateHddType',
+			fields: [
+				crudField({
+					name: 'hddTypeId',
+					location: 'path',
+					defaultValue: 0,
+					validator: numberGuard,
+				}),
+				crudField({
+					name: 'updateHddTypeFields',
+					location: 'body',
+					defaultValue: {},
+					validator: nonEmptyRecordGuard,
+				}),
+			],
+			httpMethod: 'PUT',
+			subPath: 'hddTypes/{hddTypeId}',
+		}),
+	],
+});
