@@ -5,8 +5,6 @@ export { obtainToken, addAuthorizationHeader } from './token';
 export {
 	generateAPIEndpointURL,
 	concatURLAndPath,
-	addQueryPathToURL,
-	addQueryParams,
 	getNodeParameter,
 	stringGuard,
 	nonEmptyStringGuard,

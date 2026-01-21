@@ -48,56 +48,6 @@ export function concatURLAndPath(url: string, ...path: string[]): string {
 }
 
 /**
- * Appends a query path to a given URL.
- * @param url The base URL to which the query path will be added
- * @param queryPath The query path to append to the URL
- * @returns The URL with the appended query path
- * @example
- * ```typescript
- * const url = 'https://example.com/api';
- * const queryPath = '/items/123';
- * const fullURL = addQueryPathToURL(url, queryPath);
- * // fullURL will be 'https://example.com/api/items/123'
- * ```
- */
-export function addQueryPathToURL(url: string, queryPath: string): string {
-	const urlObj = new URL(url);
-	urlObj.pathname = concatURLAndPath(urlObj.pathname, queryPath);
-	return urlObj.toString();
-}
-
-/**
- * Adds query parameters to a given URL.
- * @param url The base URL to which query parameters will be added
- * @param queryParams An object representing the query parameters to add
- * @returns The URL with the added query parameters; Values are URL-encoded
- */
-function addQueryParamsToURL(
-	url: string,
-	queryParams: Record<string, string | number | boolean>,
-): string {
-	const urlObj = new URL(url);
-	Object.entries(queryParams).forEach(([key, value]) => {
-		urlObj.searchParams.append(key, encodeURIComponent(String(value)));
-	});
-	return urlObj.toString();
-}
-
-/**
- * Adds query parameters to the request options URL.
- * @param requestOptions The request options object containing the URL
- * @param queryParams An object representing the query parameters to add
- * @returns void; The requestOptions.url is modified in place
- * Added query parameters are URL-encoded
- */
-export function addQueryParams(
-	requestOptions: { url: string },
-	queryParams: Record<string, string | number | boolean>,
-): void {
-	requestOptions.url = addQueryParamsToURL(requestOptions.url, queryParams);
-}
-
-/**
  * A Validator function type for validating node parameters.
  * @template T The expected type of the parameter value after validation
  * @param executeFunctions The execution functions context
