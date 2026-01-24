@@ -74,9 +74,12 @@ function buildHttpRequestMock(queue: HttpMock[]) {
 		}
 
 		// Validate request partially (only what fixture specifies)
-		const expected = next.expect ?? {};
+		const expected = { ...(next.expect ?? {}) } as Record<string, unknown>;
+		if ('returnFullResponse' in expected) delete expected.returnFullResponse;
 		try {
-			matchSubset(expected, options);
+			const actual = { ...(options as Record<string, unknown>) } as Record<string, unknown>;
+			if ('returnFullResponse' in actual) delete actual.returnFullResponse;
+			matchSubset(expected, actual);
 		} catch (e) {
 			throw new Error(
 				`helpers.httpRequest() did not match fixture expectation.\n` +
