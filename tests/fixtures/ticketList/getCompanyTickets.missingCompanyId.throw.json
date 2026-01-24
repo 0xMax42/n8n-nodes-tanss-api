@@ -1,0 +1,18 @@
+{
+    "name": "getCompanyTickets throws NodeOperationError on missing companyId",
+    "itemIndex": 0,
+    "parameters": { "operation": "getCompanyTickets", "companyId": 0 },
+    "credentials": {
+        "tanssApi": {
+            "baseURL": "https://example.invalid",
+            "authentication": "apiToken",
+            "apiToken": "TOKEN-123"
+        }
+    },
+    "http": [],
+    "expected": {
+        "kind": "throws",
+        "name": "NodeOperationError",
+        "messageIncludes": "companyId must be a positive number"
+    }
+}

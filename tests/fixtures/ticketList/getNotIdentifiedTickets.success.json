@@ -1,0 +1,34 @@
+{
+    "name": "getNotIdentifiedTickets returns success wrapper",
+    "itemIndex": 0,
+    "parameters": { "operation": "getNotIdentifiedTickets" },
+    "credentials": {
+        "tanssApi": {
+            "baseURL": "https://example.invalid",
+            "authentication": "apiToken",
+            "apiToken": "TOKEN-123"
+        }
+    },
+    "http": [
+        {
+            "expect": {
+                "method": "GET",
+                "url": "https://example.invalid/backend/api/v1/tickets/notIdentified",
+                "json": true,
+                "headers": {
+                    "Content-Type": "application/json",
+                    "apiToken": "Bearer TOKEN-123"
+                }
+            },
+            "reply": {
+                "statusCode": 200,
+                "body": [{ "id": 4 }],
+                "headers": { "content-type": "application/json" }
+            }
+        }
+    ],
+    "expected": {
+        "kind": "returns",
+        "matchObject": { "success": true, "statusCode": 200 }
+    }
+}

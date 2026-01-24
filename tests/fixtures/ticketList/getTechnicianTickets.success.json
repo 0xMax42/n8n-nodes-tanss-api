@@ -1,0 +1,34 @@
+{
+    "name": "getTechnicianTickets returns success wrapper",
+    "itemIndex": 0,
+    "parameters": { "operation": "getTechnicianTickets" },
+    "credentials": {
+        "tanssApi": {
+            "baseURL": "https://example.invalid",
+            "authentication": "apiToken",
+            "apiToken": "TOKEN-123"
+        }
+    },
+    "http": [
+        {
+            "expect": {
+                "method": "GET",
+                "url": "https://example.invalid/backend/api/v1/tickets/technician",
+                "json": true,
+                "headers": {
+                    "Content-Type": "application/json",
+                    "apiToken": "Bearer TOKEN-123"
+                }
+            },
+            "reply": {
+                "statusCode": 200,
+                "body": [{ "id": 7 }],
+                "headers": { "content-type": "application/json" }
+            }
+        }
+    ],
+    "expected": {
+        "kind": "returns",
+        "matchObject": { "success": true, "statusCode": 200 }
+    }
+}
