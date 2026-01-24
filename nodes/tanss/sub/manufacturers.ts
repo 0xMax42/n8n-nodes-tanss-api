@@ -1,6 +1,5 @@
 import { INodeProperties } from 'n8n-workflow';
-import { nonEmptyRecordGuard, numberGuard } from '../lib';
-import { createCrudHandler, crudField, crudOperation } from '../lib/crud';
+import { nonEmptyRecordGuard, numberGuard, createCrudHandler } from '../lib';
 
 export const manufacturersOperations: INodeProperties[] = [
 	{
@@ -86,78 +85,66 @@ export const manufacturersFields: INodeProperties[] = [
 ];
 
 export const handleManufacturers = createCrudHandler({
-	operationField: {
-		name: 'operation',
-	},
-	operations: [
-		crudOperation({
-			type: 'create',
-			operationName: 'createManufacturer',
-			fields: [
-				crudField({
-					name: 'createManufacturerFields',
+	operationField: 'operation',
+
+	operations: {
+		createManufacturer: {
+			fields: {
+				createManufacturerFields: {
 					location: 'body',
 					defaultValue: {},
-					validator: nonEmptyRecordGuard,
-				}),
-			],
+					guard: nonEmptyRecordGuard,
+				},
+			},
 			httpMethod: 'POST',
 			subPath: 'manufacturers',
-		}),
-		crudOperation({
-			type: 'delete',
-			operationName: 'deleteManufacturer',
-			fields: [
-				crudField({
-					name: 'manufacturerId',
+		},
+
+		deleteManufacturer: {
+			fields: {
+				manufacturerId: {
 					location: 'path',
 					defaultValue: 0,
-					validator: numberGuard,
-				}),
-			],
+					guard: numberGuard,
+				},
+			},
 			httpMethod: 'DELETE',
 			subPath: 'manufacturers/{manufacturerId}',
-		}),
-		crudOperation({
-			type: 'read',
-			operationName: 'getAllManufacturers',
-			fields: [],
+		},
+
+		getAllManufacturers: {
+			fields: {},
 			httpMethod: 'GET',
 			subPath: 'manufacturers',
-		}),
-		crudOperation({
-			type: 'read',
-			operationName: 'getManufacturerById',
-			fields: [
-				crudField({
-					name: 'manufacturerId',
+		},
+
+		getManufacturerById: {
+			fields: {
+				manufacturerId: {
 					location: 'path',
 					defaultValue: 0,
-					validator: numberGuard,
-				}),
-			],
+					guard: numberGuard,
+				},
+			},
 			httpMethod: 'GET',
 			subPath: 'manufacturers/{manufacturerId}',
-		}),
-		crudOperation({
-			type: 'update',
-			operationName: 'updateManufacturer',
-			fields: [
-				crudField({
-					name: 'manufacturerId',
+		},
+
+		updateManufacturer: {
+			fields: {
+				manufacturerId: {
 					location: 'path',
 					defaultValue: 0,
-					validator: numberGuard,
-				}),
-				crudField({
-					name: 'updateManufacturerFields',
+					guard: numberGuard,
+				},
+				updateManufacturerFields: {
 					location: 'body',
 					defaultValue: {},
-					validator: nonEmptyRecordGuard,
-				}),
-			],
+					guard: nonEmptyRecordGuard,
+				},
+			},
 			httpMethod: 'PUT',
 			subPath: 'manufacturers/{manufacturerId}',
-		}),
-	],
+		},
+	},
 });
