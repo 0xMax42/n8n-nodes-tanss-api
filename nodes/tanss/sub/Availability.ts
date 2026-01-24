@@ -1,6 +1,5 @@
 import { INodeProperties } from 'n8n-workflow';
-import { nonEmptyStringGuard } from '../lib';
-import { createCrudHandler, crudField, crudOperation } from '../lib/crud';
+import { createCrudHandler, nonEmptyStringGuard } from '../lib';
 
 export const availabilityOperations: INodeProperties[] = [
 	{
@@ -34,23 +33,19 @@ export const availabilityFields: INodeProperties[] = [
 ];
 
 export const handleAvailability = createCrudHandler({
-	operationField: {
-		name: 'operation',
-	},
-	operations: [
-		crudOperation({
-			type: 'read',
-			operationName: 'getAvailability',
-			fields: [
-				crudField({
-					name: 'employeeIds',
+	operationField: 'operation',
+
+	operations: {
+		getAvailability: {
+			fields: {
+				employeeIds: {
 					location: 'query',
 					defaultValue: '',
-					validator: nonEmptyStringGuard,
-				}),
-			],
+					guard: nonEmptyStringGuard,
+				},
+			},
 			httpMethod: 'GET',
 			subPath: 'availability',
-		}),
-	],
+		},
+	},
 });
