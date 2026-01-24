@@ -1,0 +1,38 @@
+{
+    "name": "getTicketDocument returns success wrapper",
+    "itemIndex": 0,
+    "parameters": {
+        "operation": "getTicketDocument",
+        "ticketId": 10,
+        "documentId": 5
+    },
+    "credentials": {
+        "tanssApi": {
+            "baseURL": "https://example.invalid",
+            "authentication": "apiToken",
+            "apiToken": "TOKEN-123"
+        }
+    },
+    "http": [
+        {
+            "expect": {
+                "method": "GET",
+                "url": "https://example.invalid/backend/api/v1/tickets/10/documents/5",
+                "json": true,
+                "headers": {
+                    "Content-Type": "application/json",
+                    "apiToken": "Bearer TOKEN-123"
+                }
+            },
+            "reply": {
+                "statusCode": 200,
+                "body": { "url": "https://example.invalid/download" },
+                "headers": { "content-type": "application/json" }
+            }
+        }
+    ],
+    "expected": {
+        "kind": "returns",
+        "matchObject": { "success": true, "statusCode": 200 }
+    }
+}

@@ -1,0 +1,33 @@
+{
+    "name": "getTicketDocuments returns http-error wrapper",
+    "itemIndex": 0,
+    "parameters": { "operation": "getTicketDocuments", "ticketId": 10 },
+    "credentials": {
+        "tanssApi": {
+            "baseURL": "https://example.invalid",
+            "authentication": "apiToken",
+            "apiToken": "TOKEN-123"
+        }
+    },
+    "http": [
+        {
+            "expect": {
+                "method": "GET",
+                "url": "https://example.invalid/backend/api/v1/tickets/10/documents"
+            },
+            "throw": {
+                "kind": "axios",
+                "statusCode": 500,
+                "data": { "message": "server error" }
+            }
+        }
+    ],
+    "expected": {
+        "kind": "returns",
+        "matchObject": {
+            "success": false,
+            "statusCode": 500,
+            "body": { "message": "server error" }
+        }
+    }
+}

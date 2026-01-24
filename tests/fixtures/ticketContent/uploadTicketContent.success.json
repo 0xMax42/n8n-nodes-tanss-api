@@ -1,0 +1,39 @@
+{
+    "name": "uploadTicketContent returns success wrapper",
+    "itemIndex": 0,
+    "parameters": {
+        "operation": "uploadTicketContent",
+        "ticketId": 10,
+        "binaryPropertyName": "data",
+        "descriptions": "test"
+    },
+    "credentials": {
+        "tanssApi": {
+            "baseURL": "https://example.invalid",
+            "authentication": "apiToken",
+            "apiToken": "TOKEN-123"
+        }
+    },
+    "injectThis": {
+        "getInputData": "__INJECT_INPUT_DATA__"
+    },
+    "http": [
+        {
+            "expect": {
+                "method": "POST",
+                "url": "https://example.invalid/backend/api/v1/tickets/10/upload",
+                "json": false,
+                "headers": { "apiToken": "Bearer TOKEN-123" }
+            },
+            "reply": {
+                "statusCode": 201,
+                "body": { "ok": true },
+                "headers": { "content-type": "application/json" }
+            }
+        }
+    ],
+    "expected": {
+        "kind": "returns",
+        "matchObject": { "success": true, "statusCode": 201 }
+    }
+}
