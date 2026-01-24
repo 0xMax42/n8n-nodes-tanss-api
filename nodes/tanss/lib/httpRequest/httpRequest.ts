@@ -1,26 +1,5 @@
 import { IExecuteFunctions, IHttpRequestOptions, IN8nHttpFullResponse } from 'n8n-workflow';
-
-/**
- * The result of an HTTP request made via `httpRequestSafe`.
- */
-export type HttpResult<T = unknown> =
-	| {
-			kind: 'success';
-			statusCode: number;
-			body: T;
-			headers?: Record<string, unknown>;
-	  }
-	| {
-			kind: 'http-error';
-			statusCode: number;
-			body: unknown;
-			headers?: Record<string, unknown>;
-	  }
-	| {
-			kind: 'network-error';
-			statusCode: 0;
-			body: string;
-	  };
+import { HttpResult } from './httpRequestTypes';
 
 /**
  * A safe wrapper around the n8n httpRequest helper that captures errors and returns them as part of the result.
@@ -29,10 +8,10 @@ export type HttpResult<T = unknown> =
  * @returns A promise that resolves to an HttpResult
  * @throws This function does not throw; all errors are captured in the returned HttpResult.
  */
-export async function httpRequest<T = unknown>(
+export async function httpRequest<T = unknown, F = unknown>(
 	executeFunction: IExecuteFunctions,
 	options: IHttpRequestOptions,
-): Promise<HttpResult<T>> {
+): Promise<HttpResult<T, F>> {
 	const opts: IHttpRequestOptions = {
 		...options,
 		returnFullResponse: true,
@@ -62,7 +41,7 @@ export async function httpRequest<T = unknown>(
 			return {
 				kind: 'http-error',
 				statusCode: err.response.status,
-				body: 'data' in err.response ? err.response.data : undefined,
+				body: ('data' in err.response ? err.response.data : undefined) as F | undefined,
 				headers:
 					'headers' in err.response &&
 					typeof err.response.headers === 'object' &&

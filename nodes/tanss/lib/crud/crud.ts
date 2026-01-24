@@ -1,15 +1,15 @@
 import { IExecuteFunctions, IHttpRequestOptions, NodeOperationError } from 'n8n-workflow';
 import {
-	CrudField,
 	CrudFieldLocation,
+	CrudFieldMap,
 	CrudOperation,
 	CrudOperationsConfig,
-	CrudOperationType,
 	NodeHandler,
 } from './crudTypes';
-import { generateAPIEndpointURL, getNodeParameter, nonEmptyStringGuard } from '../utils';
-import { addAuthorizationHeader, obtainToken } from '../token';
-import { httpRequest } from '../httpRequest';
+import { generateAPIEndpointURL, getNodeParameter } from '../utils';
+import { addAuthorizationHeader, obtainToken } from '../token/token';
+import { httpRequest } from '../httpRequest/httpRequest';
+import { nonEmptyStringGuard } from '../guards';
 
 /**
  * Creates a CRUD handler function for n8n nodes based on the provided configuration.
@@ -18,37 +18,26 @@ import { httpRequest } from '../httpRequest';
  * @example
  * ```ts
  * export const handleAvailability = createCrudHandler({
- *   operationField: {
- *     name: 'operation',
- *   },
- *   operations: [
- *     crudOperation({
- *       type: 'read',
- *       operationName: 'getAvailability',
- *       fields: [
- *         crudField({
- *           name: 'employeeIds',
+ *   operationField: 'operation',
+ *   operations: {
+ *     getAvailability: {
+ *       fields: {
+ *         employeeIds: {
  *           location: 'query',
  *           defaultValue: '',
  *           validator: nonEmptyStringGuard,
- *         }),
- *       ],
+ *         },
+ *       },
  *       httpMethod: 'GET',
  *       subPath: 'availability',
- *     }),
- *   ],
+ *     },
+ *   },
  * });
  * ```
  */
 export function createCrudHandler(config: CrudOperationsConfig): NodeHandler {
 	return async function handleCrud(this: IExecuteFunctions, i: number) {
-		const operation = getNodeParameter(
-			this,
-			config.operationField.name,
-			i,
-			'',
-			nonEmptyStringGuard,
-		);
+		const operation = getNodeParameter(this, config.operationField, i, '', nonEmptyStringGuard);
 
 		const localConfig = getLocalConfigByOperation.call(this, config, operation);
 		const method = localConfig.httpMethod;
@@ -94,7 +83,7 @@ export function createCrudHandler(config: CrudOperationsConfig): NodeHandler {
 
 		const requestOptions: IHttpRequestOptions = {
 			method: method,
-			headers: { Accept: 'application/json' },
+			headers: { 'Content-Type': 'application/json' },
 			json: true,
 			url: url,
 			body: body,
@@ -139,9 +128,9 @@ function getLocalConfigByOperation(
 	this: IExecuteFunctions,
 	config: CrudOperationsConfig,
 	operation: string,
-): CrudOperation<CrudOperationType> {
-	for (const op of Object.values(config.operations)) {
-		if (op.operationName === operation) {
+): CrudOperation {
+	for (const [key, op] of Object.entries(config.operations)) {
+		if (key === operation) {
 			return op;
 		}
 	}
@@ -158,22 +147,25 @@ function getLocalConfigByOperation(
  */
 function createRecordFromFields(
 	this: IExecuteFunctions,
-	fields: CrudField[],
+	fields: CrudFieldMap,
 	i: number,
 	type: CrudFieldLocation,
 ): Record<string, unknown> | undefined {
 	const record: Record<string, unknown> = {};
-	for (const field of fields.filter((f) => f.location === type)) {
-		const value = getNodeParameter(this, field.name, i, field.defaultValue, field.validator);
-		const recordKey = field.locationName ?? field.name;
+	for (const [key, field] of Object.entries(fields)) {
+		if (field.location !== type) continue;
+		const value = getNodeParameter(this, key, i, field.defaultValue, field.guard);
+		const recordKey = field.locationName ?? key;
 		if (field.spread) {
 			if (typeof value === 'object' && value !== null) {
-				Object.assign(record, value as Record<string, unknown>);
+				for (const [key, field] of Object.entries(value as Record<string, unknown>)) {
+					record[key] = record[key] ? record[key] : field;
+				}
 				continue;
 			} else {
 				throw new NodeOperationError(
 					this.getNode(),
-					`Field "${field.name}" is marked to be spread but its value is not an object.`,
+					`Field "${key}" is marked to be spread but its value is not an object.`,
 				);
 			}
 		}

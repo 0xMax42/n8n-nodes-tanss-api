@@ -1,12 +1,11 @@
 export { createCrudHandler } from './crud';
-export { crudField, crudOperation } from './crudTypes';
 export type {
-	CrudOperationType,
 	HttpMethod,
-	CrudHttpMethod,
 	CrudFieldLocation,
 	CrudField,
+	CrudFieldMap,
 	CrudOperation,
+	CrudOperationFieldMap,
 	CrudOperationsConfig,
 	NodeHandler,
 } from './crudTypes';

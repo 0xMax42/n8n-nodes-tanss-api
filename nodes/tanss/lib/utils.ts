@@ -1,4 +1,5 @@
 import { IExecuteFunctions, NodeOperationError } from 'n8n-workflow';
+import { NodeParameterGuard } from './guards';
 
 /**
  * Generates a full API endpoint URL by appending the API postfix and endpoint to the base URL.
@@ -48,21 +49,6 @@ export function concatURLAndPath(url: string, ...path: string[]): string {
 }
 
 /**
- * A Validator function type for validating node parameters.
- * @template T The expected type of the parameter value after validation
- * @param executeFunctions The execution functions context
- * @param value The value to validate
- * @param name The name of the parameter being validated
- * @returns The validated parameter value of type T
- * @throws The {@link NodeOperationError} exception can be thrown if validation fails.
- */
-export type NodeParameterValidator<T> = (
-	executeFunctions: IExecuteFunctions,
-	value: unknown,
-	name: string,
-) => T;
-
-/**
  * Wrapper around n8n's getNodeParameter for reusable handling of typing and validation.
  * @param executeFunctions The execution functions context
  * @param name The name of the parameter to retrieve
@@ -76,148 +62,9 @@ export function getNodeParameter<T>(
 	executeFunctions: IExecuteFunctions,
 	name: string,
 	itemIndex: number,
-	defaultValue: T,
-	validator: NodeParameterValidator<T>,
+	defaultValue: T | undefined,
+	guard: NodeParameterGuard<T>,
 ): T {
 	const value = executeFunctions.getNodeParameter(name, itemIndex, defaultValue) as T;
-	return validator ? validator(executeFunctions, value, name) : value;
-}
-
-/**
- * A Validator function that ensures a parameter is of type string
- * for use with {@link getNodeParameter}.
- * @param executeFunctions The execution functions context
- * @param value The value to validate
- * @param name The name of the parameter being validated
- * @returns The validated string value
- * @throws The {@link NodeOperationError} exception is thrown if the value is not a string.
- */
-export function stringGuard(
-	executeFunctions: IExecuteFunctions,
-	value: unknown,
-	name: string,
-): string {
-	if (typeof value !== 'string') {
-		throw new NodeOperationError(executeFunctions.getNode(), `${name} must be a string`);
-	}
-	return value;
-}
-
-/**
- * A Validator function that ensures a string parameter is not empty or whitespace only
- * for use with {@link getNodeParameter}.
- * @param executeFunctions The execution functions context
- * @param value The string value to validate
- * @param name The name of the parameter being validated
- * @returns The validated string value
- * @throws The {@link NodeOperationError} exception is thrown if the string is empty or whitespace only.
- */
-export function nonEmptyStringGuard(
-	executeFunctions: IExecuteFunctions,
-	value: unknown,
-	name: string,
-): string {
-	if (typeof value !== 'string') {
-		throw new NodeOperationError(executeFunctions.getNode(), `${name} must be a string`);
-	}
-	if (value.trim() === '') {
-		throw new NodeOperationError(executeFunctions.getNode(), `${name} cannot be empty`);
-	}
-	return value;
-}
-
-/**
- * A Validator function that ensures a parameter is of type number
- * for use with {@link getNodeParameter}.
- * @param executeFunctions The execution functions context
- * @param value The value to validate
- * @param name The name of the parameter being validated
- * @returns The validated number value
- * @throws The {@link NodeOperationError} exception is thrown if the value is not a number.
- */
-export function numberGuard(
-	executeFunctions: IExecuteFunctions,
-	value: unknown,
-	name: string,
-): number {
-	if (typeof value !== 'number' || isNaN(value)) {
-		throw new NodeOperationError(executeFunctions.getNode(), `${name} must be a number`);
-	}
-	return value;
-}
-
-/**
- * A Validator function that ensures a number parameter is not zero
- * for use with {@link getNodeParameter}.
- * @param executeFunctions The execution functions context
- * @param value The number value to validate
- * @param name The name of the parameter being validated
- * @returns The validated number value
- * @throws The {@link NodeOperationError} exception is thrown if the number is zero.
- */
-export function nonZeroNumberGuard(
-	executeFunctions: IExecuteFunctions,
-	value: unknown,
-	name: string,
-): number {
-	if (typeof value !== 'number' || isNaN(value)) {
-		throw new NodeOperationError(executeFunctions.getNode(), `${name} must be a number`);
-	}
-	if (value === 0) {
-		throw new NodeOperationError(executeFunctions.getNode(), `${name} cannot be zero`);
-	}
-	return value;
-}
-
-/**
- * A Validator function that ensures a record parameter is not empty
- * for use with {@link getNodeParameter}.
- * @param executeFunctions The execution functions context
- * @param value The record value to validate
- * @param name The name of the parameter being validated
- * @returns The validated record value
- * @throws The {@link NodeOperationError} exception is thrown if the record is empty.
- */
-export function nonEmptyRecordGuard(
-	executeFunctions: IExecuteFunctions,
-	value: unknown,
-	name: string,
-): Record<string, unknown> {
-	if (!isPlainRecord(value)) {
-		throw new NodeOperationError(executeFunctions.getNode(), `${name} must be a non-empty record`);
-	}
-	if (Object.keys(value).length === 0) {
-		throw new NodeOperationError(executeFunctions.getNode(), `${name} cannot be empty`);
-	}
-	return value;
-}
-
-/**
- * Type guard to check if a value is a plain object (Record<string, unknown>)
- * @param value The value to check
- * @returns True if the value is a plain object, false otherwise
- */
-function isPlainRecord(value: unknown): value is Record<string, unknown> {
-	if (typeof value !== 'object' || value === null || Array.isArray(value)) return false;
-	const proto = Object.getPrototypeOf(value);
-	return proto === Object.prototype || proto === null;
-}
-
-/**
- * A Validator function that ensures a parameter is of type boolean
- * for use with {@link getNodeParameter}.
- * @param executeFunctions The execution functions context
- * @param value The value to validate
- * @param name The name of the parameter being validated
- * @returns The validated boolean value
- */
-export function booleanGuard(
-	executeFunctions: IExecuteFunctions,
-	value: unknown,
-	name: string,
-): boolean {
-	if (typeof value !== 'boolean') {
-		throw new NodeOperationError(executeFunctions.getNode(), `${name} must be a boolean`);
-	}
-	return value;
+	return guard ? guard(executeFunctions, value, name) : value;
 }

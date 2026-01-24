@@ -1,29 +1,10 @@
 import { IExecuteFunctions } from 'n8n-workflow';
-import { NodeParameterValidator } from '../utils';
-
-/**
- * High-level CRUD operation identifiers used by the node.
- */
-export type CrudOperationType = 'create' | 'read' | 'update' | 'delete';
+import { NodeParameterGuard } from '../guards';
 
 /**
  * HTTP methods used by the node.
  */
 export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE';
-
-/**
- * Compile-time mapping from CRUD operation to HTTP method.
- * Keeps `type` and `httpMethod` consistent without runtime logic.
- */
-export type CrudHttpMethod<T extends CrudOperationType> = T extends 'create'
-	? 'POST'
-	: T extends 'read'
-		? 'GET'
-		: T extends 'update'
-			? 'PUT'
-			: T extends 'delete'
-				? 'DELETE'
-				: never;
 
 /**
  * Where a field is placed in the request building process.
@@ -35,11 +16,8 @@ export type CrudFieldLocation = 'query' | 'path' | 'body';
 /**
  * A single parameter/field definition used to build or validate requests.
  */
-export type CrudField<T = unknown> = {
-	/**
-	 * The name of the field as used in the node parameters.
-	 */
-	name: string;
+
+export type CrudField<T> = {
 	/**
 	 * Optional different name to use in the request instead of `name`.
 	 */
@@ -53,48 +31,37 @@ export type CrudField<T = unknown> = {
 	 */
 	location: CrudFieldLocation;
 	/**
-	 * The default value for the field; `undefined` will be propagated to the validator.
+	 * The default value for the field; `undefined` will be propagated to the guard.
 	 */
-	defaultValue: T | undefined;
+	defaultValue?: T;
 	/**
-	 * A validator function to validate and possibly transform the parameter value.
+	 * A guard function to validate and possibly transform the parameter value.
 	 */
-	validator: NodeParameterValidator<T>;
+	guard: NodeParameterGuard<T>;
 };
 
 /**
- * Helper to define a CRUD field with proper typing.
- * @param field The field definition
- * @returns The same field definition with proper typing
+ * A map of field names to their definitions.
+ * Key is the field name used in the node parameters.
+ * Value is the field definition.
  */
-export function crudField<T>(field: CrudField<T>): CrudField<T> {
-	return field;
-}
+export type CrudFieldMap = Record<string, CrudField<unknown>>;
 
 /**
  * A single CRUD operation definition.
  *
  * Note: `type` drives `httpMethod` via `CrudHttpMethod<T>`.
  */
-export interface CrudOperation<T extends CrudOperationType = CrudOperationType> {
-	/**
-	 * The CRUD operation type.
-	 * @see {@link CrudOperationType}
-	 */
-	type: T;
-	/**
-	 * The unique name of the operation used in the node parameters.
-	 */
-	operationName: string;
+export interface CrudOperation<T extends CrudFieldMap = CrudFieldMap> {
 	/**
 	 * The fields associated with the operation.
 	 */
-	fields: CrudField[];
+	fields: T;
 	/**
 	 * The HTTP method to use for the operation.
 	 * @see {@link HttpMethod}
 	 */
-	httpMethod: CrudHttpMethod<T>;
+	httpMethod: HttpMethod;
 	/**
 	 * An optional base path to override the global one.
 	 */
@@ -107,15 +74,11 @@ export interface CrudOperation<T extends CrudOperationType = CrudOperationType> 
 }
 
 /**
- * Helper to define a CRUD operation with proper typing.
- * @param operation The operation definition
- * @returns The same operation definition with proper typing
+ * A map of operation names to their definitions.
+ * Key is the operation name used in the node parameters.
+ * Value is the operation definition.
  */
-export function crudOperation<T extends CrudOperationType>(
-	operation: CrudOperation<T>,
-): CrudOperation<T> {
-	return operation;
-}
+export type CrudOperationFieldMap = Record<string, CrudOperation>;
 
 /**
  * Full CRUD configuration for a node/resource.
@@ -124,12 +87,12 @@ export interface CrudOperationsConfig {
 	/**
 	 * The field that determines the operation to execute from the node parameters.
 	 */
-	operationField: Omit<CrudField<string>, 'location' | 'defaultValue' | 'validator'>;
+	operationField: string;
 	/**
 	 * The list of supported CRUD operations.
 	 * You can have multiple operations of the same type as long as their `operationName` differs.
 	 */
-	operations: CrudOperation[];
+	operations: CrudOperationFieldMap;
 	/**
 	 * Optional credential type to use for the operations.
 	 */
