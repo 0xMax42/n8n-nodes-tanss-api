@@ -1,0 +1,22 @@
+{
+  "name": "getCallById throws NodeOperationError on missing phoneCallId",
+  "itemIndex": 0,
+  "parameters": {
+    "operation": "getCallById",
+    "phoneCallId": 0
+  },
+  "credentials": {
+    "tanssApi": {
+      "baseURL": "https://example.invalid",
+      "authentication": "loginTotp",
+      "username": "user",
+      "password": "pass"
+    }
+  },
+  "http": [],
+  "expected": {
+    "kind": "throws",
+    "name": "NodeOperationError",
+    "messageIncludes": "phoneCallId must be a positive number"
+  }
+}

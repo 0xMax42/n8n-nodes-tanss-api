@@ -1,0 +1,80 @@
+{
+  "name": "getCalls wraps httpRequest error into NodeOperationError",
+  "itemIndex": 0,
+  "parameters": {
+    "operation": "getCalls",
+    "filterJson": "{\"numberFilters\": [\"+49111\", \"+49222\"]}",
+    "getCallsFilters": {
+      "timeframe": {
+        "range": {
+          "from": 1700000000,
+          "to": 1700003600
+        }
+      },
+      "showTrysAsWell": true,
+      "employeeIdFilter": 42,
+      "companyIdFilter": 77,
+      "numberInfos": true,
+      "directions": ["INCOMING", "OUTGOING"]
+    }
+  },
+  "credentials": {
+    "tanssApi": {
+      "baseURL": "https://example.invalid",
+      "authentication": "loginTotp",
+      "username": "user",
+      "password": "pass"
+    }
+  },
+  "http": [
+    {
+      "expect": {
+        "method": "POST",
+        "url": "https://example.invalid/backend/api/v1/login",
+        "json": true,
+        "returnFullResponse": true,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "username": "user",
+          "password": "pass"
+        }
+      },
+      "reply": {
+        "statusCode": 200,
+        "body": {
+          "content": {
+            "apiKey": "TOKEN-123"
+          }
+        },
+        "headers": { "content-type": "application/json" }
+      }
+    },
+    {
+      "expect": {
+        "method": "PUT",
+        "url": "https://example.invalid/backend/api/v1/phoneCalls",
+        "json": true,
+        "body": {
+          "timeframe": { "from": 1700000000, "to": 1700003600 },
+          "showTrysAsWell": true,
+          "numberFilters": ["+49111", "+49222"],
+          "employeeId": 42,
+          "companyId": 77,
+          "numberInfos": true,
+          "directions": ["INCOMING", "OUTGOING"]
+        }
+      },
+      "throw": {
+        "kind": "error",
+        "message": "Request failed with status code 500"
+      }
+    }
+  ],
+  "expected": {
+    "kind": "throws",
+    "name": "NodeOperationError",
+    "messageIncludes": "Network error while executing getCalls: Request failed with status code 500"
+  }
+}

@@ -1,0 +1,21 @@
+{
+    "name": "getPcById throws NodeOperationError on missing pcId",
+    "itemIndex": 0,
+    "parameters": {
+        "operation": "getPcById",
+        "pcId": 0
+    },
+    "credentials": {
+        "tanssApi": {
+            "baseURL": "https://example.invalid",
+            "authentication": "apiToken",
+            "apiToken": "TOKEN-123"
+        }
+    },
+    "http": [],
+    "expected": {
+        "kind": "throws",
+        "name": "NodeOperationError",
+        "messageIncludes": "pcId must be a positive number"
+    }
+}

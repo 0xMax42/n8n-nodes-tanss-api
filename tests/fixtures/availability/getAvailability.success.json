@@ -19,7 +19,7 @@
         "url": "https://example.invalid/backend/api/v1/availability?employeeIds=1%2C2",
         "json": true,
         "headers": {
-          "Accept": "application/json",
+          "Content-Type": "application/json",
           "apiToken": "Bearer TOKEN-123"
         }
       },

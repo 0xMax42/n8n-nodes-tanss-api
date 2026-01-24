@@ -1,8 +1,10 @@
 {
-  "name": "getAllHddTypes returns success wrapper",
+  "name": "identifyCall returns success response",
   "itemIndex": 0,
   "parameters": {
-    "operation": "getAllHddTypes"
+    "operation": "identifyCall",
+    "fromPhoneNumber": "  +491234567  ",
+    "toPhoneNumber": "  +498765432  "
   },
   "credentials": {
     "tanssApi": {
@@ -39,21 +41,29 @@
     },
     {
       "expect": {
-        "method": "GET",
-        "url": "https://example.invalid/backend/api/v1/hddTypes",
+        "method": "POST",
+        "url": "https://example.invalid/backend/api/v1/phoneCalls/identify",
         "json": true,
+        "returnFullResponse": true,
         "headers": {
-          "Content-Type": "application/json",
-          "apiToken": "Bearer TOKEN-123"
+          "apiToken": "Bearer TOKEN-123",
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "fromPhoneNumber": "+491234567",
+          "toPhoneNumber": "+498765432"
         }
       },
       "reply": {
         "statusCode": 200,
-        "body": [
-          { "id": 1, "name": "SSD" },
-          { "id": 2, "name": "HDD" }
-        ],
-        "headers": { "content-type": "application/json" }
+        "body": {
+          "identified": true,
+          "companyId": 12,
+          "employeeId": 34
+        },
+        "headers": {
+          "content-type": "application/json"
+        }
       }
     }
   ],
@@ -61,7 +71,12 @@
     "kind": "returns",
     "matchObject": {
       "success": true,
-      "statusCode": 200
+      "statusCode": 200,
+      "body": {
+        "identified": true,
+        "companyId": 12,
+        "employeeId": 34
+      }
     }
   }
 }

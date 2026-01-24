@@ -24,7 +24,7 @@
         "url": "https://example.invalid/backend/api/v1/admin/ticketStates/5",
         "json": true,
         "headers": {
-          "Accept": "application/json",
+          "Content-Type": "application/json",
           "apiToken": "Bearer TOKEN-123"
         },
         "body": {
