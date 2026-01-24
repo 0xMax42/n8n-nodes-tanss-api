@@ -1,6 +1,12 @@
 import { INodeProperties } from 'n8n-workflow';
-import { booleanGuard, nonEmptyStringGuard, numberGuard, stringGuard } from '../lib';
-import { createCrudHandler, crudField, crudOperation } from '../lib/crud';
+import {
+	booleanGuard,
+	nonEmptyStringGuard,
+	numberGuard,
+	positiveNumberGuard,
+	stringGuard,
+	createCrudHandler,
+} from '../lib';
 
 export const ticketStatesOperations: INodeProperties[] = [
 	{
@@ -128,112 +134,92 @@ export const ticketStatesFields: INodeProperties[] = [
 ];
 
 export const handleTicketStates = createCrudHandler({
-	operationField: {
-		name: 'operation',
-	},
-	operations: [
-		crudOperation({
-			type: 'read',
-			operationName: 'getTicketStates',
-			fields: [],
+	operationField: 'operation',
+
+	operations: {
+		getTicketStates: {
+			fields: {},
 			httpMethod: 'GET',
 			subPath: 'admin/ticketStates',
-		}),
-		crudOperation({
-			type: 'create',
-			operationName: 'createTicketState',
-			fields: [
-				crudField({
-					name: 'name',
+		},
+
+		createTicketState: {
+			fields: {
+				name: {
 					location: 'body',
 					defaultValue: '',
-					validator: nonEmptyStringGuard,
-				}),
-				crudField({
-					name: 'image',
+					guard: nonEmptyStringGuard,
+				},
+				image: {
 					location: 'body',
 					defaultValue: '',
-					validator: stringGuard,
-				}),
-				crudField({
-					name: 'waitState',
+					guard: stringGuard,
+				},
+				waitState: {
 					location: 'body',
 					defaultValue: false,
-					validator: booleanGuard,
-				}),
-				crudField({
-					name: 'rank',
+					guard: booleanGuard,
+				},
+				rank: {
 					location: 'body',
 					defaultValue: 0,
-					validator: numberGuard,
-				}),
-				crudField({
-					name: 'active',
+					guard: numberGuard,
+				},
+				active: {
 					location: 'body',
 					defaultValue: true,
-					validator: booleanGuard,
-				}),
-			],
+					guard: booleanGuard,
+				},
+			},
 			httpMethod: 'POST',
 			subPath: 'admin/ticketStates',
-		}),
-		crudOperation({
-			type: 'update',
-			operationName: 'updateTicketState',
-			fields: [
-				crudField({
-					name: 'id',
+		},
+
+		updateTicketState: {
+			fields: {
+				id: {
 					location: 'path',
-					defaultValue: undefined,
-					validator: numberGuard,
-				}),
-				crudField({
-					name: 'name',
+					guard: positiveNumberGuard,
+				},
+				name: {
 					location: 'body',
 					defaultValue: '',
-					validator: stringGuard,
-				}),
-				crudField({
-					name: 'image',
+					guard: stringGuard,
+				},
+				image: {
 					location: 'body',
 					defaultValue: '',
-					validator: stringGuard,
-				}),
-				crudField({
-					name: 'waitState',
+					guard: stringGuard,
+				},
+				waitState: {
 					location: 'body',
 					defaultValue: false,
-					validator: booleanGuard,
-				}),
-				crudField({
-					name: 'rank',
+					guard: booleanGuard,
+				},
+				rank: {
 					location: 'body',
 					defaultValue: 0,
-					validator: numberGuard,
-				}),
-				crudField({
-					name: 'active',
+					guard: numberGuard,
+				},
+				active: {
 					location: 'body',
 					defaultValue: true,
-					validator: booleanGuard,
-				}),
-			],
+					guard: booleanGuard,
+				},
+			},
 			httpMethod: 'PUT',
 			subPath: 'admin/ticketStates/{id}',
-		}),
-		crudOperation({
-			type: 'delete',
-			operationName: 'deleteTicketState',
-			fields: [
-				crudField({
-					name: 'id',
+		},
+
+		deleteTicketState: {
+			fields: {
+				id: {
 					location: 'path',
-					defaultValue: undefined,
-					validator: numberGuard,
-				}),
-			],
+					guard: positiveNumberGuard,
+				},
+			},
 			httpMethod: 'DELETE',
 			subPath: 'admin/ticketStates/{id}',
-		}),
-	],
+		},
+	},
 });
