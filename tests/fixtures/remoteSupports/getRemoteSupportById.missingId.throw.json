@@ -1,0 +1,18 @@
+{
+    "name": "getRemoteSupportById throws NodeOperationError on missing remoteSupportId",
+    "itemIndex": 0,
+    "parameters": { "operation": "getRemoteSupportById", "remoteSupportId": 0 },
+    "credentials": {
+        "tanssApi": {
+            "baseURL": "https://example.invalid",
+            "authentication": "apiToken",
+            "apiToken": "TOKEN-123"
+        }
+    },
+    "http": [],
+    "expected": {
+        "kind": "throws",
+        "name": "NodeOperationError",
+        "messageIncludes": "remoteSupportId must be a positive number"
+    }
+}
