@@ -1,4 +1,12 @@
-import { IExecuteFunctions, INodeProperties, NodeOperationError } from 'n8n-workflow';
+import { INodeProperties } from 'n8n-workflow';
+import {
+	booleanGuard,
+	createCrudHandler,
+	nonEmptyRecordGuard,
+	nonEmptyStringGuard,
+	nullOrGuard,
+	positiveNumberGuard,
+} from '../lib';
 
 export const ticketOperations: INodeProperties[] = [
 	{
@@ -60,20 +68,6 @@ export const ticketOperations: INodeProperties[] = [
 ];
 
 export const ticketFields: INodeProperties[] = [
-	{
-		displayName: 'API Token',
-		name: 'apiToken',
-		type: 'string' as const,
-		required: true,
-		typeOptions: { password: true },
-		default: '',
-		description: 'API token obtained from the TANSS API login',
-		displayOptions: {
-			show: {
-				resource: ['ticket'],
-			},
-		},
-	},
 	{
 		displayName: 'Ticket ID',
 		name: 'ticketId',
@@ -423,97 +417,114 @@ export const ticketFields: INodeProperties[] = [
 	},
 ];
 
-export async function handleTicket(this: IExecuteFunctions, i: number) {
-	const operation = this.getNodeParameter('operation', i) as string;
-	const credentials = await this.getCredentials('tanssApi');
+export const handleTicket = createCrudHandler({
+	operationField: 'operation',
 
-	if (!credentials) throw new NodeOperationError(this.getNode(), 'No credentials returned!');
+	operations: {
+		createTicket: {
+			httpMethod: 'POST',
+			subPath: 'tickets',
+			fields: {
+				createTicketFields: {
+					location: 'body',
+					spread: true,
+					defaultValue: {},
+					guard: nonEmptyRecordGuard,
+				},
+			},
+		},
 
-	const apiToken = this.getNodeParameter('apiToken', i, '') as string;
-	const ticketId = this.getNodeParameter('ticketId', i, 0) as number;
+		getTicketById: {
+			httpMethod: 'GET',
+			subPath: 'tickets/{ticketId}',
+			fields: {
+				ticketId: {
+					location: 'path',
+					guard: positiveNumberGuard,
+				},
+			},
+		},
 
-	let url = '';
-	const requestOptions: {
-		method: 'GET' | 'POST' | 'PUT' | 'DELETE';
-		headers: { apiToken: string; 'Content-Type': string };
-		json: boolean;
-		body?: Record<string, unknown>;
-		url: string;
-	} = {
-		method: 'GET',
-		headers: { apiToken, 'Content-Type': 'application/json' },
-		json: true,
-		url,
-	};
+		getTicketHistory: {
+			httpMethod: 'GET',
+			subPath: 'tickets/history/{ticketId}',
+			fields: {
+				ticketId: {
+					location: 'path',
+					guard: positiveNumberGuard,
+				},
+			},
+		},
 
-	switch (operation) {
-		case 'createTicket': {
-			url = `${credentials.baseURL}/backend/api/v1/tickets`;
-			requestOptions.method = 'POST';
-			const createTicketFields = this.getNodeParameter('createTicketFields', i, {}) as Record<
-				string,
-				unknown
-			>;
-			if (Object.keys(createTicketFields).length === 0)
-				throw new NodeOperationError(this.getNode(), 'No fields provided for ticket creation.');
-			requestOptions.body = createTicketFields;
-			break;
-		}
-		case 'getTicketById':
-			url = `${credentials.baseURL}/backend/api/v1/tickets/${ticketId}`;
-			requestOptions.method = 'GET';
-			break;
-		case 'getTicketHistory':
-			url = `${credentials.baseURL}/backend/api/v1/tickets/history/${ticketId}`;
-			requestOptions.method = 'GET';
-			break;
-		case 'createComment': {
-			const commentTitle = this.getNodeParameter('commentTitle', i) as string;
-			const commentContent = this.getNodeParameter('commentContent', i) as string;
-			const internal = this.getNodeParameter('internal', i) as boolean;
-			url = `${credentials.baseURL}/backend/api/v1/tickets/${ticketId}/comments`;
-			requestOptions.method = 'POST';
-			requestOptions.body = { title: commentTitle, content: commentContent, internal };
-			break;
-		}
-		case 'updateTicket': {
-			url = `${credentials.baseURL}/backend/api/v1/tickets/${ticketId}`;
-			const updateFields = this.getNodeParameter('updateFields', i, {}) as Record<string, unknown>;
-			if (Object.keys(updateFields).length === 0)
-				throw new NodeOperationError(this.getNode(), 'No fields to update were provided.');
-			requestOptions.method = 'PUT';
-			requestOptions.body = updateFields;
-			break;
-		}
-		case 'deleteTicket': {
-			const targetTicketId = this.getNodeParameter('targetTicketId', i, 0) as number;
-			url = `${credentials.baseURL}/backend/api/v1/tickets/${ticketId}`;
-			requestOptions.method = 'DELETE';
-			if (targetTicketId) url += `?targetTicketId=${targetTicketId}`;
-			break;
-		}
-		case 'mergeTickets': {
-			const mergeTargetId = this.getNodeParameter('targetTicketId', i, 0) as number;
-			url = `${credentials.baseURL}/backend/api/v1/tickets/${ticketId}/merge/${mergeTargetId}`;
-			requestOptions.method = 'PUT';
-			break;
-		}
-		default:
-			throw new NodeOperationError(
-				this.getNode(),
-				`The operation "${operation}" is not recognized.`,
-			);
-	}
+		createComment: {
+			httpMethod: 'POST',
+			subPath: 'tickets/{ticketId}/comments',
+			fields: {
+				ticketId: {
+					location: 'path',
+					guard: positiveNumberGuard,
+				},
+				commentTitle: {
+					location: 'body',
+					locationName: 'title',
+					guard: nonEmptyStringGuard,
+				},
+				commentContent: {
+					location: 'body',
+					locationName: 'content',
+					guard: nonEmptyStringGuard,
+				},
+				internal: {
+					location: 'body',
+					guard: booleanGuard,
+				},
+			},
+		},
 
-	requestOptions.url = url;
+		updateTicket: {
+			httpMethod: 'PUT',
+			subPath: 'tickets/{ticketId}',
+			fields: {
+				ticketId: {
+					location: 'path',
+					guard: positiveNumberGuard,
+				},
+				updateFields: {
+					location: 'body',
+					spread: true,
+					guard: nonEmptyRecordGuard,
+				},
+			},
+		},
 
-	try {
-		const responseData = await this.helpers.httpRequest(
-			requestOptions as unknown as import('n8n-workflow').IHttpRequestOptions,
-		);
-		return responseData;
-	} catch (error: unknown) {
-		const errorMessage = error instanceof Error ? error.message : String(error);
-		throw new NodeOperationError(this.getNode(), `Failed to execute ${operation}: ${errorMessage}`);
-	}
-}
+		deleteTicket: {
+			httpMethod: 'DELETE',
+			subPath: 'tickets/{ticketId}',
+			fields: {
+				ticketId: {
+					location: 'path',
+					guard: positiveNumberGuard,
+				},
+				targetTicketId: {
+					location: 'query',
+					guard: nullOrGuard(positiveNumberGuard),
+				},
+			},
+		},
+
+		mergeTickets: {
+			httpMethod: 'PUT',
+			subPath: 'tickets/{ticketId}/merge/{targetTicketId}',
+			fields: {
+				ticketId: {
+					location: 'path',
+					guard: positiveNumberGuard,
+				},
+				targetTicketId: {
+					location: 'path',
+					guard: positiveNumberGuard,
+				},
+			},
+		},
+	},
+});
