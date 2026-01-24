@@ -1,0 +1,47 @@
+{
+    "name": "createTimestamp returns success wrapper",
+    "itemIndex": 0,
+    "parameters": {
+        "operation": "createTimestamp",
+        "autoPause": true,
+        "employeeId": 1,
+        "date": 1700000000,
+        "state": "ON",
+        "type": "WORK"
+    },
+    "credentials": {
+        "tanssApi": {
+            "baseURL": "https://example.invalid",
+            "authentication": "apiToken",
+            "apiToken": "TOKEN-123"
+        }
+    },
+    "http": [
+        {
+            "expect": {
+                "method": "POST",
+                "url": "https://example.invalid/backend/api/v1/timestamps?autoPause=true",
+                "json": true,
+                "headers": {
+                    "Content-Type": "application/json",
+                    "apiToken": "Bearer TOKEN-123"
+                },
+                "body": {
+                    "employeeId": 1,
+                    "date": 1700000000,
+                    "state": "ON",
+                    "type": "WORK"
+                }
+            },
+            "reply": {
+                "statusCode": 201,
+                "body": { "id": 1 },
+                "headers": { "content-type": "application/json" }
+            }
+        }
+    ],
+    "expected": {
+        "kind": "returns",
+        "matchObject": { "success": true, "statusCode": 201 }
+    }
+}

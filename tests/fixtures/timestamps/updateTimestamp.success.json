@@ -1,0 +1,47 @@
+{
+    "name": "updateTimestamp returns success wrapper",
+    "itemIndex": 0,
+    "parameters": {
+        "operation": "updateTimestamp",
+        "timestampId": 3,
+        "employeeId": 1,
+        "date": 1700000000,
+        "state": "OFF",
+        "type": "WORK"
+    },
+    "credentials": {
+        "tanssApi": {
+            "baseURL": "https://example.invalid",
+            "authentication": "apiToken",
+            "apiToken": "TOKEN-123"
+        }
+    },
+    "http": [
+        {
+            "expect": {
+                "method": "PUT",
+                "url": "https://example.invalid/backend/api/v1/timestamps/3",
+                "json": true,
+                "headers": {
+                    "Content-Type": "application/json",
+                    "apiToken": "Bearer TOKEN-123"
+                },
+                "body": {
+                    "employeeId": 1,
+                    "date": 1700000000,
+                    "state": "OFF",
+                    "type": "WORK"
+                }
+            },
+            "reply": {
+                "statusCode": 200,
+                "body": { "id": 3 },
+                "headers": { "content-type": "application/json" }
+            }
+        }
+    ],
+    "expected": {
+        "kind": "returns",
+        "matchObject": { "success": true, "statusCode": 200 }
+    }
+}

@@ -1,0 +1,40 @@
+{
+    "name": "saveDayTimestamps returns success wrapper",
+    "itemIndex": 0,
+    "parameters": {
+        "operation": "saveDayTimestamps",
+        "employeeIdDay": 1,
+        "day": "2024-01-01",
+        "timestampsJson": "[{\"date\":1700000000,\"state\":\"ON\",\"type\":\"WORK\"}]"
+    },
+    "credentials": {
+        "tanssApi": {
+            "baseURL": "https://example.invalid",
+            "authentication": "apiToken",
+            "apiToken": "TOKEN-123"
+        }
+    },
+    "http": [
+        {
+            "expect": {
+                "method": "PUT",
+                "url": "https://example.invalid/backend/api/v1/timestamps/1/day/2024-01-01",
+                "json": true,
+                "headers": {
+                    "Content-Type": "application/json",
+                    "apiToken": "Bearer TOKEN-123"
+                },
+                "body": [{ "date": 1700000000, "state": "ON", "type": "WORK" }]
+            },
+            "reply": {
+                "statusCode": 200,
+                "body": { "ok": true },
+                "headers": { "content-type": "application/json" }
+            }
+        }
+    ],
+    "expected": {
+        "kind": "returns",
+        "matchObject": { "success": true, "statusCode": 200 }
+    }
+}
