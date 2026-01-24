@@ -1,0 +1,22 @@
+{
+    "name": "updateTicket throws NodeOperationError on missing updateFields",
+    "itemIndex": 0,
+    "parameters": {
+        "operation": "updateTicket",
+        "ticketId": 1,
+        "updateFields": {}
+    },
+    "credentials": {
+        "tanssApi": {
+            "baseURL": "https://example.invalid",
+            "authentication": "apiToken",
+            "apiToken": "TOKEN-123"
+        }
+    },
+    "http": [],
+    "expected": {
+        "kind": "throws",
+        "name": "NodeOperationError",
+        "messageIncludes": "updateFields cannot be empty"
+    }
+}

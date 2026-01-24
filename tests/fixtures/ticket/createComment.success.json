@@ -1,0 +1,41 @@
+{
+    "name": "createComment returns success wrapper",
+    "itemIndex": 0,
+    "parameters": {
+        "operation": "createComment",
+        "ticketId": 1,
+        "commentTitle": "Note",
+        "commentContent": "Hi",
+        "internal": false
+    },
+    "credentials": {
+        "tanssApi": {
+            "baseURL": "https://example.invalid",
+            "authentication": "apiToken",
+            "apiToken": "TOKEN-123"
+        }
+    },
+    "http": [
+        {
+            "expect": {
+                "method": "POST",
+                "url": "https://example.invalid/backend/api/v1/tickets/1/comments",
+                "json": true,
+                "headers": {
+                    "Content-Type": "application/json",
+                    "apiToken": "Bearer TOKEN-123"
+                },
+                "body": { "title": "Note", "content": "Hi", "internal": false }
+            },
+            "reply": {
+                "statusCode": 201,
+                "body": { "id": 10 },
+                "headers": { "content-type": "application/json" }
+            }
+        }
+    ],
+    "expected": {
+        "kind": "returns",
+        "matchObject": { "success": true, "statusCode": 201 }
+    }
+}

@@ -1,0 +1,39 @@
+{
+    "name": "updateTicket returns success wrapper",
+    "itemIndex": 0,
+    "parameters": {
+        "operation": "updateTicket",
+        "ticketId": 1,
+        "updateFields": { "title": "New" }
+    },
+    "credentials": {
+        "tanssApi": {
+            "baseURL": "https://example.invalid",
+            "authentication": "apiToken",
+            "apiToken": "TOKEN-123"
+        }
+    },
+    "http": [
+        {
+            "expect": {
+                "method": "PUT",
+                "url": "https://example.invalid/backend/api/v1/tickets/1",
+                "json": true,
+                "headers": {
+                    "Content-Type": "application/json",
+                    "apiToken": "Bearer TOKEN-123"
+                },
+                "body": { "title": "New" }
+            },
+            "reply": {
+                "statusCode": 200,
+                "body": { "id": 1, "title": "New" },
+                "headers": { "content-type": "application/json" }
+            }
+        }
+    ],
+    "expected": {
+        "kind": "returns",
+        "matchObject": { "success": true, "statusCode": 200 }
+    }
+}

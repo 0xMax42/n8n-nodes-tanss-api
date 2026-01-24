@@ -1,0 +1,38 @@
+{
+    "name": "createTicket returns success wrapper",
+    "itemIndex": 0,
+    "parameters": {
+        "operation": "createTicket",
+        "createTicketFields": { "title": "Issue", "content": "Desc" }
+    },
+    "credentials": {
+        "tanssApi": {
+            "baseURL": "https://example.invalid",
+            "authentication": "apiToken",
+            "apiToken": "TOKEN-123"
+        }
+    },
+    "http": [
+        {
+            "expect": {
+                "method": "POST",
+                "url": "https://example.invalid/backend/api/v1/tickets",
+                "json": true,
+                "headers": {
+                    "Content-Type": "application/json",
+                    "apiToken": "Bearer TOKEN-123"
+                },
+                "body": { "title": "Issue", "content": "Desc" }
+            },
+            "reply": {
+                "statusCode": 201,
+                "body": { "id": 1 },
+                "headers": { "content-type": "application/json" }
+            }
+        }
+    ],
+    "expected": {
+        "kind": "returns",
+        "matchObject": { "success": true, "statusCode": 201 }
+    }
+}

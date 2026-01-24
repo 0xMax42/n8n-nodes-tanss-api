@@ -1,0 +1,38 @@
+{
+    "name": "deleteTicket returns success wrapper",
+    "itemIndex": 0,
+    "parameters": {
+        "operation": "deleteTicket",
+        "ticketId": 1,
+        "targetTicketId": 2
+    },
+    "credentials": {
+        "tanssApi": {
+            "baseURL": "https://example.invalid",
+            "authentication": "apiToken",
+            "apiToken": "TOKEN-123"
+        }
+    },
+    "http": [
+        {
+            "expect": {
+                "method": "DELETE",
+                "url": "https://example.invalid/backend/api/v1/tickets/1?targetTicketId=2",
+                "json": true,
+                "headers": {
+                    "Content-Type": "application/json",
+                    "apiToken": "Bearer TOKEN-123"
+                }
+            },
+            "reply": {
+                "statusCode": 204,
+                "body": "",
+                "headers": { "content-type": "application/json" }
+            }
+        }
+    ],
+    "expected": {
+        "kind": "returns",
+        "matchObject": { "success": true, "statusCode": 204 }
+    }
+}
