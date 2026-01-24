@@ -1,0 +1,36 @@
+{
+    "name": "getTechnicians returns http-error wrapper",
+    "itemIndex": 0,
+    "parameters": {
+        "operation": "getTechnicians",
+        "freelancerCompanyId": 12
+    },
+    "credentials": {
+        "tanssApi": {
+            "baseURL": "https://example.invalid",
+            "authentication": "apiToken",
+            "apiToken": "TOKEN-123"
+        }
+    },
+    "http": [
+        {
+            "expect": {
+                "method": "GET",
+                "url": "https://example.invalid/backend/api/v1/employees/technicians?freelancerCompanyId=12"
+            },
+            "throw": {
+                "kind": "axios",
+                "statusCode": 502,
+                "data": { "message": "bad gateway" }
+            }
+        }
+    ],
+    "expected": {
+        "kind": "returns",
+        "matchObject": {
+            "success": false,
+            "statusCode": 502,
+            "body": { "message": "bad gateway" }
+        }
+    }
+}

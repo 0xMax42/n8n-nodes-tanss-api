@@ -1,0 +1,62 @@
+{
+    "name": "createEmployee returns success wrapper",
+    "itemIndex": 0,
+    "parameters": {
+        "operation": "createEmployee",
+        "employeeObject": {
+            "name": "Max",
+            "firstName": "Max",
+            "lastName": "Mustermann",
+            "active": true,
+            "companyAssignments": {
+                "assignment": [
+                    { "companyId": 10 },
+                    { "companyId": 20 }
+                ]
+            }
+        }
+    },
+    "credentials": {
+        "tanssApi": {
+            "baseURL": "https://example.invalid",
+            "authentication": "apiToken",
+            "apiToken": "TOKEN-123"
+        }
+    },
+    "http": [
+        {
+            "expect": {
+                "method": "POST",
+                "url": "https://example.invalid/backend/api/v1/employees",
+                "json": true,
+                "headers": {
+                    "Content-Type": "application/json",
+                    "apiToken": "Bearer TOKEN-123"
+                },
+                "body": {
+                    "name": "Max",
+                    "firstName": "Max",
+                    "lastName": "Mustermann",
+                    "active": true,
+                    "companyAssignments": [
+                        { "companyId": 10 },
+                        { "companyId": 20 }
+                    ]
+                }
+            },
+            "reply": {
+                "statusCode": 201,
+                "body": { "id": 99, "name": "Max" },
+                "headers": { "content-type": "application/json" }
+            }
+        }
+    ],
+    "expected": {
+        "kind": "returns",
+        "matchObject": {
+            "success": true,
+            "statusCode": 201,
+            "body": { "id": 99, "name": "Max" }
+        }
+    }
+}

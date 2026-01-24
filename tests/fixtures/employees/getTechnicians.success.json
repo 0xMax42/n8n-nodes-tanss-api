@@ -1,0 +1,47 @@
+{
+    "name": "getTechnicians returns success wrapper",
+    "itemIndex": 0,
+    "parameters": {
+        "operation": "getTechnicians",
+        "freelancerCompanyId": 12
+    },
+    "credentials": {
+        "tanssApi": {
+            "baseURL": "https://example.invalid",
+            "authentication": "apiToken",
+            "apiToken": "TOKEN-123"
+        }
+    },
+    "http": [
+        {
+            "expect": {
+                "method": "GET",
+                "url": "https://example.invalid/backend/api/v1/employees/technicians?freelancerCompanyId=12",
+                "json": true,
+                "headers": {
+                    "Content-Type": "application/json",
+                    "apiToken": "Bearer TOKEN-123"
+                }
+            },
+            "reply": {
+                "statusCode": 200,
+                "body": [
+                    { "id": 1, "name": "Max Mustermann" },
+                    { "id": 2, "name": "Erika Musterfrau" }
+                ],
+                "headers": { "content-type": "application/json" }
+            }
+        }
+    ],
+    "expected": {
+        "kind": "returns",
+        "matchObject": {
+            "success": true,
+            "statusCode": 200,
+            "body": [
+                { "id": 1, "name": "Max Mustermann" },
+                { "id": 2, "name": "Erika Musterfrau" }
+            ]
+        }
+    }
+}
