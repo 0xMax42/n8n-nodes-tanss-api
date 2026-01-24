@@ -1,6 +1,5 @@
 import { INodeProperties } from 'n8n-workflow';
-import { nonEmptyRecordGuard, numberGuard } from '../lib';
-import { createCrudHandler, crudField, crudOperation } from '../lib/crud';
+import { createCrudHandler, nonEmptyRecordGuard, numberGuard } from '../lib';
 
 export const hddTypesOperations: INodeProperties[] = [
 	{
@@ -86,78 +85,65 @@ export const hddTypesFields: INodeProperties[] = [
 ];
 
 export const handleHddTypes = createCrudHandler({
-	operationField: {
-		name: 'operation',
-	},
-	operations: [
-		crudOperation({
-			type: 'create',
-			operationName: 'createHddType',
-			fields: [
-				crudField({
-					name: 'createHddTypeFields',
+	operationField: 'operation',
+	operations: {
+		createHddType: {
+			fields: {
+				createHddTypeFields: {
 					location: 'body',
 					defaultValue: {},
-					validator: nonEmptyRecordGuard,
-				}),
-			],
+					guard: nonEmptyRecordGuard,
+				},
+			},
 			httpMethod: 'POST',
 			subPath: 'hddTypes',
-		}),
-		crudOperation({
-			type: 'delete',
-			operationName: 'deleteHddType',
-			fields: [
-				crudField({
-					name: 'hddTypeId',
+		},
+
+		deleteHddType: {
+			fields: {
+				hddTypeId: {
 					location: 'path',
 					defaultValue: 0,
-					validator: numberGuard,
-				}),
-			],
+					guard: numberGuard,
+				},
+			},
 			httpMethod: 'DELETE',
 			subPath: 'hddTypes/{hddTypeId}',
-		}),
-		crudOperation({
-			type: 'read',
-			operationName: 'getAllHddTypes',
-			fields: [],
+		},
+
+		getAllHddTypes: {
+			fields: {},
 			httpMethod: 'GET',
 			subPath: 'hddTypes',
-		}),
-		crudOperation({
-			type: 'read',
-			operationName: 'getHddTypeById',
-			fields: [
-				crudField({
-					name: 'hddTypeId',
+		},
+
+		getHddTypeById: {
+			fields: {
+				hddTypeId: {
 					location: 'path',
 					defaultValue: 0,
-					validator: numberGuard,
-				}),
-			],
+					guard: numberGuard,
+				},
+			},
 			httpMethod: 'GET',
 			subPath: 'hddTypes/{hddTypeId}',
-		}),
-		crudOperation({
-			type: 'update',
-			operationName: 'updateHddType',
-			fields: [
-				crudField({
-					name: 'hddTypeId',
+		},
+
+		updateHddType: {
+			fields: {
+				hddTypeId: {
 					location: 'path',
 					defaultValue: 0,
-					validator: numberGuard,
-				}),
-				crudField({
-					name: 'updateHddTypeFields',
+					guard: numberGuard,
+				},
+				updateHddTypeFields: {
 					location: 'body',
 					defaultValue: {},
-					validator: nonEmptyRecordGuard,
-				}),
-			],
+					guard: nonEmptyRecordGuard,
+				},
+			},
 			httpMethod: 'PUT',
 			subPath: 'hddTypes/{hddTypeId}',
-		}),
-	],
+		},
+	},
 });
