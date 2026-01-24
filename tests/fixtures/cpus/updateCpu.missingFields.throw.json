@@ -1,0 +1,22 @@
+{
+    "name": "updateCpu throws NodeOperationError on missing updateCpuFields",
+    "itemIndex": 0,
+    "parameters": {
+        "operation": "updateCpu",
+        "cpuId": 7,
+        "updateCpuFields": {}
+    },
+    "credentials": {
+        "tanssApi": {
+            "baseURL": "https://example.invalid",
+            "authentication": "apiToken",
+            "apiToken": "TOKEN-123"
+        }
+    },
+    "http": [],
+    "expected": {
+        "kind": "throws",
+        "name": "NodeOperationError",
+        "messageIncludes": "updateCpuFields cannot be empty"
+    }
+}

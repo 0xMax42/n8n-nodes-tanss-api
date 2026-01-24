@@ -1,0 +1,38 @@
+{
+    "name": "createCpu returns success wrapper",
+    "itemIndex": 0,
+    "parameters": {
+        "operation": "createCpu",
+        "createCpuFields": { "name": "CPU-New" }
+    },
+    "credentials": {
+        "tanssApi": {
+            "baseURL": "https://example.invalid",
+            "authentication": "apiToken",
+            "apiToken": "TOKEN-123"
+        }
+    },
+    "http": [
+        {
+            "expect": {
+                "method": "POST",
+                "url": "https://example.invalid/backend/api/v1/cpus",
+                "json": true,
+                "headers": {
+                    "Content-Type": "application/json",
+                    "apiToken": "Bearer TOKEN-123"
+                },
+                "body": { "name": "CPU-New" }
+            },
+            "reply": {
+                "statusCode": 201,
+                "body": { "id": 9, "name": "CPU-New" },
+                "headers": { "content-type": "application/json" }
+            }
+        }
+    ],
+    "expected": {
+        "kind": "returns",
+        "matchObject": { "success": true, "statusCode": 201 }
+    }
+}
