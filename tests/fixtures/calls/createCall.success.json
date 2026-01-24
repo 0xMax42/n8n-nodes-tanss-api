@@ -1,0 +1,52 @@
+{
+    "name": "createCall returns success wrapper",
+    "itemIndex": 0,
+    "parameters": {
+        "operation": "createCall",
+        "createCallFields": {
+            "date": 1700000000,
+            "fromPhoneNumber": "+49111",
+            "toPhoneNumber": "+49222",
+            "direction": "INCOMING"
+        }
+    },
+    "credentials": {
+        "tanssApi": {
+            "baseURL": "https://example.invalid",
+            "authentication": "apiToken",
+            "apiToken": "TOKEN-123"
+        }
+    },
+    "http": [
+        {
+            "expect": {
+                "method": "POST",
+                "url": "https://example.invalid/backend/api/calls/v1",
+                "json": true,
+                "headers": {
+                    "Content-Type": "application/json",
+                    "apiToken": "Bearer TOKEN-123"
+                },
+                "body": {
+                    "date": 1700000000,
+                    "fromPhoneNumber": "+49111",
+                    "toPhoneNumber": "+49222",
+                    "direction": "INCOMING"
+                }
+            },
+            "reply": {
+                "statusCode": 201,
+                "body": { "id": 501, "direction": "INCOMING" },
+                "headers": { "content-type": "application/json" }
+            }
+        }
+    ],
+    "expected": {
+        "kind": "returns",
+        "matchObject": {
+            "success": true,
+            "statusCode": 201,
+            "body": { "id": 501, "direction": "INCOMING" }
+        }
+    }
+}

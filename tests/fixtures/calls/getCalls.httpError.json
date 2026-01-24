@@ -1,0 +1,39 @@
+{
+    "name": "getCalls returns http-error wrapper",
+    "itemIndex": 0,
+    "parameters": {
+        "operation": "getCalls",
+        "getCallsFilters": {
+            "timeFrom": 1700000000,
+            "timeTo": 1700003600
+        }
+    },
+    "credentials": {
+        "tanssApi": {
+            "baseURL": "https://example.invalid",
+            "authentication": "apiToken",
+            "apiToken": "TOKEN-123"
+        }
+    },
+    "http": [
+        {
+            "expect": {
+                "method": "PUT",
+                "url": "https://example.invalid/backend/api/calls/v1"
+            },
+            "throw": {
+                "kind": "axios",
+                "statusCode": 500,
+                "data": { "message": "server error" }
+            }
+        }
+    ],
+    "expected": {
+        "kind": "returns",
+        "matchObject": {
+            "success": false,
+            "statusCode": 500,
+            "body": { "message": "server error" }
+        }
+    }
+}
