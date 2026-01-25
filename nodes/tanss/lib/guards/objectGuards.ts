@@ -12,6 +12,15 @@ export function isPlainRecord(value: unknown): value is Record<string, unknown> 
 	return proto === Object.prototype || proto === null;
 }
 
+/**
+ * Type guard to check if a value is an array
+ * @param value The value to check
+ * @returns True if the value is an array, false otherwise
+ */
+export function isArray(value: unknown): value is Array<unknown> {
+	return Array.isArray(value);
+}
+
 export function arrayGuard<T>(innerGuard: NodeParameterGuard<T>): NodeParameterGuard<T[]> {
 	return (executeFunctions: IExecuteFunctions, value: unknown, name: string): T[] => {
 		if (!Array.isArray(value)) {
