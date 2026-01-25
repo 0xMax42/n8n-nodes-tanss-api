@@ -3,7 +3,7 @@
     "itemIndex": 0,
     "parameters": {
         "operation": "createCpu",
-        "createCpuFields": { "name": "CPU-New" }
+        "createCpuFields": { "id": 0, "name": "CPU-New" }
     },
     "credentials": {
         "tanssApi": {

@@ -1,6 +1,5 @@
 import { INodeProperties } from 'n8n-workflow';
 import {
-	createCrudFieldMap,
 	createCrudHandler,
 	createSubObjectGuard,
 	CrudFieldMap,
@@ -96,8 +95,23 @@ const cpuIdField = {
 	},
 } satisfies CrudFieldMap;
 
-const createAndUpdateCpuFields = {
-	operation: {
+const createCpuFields = {
+	createCpuFields: {
+		location: 'body',
+		spread: true,
+		guard: createSubObjectGuard({
+			id: {
+				guard: positiveNumberGuard,
+			},
+			name: {
+				guard: stringGuard,
+			},
+		}),
+	},
+} satisfies CrudFieldMap;
+
+const updateCpuFields = {
+	updateCpuFields: {
 		location: 'body',
 		spread: true,
 		guard: createSubObjectGuard({
@@ -118,12 +132,7 @@ export const handleCpu = createCrudHandler({
 		createCpu: {
 			httpMethod: 'POST',
 			subPath: '/cpus',
-			fields: {
-				...createCrudFieldMap(
-					{ fromKey: 'operation', toKey: 'createCpuFields' },
-					createAndUpdateCpuFields,
-				),
-			},
+			fields: createCpuFields,
 		},
 		deleteCpu: {
 			httpMethod: 'DELETE',
@@ -149,10 +158,7 @@ export const handleCpu = createCrudHandler({
 			subPath: '/cpus/{cpuId}',
 			fields: {
 				...cpuIdField,
-				...createCrudFieldMap(
-					{ fromKey: 'operation', toKey: 'updateCpuFields' },
-					createAndUpdateCpuFields,
-				),
+				...updateCpuFields,
 			},
 		},
 	},
