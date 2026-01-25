@@ -3,7 +3,26 @@
     "itemIndex": 0,
     "parameters": {
         "operation": "getCustomTicketList",
-        "customTicketQuery": { "page": 1, "itemsPerPage": 20 }
+        "customTicketQuery": {
+            "companies": [1, 2],
+            "departments": [3, 4],
+            "ids": [10, 11],
+            "includeDoneTickets": false,
+            "isRepair": false,
+            "itemsPerPage": 20,
+            "modifiedWithinTimeframe": {
+                "from": 1700000000,
+                "to": 1700003600
+            },
+            "notAssignedToEmployees": [5, 6],
+            "page": 1,
+            "phaseId": 1,
+            "projectId": 1,
+            "remitterId": 1,
+            "staff": [7, 8],
+            "states": ["open", "closed"],
+            "types": ["incident", "service"]
+        }
     },
     "credentials": {
         "tanssApi": {
@@ -22,7 +41,26 @@
                     "Content-Type": "application/json",
                     "apiToken": "Bearer TOKEN-123"
                 },
-                "body": { "page": 1, "itemsPerPage": 20 }
+                "body": {
+                    "companies": [1, 2],
+                    "departments": [3, 4],
+                    "ids": [10, 11],
+                    "includeDoneTickets": false,
+                    "isRepair": false,
+                    "itemsPerPage": 20,
+                    "modifiedWithinTimeframe": {
+                        "from": 1700000000,
+                        "to": 1700003600
+                    },
+                    "notAssignedToEmployees": [5, 6],
+                    "page": 1,
+                    "phaseId": 1,
+                    "projectId": 1,
+                    "remitterId": 1,
+                    "staff": [7, 8],
+                    "states": ["open", "closed"],
+                    "types": ["incident", "service"]
+                }
             },
             "reply": {
                 "statusCode": 200,
