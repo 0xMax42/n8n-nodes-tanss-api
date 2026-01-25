@@ -81,9 +81,15 @@ export function createCrudHandler(config: CrudOperationsConfig): NodeHandler {
 			config.credentialType,
 		);
 
+		const headers: Record<string, string> = {};
+
+		if (body) {
+			headers['Content-Type'] = 'application/json';
+		}
+
 		const requestOptions: IHttpRequestOptions = {
 			method: method,
-			headers: { 'Content-Type': 'application/json' },
+			headers: headers,
 			json: true,
 			url: url,
 			body: body,
