@@ -1,4 +1,13 @@
-import { IExecuteFunctions, INodeProperties, NodeOperationError, IDataObject } from 'n8n-workflow';
+import { INodeProperties } from 'n8n-workflow';
+import {
+	createCrudHandler,
+	createSubObjectGuard,
+	CrudFieldMap,
+	nonEmptyStringGuard,
+	nullOrGuard,
+	positiveNumberGuard,
+	stringGuard,
+} from '../lib';
 
 export const remoteSupportsOperations: INodeProperties[] = [
 	{
@@ -82,16 +91,6 @@ export const remoteSupportsOperations: INodeProperties[] = [
 ];
 
 export const remoteSupportsFields: INodeProperties[] = [
-	{
-		displayName: 'API Token',
-		name: 'apiToken',
-		type: 'string' as const,
-		required: true,
-		typeOptions: { password: true },
-		default: '',
-		description: 'API token obtained from the TANSS web interface (must be generated in TANSS)',
-		displayOptions: { show: { resource: ['remoteSupports'] } },
-	},
 	{
 		displayName: 'Assign Device Object',
 		name: 'assignDeviceObject',
@@ -209,356 +208,259 @@ export const remoteSupportsFields: INodeProperties[] = [
 	},
 ];
 
-export async function handleRemoteSupports(this: IExecuteFunctions, i: number) {
-	const operation = this.getNodeParameter('operation', i) as string;
-	const credentials = await this.getCredentials('tanssApi');
-	if (!credentials) throw new NodeOperationError(this.getNode(), 'No credentials returned!');
+const remoteSupportIdField = {
+	remoteSupportId: {
+		location: 'path',
+		guard: positiveNumberGuard,
+	},
+} satisfies CrudFieldMap;
 
-	const apiToken = this.getNodeParameter('apiToken', i, '') as string;
-	const base = credentials.baseURL as string;
-	if (!base) throw new NodeOperationError(this.getNode(), 'No baseURL in credentials');
+const getRemoteSupportsFilters = {
+	getRemoteSupportsFilters: {
+		location: 'body',
+		spread: true,
+		defaultValue: {},
+		guard: createSubObjectGuard({
+			timeFrom: { guard: nullOrGuard(positiveNumberGuard) },
+			timeTo: { guard: nullOrGuard(positiveNumberGuard) },
+			employeeId: { guard: nullOrGuard(positiveNumberGuard) },
+			companyId: { guard: nullOrGuard(positiveNumberGuard) },
+			typeId: { guard: nullOrGuard(positiveNumberGuard) },
+			text: { guard: nullOrGuard(nonEmptyStringGuard) },
+		}),
+	},
+} satisfies CrudFieldMap;
 
-	let url = '';
-	const requestOptions: {
-		method: 'GET' | 'PUT' | 'POST' | 'DELETE';
-		headers: { [key: string]: string };
-		json: boolean;
-		body?: IDataObject;
-		url: string;
-	} = {
-		method: 'POST',
-		headers: { Accept: 'application/json' },
-		json: true,
-		url,
-	};
+const createOrUpdateRemoteSupportFields = {
+	remoteObject: {
+		location: 'body',
+		spread: true,
+		defaultValue: {},
+		guard: createSubObjectGuard({
+			remoteMaintenanceId: { guard: nullOrGuard(nonEmptyStringGuard) },
+			userId: { guard: nullOrGuard(stringGuard) },
+			userName: { guard: nullOrGuard(nonEmptyStringGuard) },
+			employeeId: { guard: nullOrGuard(positiveNumberGuard) },
+			deviceId: { guard: nullOrGuard(stringGuard) },
+			deviceName: { guard: nullOrGuard(nonEmptyStringGuard) },
+			companyId: { guard: nullOrGuard(positiveNumberGuard) },
+			linkTypeId: { guard: nullOrGuard(positiveNumberGuard) },
+			linkId: { guard: nullOrGuard(positiveNumberGuard) },
+			startTime: { guard: nullOrGuard(positiveNumberGuard) },
+			endTime: { guard: nullOrGuard(positiveNumberGuard) },
+			comment: { guard: nullOrGuard(nonEmptyStringGuard) },
+		}),
+	},
+} satisfies CrudFieldMap;
 
-	if (apiToken && apiToken.toString().trim() !== '') {
-		const tokenValue = String(apiToken).startsWith('Bearer ')
-			? String(apiToken)
-			: `Bearer ${String(apiToken)}`;
-		requestOptions.headers.Authorization = tokenValue;
-		requestOptions.headers.apiToken = tokenValue;
-	}
+const createAssignDeviceFields = {
+	assignDeviceObject: {
+		location: 'body',
+		spread: true,
+		defaultValue: {},
+		guard: createSubObjectGuard({
+			deviceId: { guard: nonEmptyStringGuard },
+			companyId: { guard: nullOrGuard(positiveNumberGuard) },
+			linkTypeId: { guard: nullOrGuard(positiveNumberGuard) },
+			linkId: { guard: nullOrGuard(positiveNumberGuard) },
+		}),
+	},
+} satisfies CrudFieldMap;
 
-	switch (operation) {
-		case 'createRemoteSupport': {
-			const body: IDataObject = {};
-			const fields = this.getNodeParameter('remoteObject', i, {}) as IDataObject;
+export const handleRemoteSupports = createCrudHandler({
+	operationField: 'operation',
+	credentialType: 'system',
 
-			if (fields.remoteMaintenanceId && String(fields.remoteMaintenanceId).trim() !== '')
-				body.remoteMaintenanceId = String(fields.remoteMaintenanceId).trim();
+	operations: {
+		getDeviceAssignments: {
+			fields: {},
+			httpMethod: 'GET',
+			subPath: 'remoteSupports/v1/assignDevice',
+			basePath: 'backend/api',
+		},
 
-			if (fields.userId && String(fields.userId).trim() !== '')
-				body.userId = String(fields.userId).trim();
+		getRemoteSupportById: {
+			fields: remoteSupportIdField,
+			httpMethod: 'GET',
+			subPath: 'remoteSupports/v1/{remoteSupportId}',
+			basePath: 'backend/api',
+		},
 
-			if (fields.userName && String(fields.userName).trim() !== '')
-				body.userName = String(fields.userName).trim();
+		deleteRemoteSupport: {
+			fields: remoteSupportIdField,
+			httpMethod: 'DELETE',
+			subPath: 'remoteSupports/v1/{remoteSupportId}',
+			basePath: 'backend/api',
+		},
 
-			const employeeId = Number(fields.employeeId) || 0;
-			if (employeeId > 0) body.employeeId = employeeId;
+		getRemoteSupports: {
+			fields: getRemoteSupportsFilters,
+			httpMethod: 'PUT',
+			subPath: 'remoteSupports/v1',
+			basePath: 'backend/api',
+		},
 
-			if (fields.deviceId && String(fields.deviceId).trim() !== '')
-				body.deviceId = String(fields.deviceId).trim();
+		createRemoteSupport: {
+			fields: createOrUpdateRemoteSupportFields,
+			httpMethod: 'POST',
+			subPath: 'remoteSupports/v1',
+			basePath: 'backend/api',
+		},
 
-			if (fields.deviceName && String(fields.deviceName).trim() !== '')
-				body.deviceName = String(fields.deviceName).trim();
+		updateRemoteSupport: {
+			fields: { ...remoteSupportIdField, ...createOrUpdateRemoteSupportFields },
+			httpMethod: 'PUT',
+			subPath: 'remoteSupports/v1/{remoteSupportId}',
+			basePath: 'backend/api',
+		},
 
-			const companyId = Number(fields.companyId) || 0;
-			if (companyId > 0) body.companyId = companyId;
+		deleteAssignDevice: {
+			fields: {
+				assignDeviceObject: {
+					location: 'body',
+					spread: true,
+					defaultValue: {},
+					guard: createSubObjectGuard({
+						deviceId: { guard: nonEmptyStringGuard },
+					}),
+				},
+			},
+			httpMethod: 'DELETE',
+			subPath: 'remoteSupports/v1/assignDevice',
+			basePath: 'backend/api',
+		},
 
-			const linkTypeId = Number(fields.linkTypeId) || 0;
-			if (linkTypeId > 0) body.linkTypeId = linkTypeId;
+		createAssignDevice: {
+			fields: createAssignDeviceFields,
+			httpMethod: 'POST',
+			subPath: 'remoteSupports/v1/assignDevice',
+			basePath: 'backend/api',
+		},
 
-			const linkId = Number(fields.linkId) || 0;
-			if (linkId > 0) body.linkId = linkId;
+		getEmployeeAssignments: {
+			fields: {},
+			httpMethod: 'GET',
+			subPath: 'remoteSupports/v1/assignEmployee',
+			basePath: 'backend/api',
+		},
 
-			const startTime = Number(fields.startTime) || 0;
-			if (startTime > 0) body.startTime = startTime;
+		createAssignEmployee: {
+			fields: {
+				assignEmployeeObject: {
+					location: 'body',
+					spread: true,
+					defaultValue: {},
+					guard: createSubObjectGuard({
+						userId: { guard: nonEmptyStringGuard },
+						employeeId: { guard: positiveNumberGuard },
+					}),
+				},
+			},
+			httpMethod: 'POST',
+			subPath: 'remoteSupports/v1/assignEmployee',
+			basePath: 'backend/api',
+		},
 
-			const endTime = Number(fields.endTime) || 0;
-			if (endTime > 0) body.endTime = endTime;
+		deleteAssignEmployee: {
+			fields: {
+				assignEmployeeObject: {
+					location: 'body',
+					spread: true,
+					defaultValue: {},
+					guard: createSubObjectGuard({
+						userId: { guard: nonEmptyStringGuard },
+					}),
+				},
+			},
+			httpMethod: 'DELETE',
+			subPath: 'remoteSupports/v1/assignEmployee',
+			basePath: 'backend/api',
+		},
+	},
+});
 
-			if (fields.comment && String(fields.comment).trim() !== '')
-				body.comment = String(fields.comment).trim();
+// export async function handleRemoteSupports(this: IExecuteFunctions, i: number) {
+// 	const operation = this.getNodeParameter('operation', i) as string;
+// 	const credentials = await this.getCredentials('tanssApi');
+// 	if (!credentials) throw new NodeOperationError(this.getNode(), 'No credentials returned!');
 
-			url = `${credentials.baseURL}/backend/api/remoteSupports/v1`;
-			requestOptions.method = 'POST';
-			requestOptions.url = url;
-			requestOptions.headers['Content-Type'] = 'application/json';
-			requestOptions.body = body;
-			break;
-		}
+// 	const apiToken = this.getNodeParameter('apiToken', i, '') as string;
+// 	const base = credentials.baseURL as string;
+// 	if (!base) throw new NodeOperationError(this.getNode(), 'No baseURL in credentials');
 
-		case 'getRemoteSupports': {
-			const filters = this.getNodeParameter('getRemoteSupportsFilters', i, {}) as IDataObject;
-			const timeframeFrom = Number(filters.timeFrom) || 0;
-			const timeframeTo = Number(filters.timeTo) || 0;
-			const body: IDataObject = {};
-			if (timeframeFrom > 0 || timeframeTo > 0) {
-				const timeframeObj: IDataObject = {};
-				if (timeframeFrom > 0) timeframeObj.from = timeframeFrom;
-				if (timeframeTo > 0) timeframeObj.to = timeframeTo;
-				body.timeframe = timeframeObj;
-			}
+// 	let url = '';
+// 	const requestOptions: {
+// 		method: 'GET' | 'PUT' | 'POST' | 'DELETE';
+// 		headers: { [key: string]: string };
+// 		json: boolean;
+// 		body?: IDataObject;
+// 		url: string;
+// 	} = {
+// 		method: 'POST',
+// 		headers: { Accept: 'application/json' },
+// 		json: true,
+// 		url,
+// 	};
 
-			const employeeId = Number(filters.employeeId) || 0;
-			if (employeeId > 0) body.employeeId = employeeId;
+// 	if (apiToken && apiToken.toString().trim() !== '') {
+// 		const tokenValue = String(apiToken).startsWith('Bearer ')
+// 			? String(apiToken)
+// 			: `Bearer ${String(apiToken)}`;
+// 		requestOptions.headers.Authorization = tokenValue;
+// 		requestOptions.headers.apiToken = tokenValue;
+// 	}
 
-			const companyId = Number(filters.companyId) || 0;
-			if (companyId > 0) body.companyId = companyId;
+// 	switch (operation) {
+// 		case 'createAssignDevice': {
+// 			const assignJson = this.getNodeParameter('assignDeviceJson', i, '') as string;
+// 			let body: IDataObject = {};
+// 			if (assignJson && assignJson.trim() !== '') {
+// 				try {
+// 					const parsed = JSON.parse(assignJson);
+// 					if (typeof parsed !== 'object' || parsed === null)
+// 						throw new Error('assignDeviceJson must be a JSON object.');
+// 					body = parsed as IDataObject;
+// 				} catch (err) {
+// 					const msg = err instanceof Error ? err.message : String(err);
+// 					throw new NodeOperationError(
+// 						this.getNode(),
+// 						`assignDeviceJson must be valid JSON: ${msg}`,
+// 					);
+// 				}
+// 			} else {
+// 				const fields = this.getNodeParameter('assignDeviceObject', i, {}) as IDataObject;
+// 				if (fields.deviceId && String(fields.deviceId).trim() !== '')
+// 					body.deviceId = String(fields.deviceId).trim();
+// 				const companyId = Number(fields.companyId) || 0;
+// 				if (companyId > 0) body.companyId = companyId;
+// 				const linkTypeId = Number(fields.linkTypeId) || 0;
+// 				if (linkTypeId > 0) body.linkTypeId = linkTypeId;
+// 				const linkId = Number(fields.linkId) || 0;
+// 				if (linkId > 0) body.linkId = linkId;
+// 			}
 
-			const typeId = Number(filters.typeId) || 0;
-			if (typeId > 0) body.typeId = typeId;
+// 			url = `${credentials.baseURL}/backend/api/remoteSupports/v1/assignDevice`;
+// 			requestOptions.method = 'POST';
+// 			requestOptions.url = url;
+// 			requestOptions.headers['Content-Type'] = 'application/json';
+// 			requestOptions.body = body;
+// 			break;
+// 		}
 
-			if (filters.text && String(filters.text).trim() !== '')
-				body.text = String(filters.text).trim();
+// 		default:
+// 			throw new NodeOperationError(
+// 				this.getNode(),
+// 				`The operation "${operation}" is not recognized.`,
+// 			);
+// 	}
 
-			url = `${credentials.baseURL}/backend/api/remoteSupports/v1`;
-			requestOptions.method = 'PUT';
-			requestOptions.url = url;
-			requestOptions.headers['Content-Type'] = 'application/json';
-			requestOptions.body = body;
-			break;
-		}
-
-		case 'getDeviceAssignments': {
-			url = `${credentials.baseURL}/backend/api/remoteSupports/v1/assignDevice`;
-			requestOptions.method = 'GET';
-			requestOptions.url = url;
-			delete requestOptions.headers['Content-Type'];
-			break;
-		}
-
-		case 'createAssignDevice': {
-			const assignJson = this.getNodeParameter('assignDeviceJson', i, '') as string;
-			let body: IDataObject = {};
-			if (assignJson && assignJson.trim() !== '') {
-				try {
-					const parsed = JSON.parse(assignJson);
-					if (typeof parsed !== 'object' || parsed === null)
-						throw new Error('assignDeviceJson must be a JSON object.');
-					body = parsed as IDataObject;
-				} catch (err) {
-					const msg = err instanceof Error ? err.message : String(err);
-					throw new NodeOperationError(
-						this.getNode(),
-						`assignDeviceJson must be valid JSON: ${msg}`,
-					);
-				}
-			} else {
-				const fields = this.getNodeParameter('assignDeviceObject', i, {}) as IDataObject;
-				if (fields.deviceId && String(fields.deviceId).trim() !== '')
-					body.deviceId = String(fields.deviceId).trim();
-				const companyId = Number(fields.companyId) || 0;
-				if (companyId > 0) body.companyId = companyId;
-				const linkTypeId = Number(fields.linkTypeId) || 0;
-				if (linkTypeId > 0) body.linkTypeId = linkTypeId;
-				const linkId = Number(fields.linkId) || 0;
-				if (linkId > 0) body.linkId = linkId;
-			}
-
-			url = `${credentials.baseURL}/backend/api/remoteSupports/v1/assignDevice`;
-			requestOptions.method = 'POST';
-			requestOptions.url = url;
-			requestOptions.headers['Content-Type'] = 'application/json';
-			requestOptions.body = body;
-			break;
-		}
-
-		case 'deleteAssignDevice': {
-			const assignJson = this.getNodeParameter('assignDeviceJson', i, '') as string;
-			let body: IDataObject = {};
-			if (assignJson && assignJson.trim() !== '') {
-				try {
-					const parsed = JSON.parse(assignJson);
-					if (typeof parsed !== 'object' || parsed === null)
-						throw new Error('assignDeviceJson must be a JSON object.');
-					body = parsed as IDataObject;
-				} catch (err) {
-					const msg = err instanceof Error ? err.message : String(err);
-					throw new NodeOperationError(
-						this.getNode(),
-						`assignDeviceJson must be valid JSON: ${msg}`,
-					);
-				}
-			} else {
-				const fields = this.getNodeParameter('assignDeviceObject', i, {}) as IDataObject;
-				if (fields.deviceId && String(fields.deviceId).trim() !== '')
-					body.deviceId = String(fields.deviceId).trim();
-			}
-
-			url = `${credentials.baseURL}/backend/api/remoteSupports/v1/assignDevice`;
-			requestOptions.method = 'DELETE';
-			requestOptions.url = url;
-			requestOptions.headers['Content-Type'] = 'application/json';
-			requestOptions.body = body;
-
-			try {
-				const fullResponse = await this.helpers.httpRequest({
-					...(requestOptions as unknown as IDataObject),
-					simple: false,
-					resolveWithFullResponse: true,
-				} as unknown as import('n8n-workflow').IHttpRequestOptions);
-				if (fullResponse && fullResponse.statusCode === 204) {
-					return {
-						success: true,
-						statusCode: 204,
-						message: 'Device assignment deleted',
-					} as unknown as IDataObject;
-				}
-				return fullResponse && fullResponse.body ? fullResponse.body : fullResponse;
-			} catch (err: unknown) {
-				const e = err as unknown as { statusCode?: number; response?: { statusCode?: number } };
-				const status = e?.statusCode ?? e?.response?.statusCode;
-				if (status === 403) {
-					return {
-						success: false,
-						statusCode: 403,
-						message: 'forbidden',
-					} as unknown as IDataObject;
-				}
-				const msg = err instanceof Error ? err.message : String(err);
-				throw new NodeOperationError(
-					this.getNode(),
-					`Failed to execute deleteAssignDevice: ${msg}`,
-				);
-			}
-		}
-
-		case 'getRemoteSupportById': {
-			const remoteSupportId = Number(this.getNodeParameter('remoteSupportId', i, 0)) || 0;
-			if (remoteSupportId <= 0)
-				throw new NodeOperationError(this.getNode(), 'remoteSupportId must be set and > 0');
-
-			url = `${credentials.baseURL}/backend/api/remoteSupports/v1/${remoteSupportId}`;
-			requestOptions.method = 'GET';
-			requestOptions.url = url;
-			delete requestOptions.headers['Content-Type'];
-			break;
-		}
-
-		case 'updateRemoteSupport': {
-			const remoteSupportId = Number(this.getNodeParameter('remoteSupportId', i, 0)) || 0;
-			if (remoteSupportId <= 0)
-				throw new NodeOperationError(this.getNode(), 'remoteSupportId must be set and > 0');
-
-			const remoteJson = this.getNodeParameter('remoteJson', i, '') as string;
-			let body: IDataObject = {};
-
-			if (remoteJson && remoteJson.trim() !== '') {
-				try {
-					const parsed = JSON.parse(remoteJson);
-					if (typeof parsed !== 'object' || parsed === null) {
-						throw new Error('remoteJson must be a JSON object.');
-					}
-					body = parsed as IDataObject;
-				} catch (err) {
-					const msg = err instanceof Error ? err.message : String(err);
-					throw new NodeOperationError(this.getNode(), `remoteJson must be valid JSON: ${msg}`);
-				}
-			} else {
-				const fields = this.getNodeParameter('remoteObject', i, {}) as IDataObject;
-
-				if (fields.remoteMaintenanceId && String(fields.remoteMaintenanceId).trim() !== '')
-					body.remoteMaintenanceId = String(fields.remoteMaintenanceId).trim();
-
-				if (fields.userId && String(fields.userId).trim() !== '')
-					body.userId = String(fields.userId).trim();
-
-				if (fields.userName && String(fields.userName).trim() !== '')
-					body.userName = String(fields.userName).trim();
-
-				const employeeId = Number(fields.employeeId) || 0;
-				if (employeeId > 0) body.employeeId = employeeId;
-
-				if (fields.deviceId && String(fields.deviceId).trim() !== '')
-					body.deviceId = String(fields.deviceId).trim();
-
-				if (fields.deviceName && String(fields.deviceName).trim() !== '')
-					body.deviceName = String(fields.deviceName).trim();
-
-				const companyId = Number(fields.companyId) || 0;
-				if (companyId > 0) body.companyId = companyId;
-
-				const linkTypeId = Number(fields.linkTypeId) || 0;
-				if (linkTypeId > 0) body.linkTypeId = linkTypeId;
-
-				const linkId = Number(fields.linkId) || 0;
-				if (linkId > 0) body.linkId = linkId;
-
-				const startTime = Number(fields.startTime) || 0;
-				if (startTime > 0) body.startTime = startTime;
-
-				const endTime = Number(fields.endTime) || 0;
-				if (endTime > 0) body.endTime = endTime;
-
-				if (fields.comment && String(fields.comment).trim() !== '')
-					body.comment = String(fields.comment).trim();
-			}
-
-			url = `${credentials.baseURL}/backend/api/remoteSupports/v1/${remoteSupportId}`;
-			requestOptions.method = 'PUT';
-			requestOptions.url = url;
-			requestOptions.headers['Content-Type'] = 'application/json';
-			requestOptions.body = body;
-			break;
-		}
-
-		case 'deleteRemoteSupport': {
-			const remoteSupportId = Number(this.getNodeParameter('remoteSupportId', i, 0)) || 0;
-			if (remoteSupportId <= 0)
-				throw new NodeOperationError(this.getNode(), 'remoteSupportId must be set and > 0');
-
-			url = `${credentials.baseURL}/backend/api/remoteSupports/v1/${remoteSupportId}`;
-			requestOptions.method = 'DELETE';
-			requestOptions.url = url;
-
-			try {
-				const fullResponse = await this.helpers.httpRequest({
-					...(requestOptions as unknown as IDataObject),
-					simple: false,
-					resolveWithFullResponse: true,
-				} as unknown as import('n8n-workflow').IHttpRequestOptions);
-				if (fullResponse && fullResponse.statusCode === 204) {
-					return {
-						success: true,
-						statusCode: 204,
-						message: 'Remote support deleted',
-					} as unknown as IDataObject;
-				}
-				return fullResponse && fullResponse.body ? fullResponse.body : fullResponse;
-			} catch (err: unknown) {
-				const e = err as unknown as { statusCode?: number; response?: { statusCode?: number } };
-				const status = e?.statusCode ?? e?.response?.statusCode;
-				if (status === 403) {
-					return {
-						success: false,
-						statusCode: 403,
-						message: 'forbidden',
-					} as unknown as IDataObject;
-				}
-				const msg = err instanceof Error ? err.message : String(err);
-				throw new NodeOperationError(
-					this.getNode(),
-					`Failed to execute deleteRemoteSupport: ${msg}`,
-				);
-			}
-		}
-
-		default:
-			throw new NodeOperationError(
-				this.getNode(),
-				`The operation "${operation}" is not recognized.`,
-			);
-	}
-
-	try {
-		const responseData = await this.helpers.httpRequest(
-			requestOptions as unknown as import('n8n-workflow').IHttpRequestOptions,
-		);
-		return responseData;
-	} catch (error: unknown) {
-		const message = error instanceof Error ? error.message : String(error);
-		throw new NodeOperationError(this.getNode(), `Failed to execute ${operation}: ${message}`);
-	}
-}
+// 	try {
+// 		const responseData = await this.helpers.httpRequest(
+// 			requestOptions as unknown as import('n8n-workflow').IHttpRequestOptions,
+// 		);
+// 		return responseData;
+// 	} catch (error: unknown) {
+// 		const message = error instanceof Error ? error.message : String(error);
+// 		throw new NodeOperationError(this.getNode(), `Failed to execute ${operation}: ${message}`);
+// 	}
+// }
