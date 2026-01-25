@@ -22,7 +22,7 @@
                     "Content-Type": "application/json",
                     "apiToken": "Bearer TOKEN-123"
                 },
-                "body": { "userId": "u1", "employeeId": 1 }
+                "body": { "userId": "u1" }
             },
             "reply": {
                 "statusCode": 204,
