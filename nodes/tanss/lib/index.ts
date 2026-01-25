@@ -18,12 +18,14 @@ export {
 	nonNegativeNumberGuard,
 	nonZeroNumberGuard,
 	isPlainRecord,
+	isArray,
 	arrayGuard,
 	nonEmptyRecordGuard,
 	jsonGuard,
 	stringGuard,
 	nonEmptyStringGuard,
 	csvGuard,
+	createSubArrayGuard,
 	createSubObjectGuard,
 } from './guards/index';
 export type {

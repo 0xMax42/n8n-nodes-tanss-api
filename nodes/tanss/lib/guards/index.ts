@@ -12,6 +12,7 @@ export {
 	nonNegativeNumberGuard,
 	nonZeroNumberGuard,
 } from './numberGuards';
-export { isPlainRecord, arrayGuard, nonEmptyRecordGuard, jsonGuard } from './objectGuards';
+export { isPlainRecord, isArray, arrayGuard, nonEmptyRecordGuard, jsonGuard } from './objectGuards';
 export { stringGuard, nonEmptyStringGuard, csvGuard } from './stringGuards';
+export { createSubArrayGuard } from './subArrayGuard';
 export { createSubObjectGuard } from './subObjectGuards';
