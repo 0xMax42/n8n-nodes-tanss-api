@@ -34,13 +34,13 @@ export const availabilityFields: INodeProperties[] = [
 
 export const handleAvailability = createCrudHandler({
 	operationField: 'operation',
+	credentialType: 'user',
 
 	operations: {
 		getAvailability: {
 			fields: {
 				employeeIds: {
 					location: 'query',
-					defaultValue: '',
 					guard: nonEmptyStringGuard,
 				},
 			},
