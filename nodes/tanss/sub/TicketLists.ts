@@ -276,7 +276,7 @@ const customTicketQueryField = {
 
 export const handleTicketList = createCrudHandler({
 	operationField: 'operation',
-	credentialType: 'system',
+	credentialType: 'user',
 
 	operations: {
 		getOwnTickets: {
