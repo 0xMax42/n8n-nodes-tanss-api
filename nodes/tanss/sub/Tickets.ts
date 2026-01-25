@@ -419,6 +419,7 @@ export const ticketFields: INodeProperties[] = [
 
 export const handleTicket = createCrudHandler({
 	operationField: 'operation',
+	credentialType: 'user',
 
 	operations: {
 		createTicket: {
