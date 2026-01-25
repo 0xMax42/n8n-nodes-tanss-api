@@ -31,7 +31,8 @@
         "test:watch": "jest --watch",
         "test:ci": "jest --ci",
         "test:one": "jest -t",
-        "test:coverage": "jest --coverage"
+        "test:coverage": "jest --coverage",
+        "test:sum": "jest --silent --reporters=./clean-tests-reporter.js"
     },
     "files": [
         "dist"
