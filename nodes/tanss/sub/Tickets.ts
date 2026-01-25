@@ -425,6 +425,7 @@ export const handleTicket = createCrudHandler({
 			httpMethod: 'POST',
 			subPath: 'tickets',
 			fields: {
+				// TODO: Create a subObjectGuard for this
 				createTicketFields: {
 					location: 'body',
 					spread: true,
@@ -489,6 +490,7 @@ export const handleTicket = createCrudHandler({
 					location: 'path',
 					guard: positiveNumberGuard,
 				},
+				// TODO: Create a subObjectGuard for this
 				updateFields: {
 					location: 'body',
 					spread: true,
