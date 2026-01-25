@@ -146,6 +146,7 @@ export const employeesFields: INodeProperties[] = [
 
 export const handleEmployees = createCrudHandler({
 	operationField: 'operation',
+	credentialType: 'user',
 
 	operations: {
 		getTechnicians: {

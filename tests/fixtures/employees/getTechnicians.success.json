@@ -8,11 +8,36 @@
     "credentials": {
         "tanssApi": {
             "baseURL": "https://example.invalid",
-            "authentication": "apiToken",
-            "apiToken": "TOKEN-123"
+            "authentication": "loginTotp",
+            "username": "user",
+            "password": "pass"
         }
     },
     "http": [
+        {
+            "expect": {
+                "method": "POST",
+                "url": "https://example.invalid/backend/api/v1/login",
+                "json": true,
+                "returnFullResponse": true,
+                "headers": {
+                    "Content-Type": "application/json"
+                },
+                "body": {
+                    "username": "user",
+                    "password": "pass"
+                }
+            },
+            "reply": {
+                "statusCode": 200,
+                "body": {
+                    "content": {
+                        "apiKey": "TOKEN-123"
+                    }
+                },
+                "headers": { "content-type": "application/json" }
+            }
+        },
         {
             "expect": {
                 "method": "GET",
