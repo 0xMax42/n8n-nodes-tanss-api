@@ -109,7 +109,7 @@ export const operatingSystemsFields: INodeProperties[] = [
 
 export const handleOperatingSystems = createCrudHandler({
 	operationField: 'operation',
-	credentialType: 'system',
+	credentialType: 'user',
 
 	operations: {
 		getAllOs: {

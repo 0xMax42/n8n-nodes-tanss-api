@@ -5,8 +5,9 @@
     "credentials": {
         "tanssApi": {
             "baseURL": "https://example.invalid",
-            "authentication": "apiToken",
-            "apiToken": "TOKEN-123"
+            "authentication": "loginTotp",
+            "username": "user",
+            "password": "pass"
         }
     },
     "http": [],
