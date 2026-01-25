@@ -127,6 +127,7 @@ const updateCpuFields = {
 
 export const handleCpu = createCrudHandler({
 	operationField: 'operation',
+	credentialType: 'user',
 
 	operations: {
 		createCpu: {
