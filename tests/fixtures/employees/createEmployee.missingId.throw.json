@@ -16,6 +16,6 @@
     "expected": {
         "kind": "throws",
         "name": "NodeOperationError",
-        "messageIncludes": "name cannot be empty"
+        "messageIncludes": "employeeObject.id must be a number"
     }
 }

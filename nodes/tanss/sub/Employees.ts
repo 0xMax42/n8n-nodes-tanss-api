@@ -170,7 +170,7 @@ export const handleEmployees = createCrudHandler({
 					spread: true,
 					defaultValue: {},
 					guard: createSubObjectGuard({
-						id: { guard: nullOrGuard(positiveNumberGuard) },
+						id: { guard: positiveNumberGuard },
 						name: { guard: nonEmptyStringGuard },
 						firstName: { guard: nullOrGuard(stringGuard) },
 						lastName: { guard: nullOrGuard(stringGuard) },
