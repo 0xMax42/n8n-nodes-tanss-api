@@ -48,7 +48,7 @@ export function createSubObjectGuard<T extends SubGuardSpecMap>(
 			throw new NodeOperationError(executeFunctions.getNode(), `${name} cannot be empty`);
 		}
 
-		const out: Record<string, unknown> = {};
+		let out: Record<string, unknown> = {};
 
 		for (const key of Object.keys(specs) as (keyof T)[]) {
 			const spec = specs[key];
@@ -58,7 +58,8 @@ export function createSubObjectGuard<T extends SubGuardSpecMap>(
 			const fieldName = `${name}.${String(key)}`;
 
 			if (spec.spread) {
-				handleSpread(executeFunctions, spec, v, fieldName, out);
+				// TODO: Refactor Array vs Object handling
+				out = handleSpread(executeFunctions, spec, v, fieldName, out) as Record<string, unknown>;
 				continue;
 			}
 
@@ -76,8 +77,10 @@ function handleSpread(
 	value: unknown,
 	fieldName: string,
 	out: Record<string, unknown>,
-) {
-	if (!isPlainRecord(value)) {
+): Record<string, unknown> | unknown[] {
+	if (Array.isArray(value)) {
+		return value;
+	} else if (!isPlainRecord(value)) {
 		throw new NodeOperationError(
 			executeFunctions.getNode(),
 			`${fieldName} is marked to be spread but its value is not an object.`,
@@ -91,4 +94,5 @@ function handleSpread(
 			out[subKey] = subValue;
 		}
 	}
+	return out;
 }

@@ -13,6 +13,7 @@ export type {
 export {
 	nullOrGuard,
 	booleanGuard,
+	discardGuard,
 	numberGuard,
 	positiveNumberGuard,
 	nonNegativeNumberGuard,
@@ -22,10 +23,10 @@ export {
 	arrayGuard,
 	nonEmptyRecordGuard,
 	jsonGuard,
+	jsonAndGuard,
 	stringGuard,
 	nonEmptyStringGuard,
 	csvGuard,
-	createSubArrayGuard,
 	createSubObjectGuard,
 } from './guards/index';
 export type {
@@ -37,6 +38,7 @@ export type {
 } from './guards/index';
 export { httpRequest } from './httpRequest/index';
 export type { HttpResult } from './httpRequest/index';
+export { ApiQuirks } from './quirks';
 export {
 	obtainToken,
 	addAuthorizationHeader,

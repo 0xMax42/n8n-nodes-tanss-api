@@ -42,7 +42,6 @@ export function createCrudHandler(config: CrudOperationsConfig): NodeHandler {
 		const localConfig = getLocalConfigByOperation.call(this, config, operation);
 		const method = localConfig.httpMethod;
 		let subPath = localConfig.subPath;
-
 		const body = createRecordFromFields.call(this, localConfig.fields, i, 'body');
 		const queryParams = createRecordFromFields.call(this, localConfig.fields, i, 'query');
 		const pathParams = createRecordFromFields.call(this, localConfig.fields, i, 'path');
@@ -156,14 +155,17 @@ function createRecordFromFields(
 	fields: CrudFieldMap,
 	i: number,
 	type: CrudFieldLocation,
-): Record<string, unknown> | undefined {
+): Record<string, unknown> | unknown[] | undefined {
 	const record: Record<string, unknown> = {};
 	for (const [key, field] of Object.entries(fields)) {
 		if (field.location !== type) continue;
 		const value = getNodeParameter(this, key, i, field.defaultValue, field.guard);
 		const recordKey = field.locationName ?? key;
 		if (field.spread) {
-			if (typeof value === 'object' && value !== null) {
+			if (Array.isArray(value)) {
+				// For arrays, we cannot spread into the parent object, so return the array itself
+				return value;
+			} else if (typeof value === 'object' && value !== null) {
 				for (const [key, field] of Object.entries(value as Record<string, unknown>)) {
 					record[key] = record[key] ? record[key] : field;
 				}

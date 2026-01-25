@@ -1,5 +1,7 @@
 import { IExecuteFunctions, NodeOperationError } from 'n8n-workflow';
 import { NodeParameterGuard } from './guardTypes';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { ApiQuirks } from '../quirks';
 
 /**
  * A Validator function that ensures a parameter is either null/undefined or passes the inner guard
@@ -34,4 +36,13 @@ export function booleanGuard(
 		throw new NodeOperationError(executeFunctions.getNode(), `${name} must be a boolean`);
 	}
 	return value;
+}
+
+/**
+ * A guard that always discards the value.
+ * @see {@link ApiQuirks.requiresIdOnCreate}
+ * @returns Always returns undefined
+ */
+export function discardGuard(): undefined {
+	return undefined;
 }

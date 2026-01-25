@@ -91,3 +91,12 @@ export function jsonGuard(
 		throw new NodeOperationError(executeFunctions.getNode(), `${name} must be a JSON object`);
 	}
 }
+
+export function jsonAndGuard<T>(
+	innerGuard: NodeParameterGuard<T>,
+): NodeParameterGuard<T | undefined> {
+	return (executeFunctions: IExecuteFunctions, value: unknown, name: string): T | undefined => {
+		const json = jsonGuard(executeFunctions, value, name);
+		return innerGuard(executeFunctions, json, name);
+	};
+}
