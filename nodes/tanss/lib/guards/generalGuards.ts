@@ -1,10 +1,12 @@
 import { IExecuteFunctions, NodeOperationError } from 'n8n-workflow';
 import { NodeParameterGuard } from './guardTypes';
 
-export function nullOrGuard<T>(innerGuard: NodeParameterGuard<T>): NodeParameterGuard<T | null> {
-	return (executeFunctions: IExecuteFunctions, value: unknown, name: string): T | null => {
+export function nullOrGuard<T>(
+	innerGuard: NodeParameterGuard<T>,
+): NodeParameterGuard<T | undefined> {
+	return (executeFunctions: IExecuteFunctions, value: unknown, name: string): T | undefined => {
 		if (value == null) {
-			return null;
+			return undefined;
 		}
 		return innerGuard(executeFunctions, value, name);
 	};
