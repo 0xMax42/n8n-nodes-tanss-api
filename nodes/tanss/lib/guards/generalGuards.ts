@@ -1,6 +1,11 @@
 import { IExecuteFunctions, NodeOperationError } from 'n8n-workflow';
 import { NodeParameterGuard } from './guardTypes';
 
+/**
+ * A Validator function that ensures a parameter is either null/undefined or passes the inner guard
+ * @param innerGuard The guard function to apply if the value is not null/undefined
+ * @returns A guard function that validates the value
+ */
 export function nullOrGuard<T>(
 	innerGuard: NodeParameterGuard<T>,
 ): NodeParameterGuard<T | undefined> {
