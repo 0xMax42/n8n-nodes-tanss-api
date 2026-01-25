@@ -1,5 +1,12 @@
 import { INodeProperties } from 'n8n-workflow';
-import { nonEmptyRecordGuard, nonEmptyStringGuard, createCrudHandler } from '../lib';
+import {
+	nonEmptyStringGuard,
+	createCrudHandler,
+	booleanGuard,
+	createSubObjectGuard,
+	CrudFieldMap,
+	nullOrGuard,
+} from '../lib';
 
 export const mailsOperations: INodeProperties[] = [
 	{
@@ -70,6 +77,23 @@ export const mailsFields: INodeProperties[] = [
 	},
 ];
 
+const mailObjectField = {
+	mailObject: {
+		location: 'body',
+		spread: true,
+		defaultValue: {},
+		guard: createSubObjectGuard({
+			smtpAddress: { guard: nonEmptyStringGuard },
+			smtpHost: { guard: nonEmptyStringGuard },
+			smtpUser: { guard: nonEmptyStringGuard },
+			smtpPassword: { guard: nonEmptyStringGuard },
+			smtpAuth: { guard: booleanGuard },
+			smtpEncryptionType: { guard: nullOrGuard(nonEmptyStringGuard) },
+			smtpSenderName: { guard: nullOrGuard(nonEmptyStringGuard) },
+		}),
+	},
+} satisfies CrudFieldMap;
+
 export const handleMails = createCrudHandler({
 	operationField: 'operation',
 
@@ -81,12 +105,7 @@ export const handleMails = createCrudHandler({
 					defaultValue: '',
 					guard: nonEmptyStringGuard,
 				},
-				mailObject: {
-					location: 'body',
-					spread: true,
-					defaultValue: {},
-					guard: nonEmptyRecordGuard,
-				},
+				...mailObjectField,
 			},
 			httpMethod: 'POST',
 			subPath: 'mails/test/smtp',

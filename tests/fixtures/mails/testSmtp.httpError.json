@@ -6,7 +6,11 @@
     "receiver": "user@example.invalid",
     "mailObject": {
       "smtpAddress": "smtp.example.invalid",
-      "smtpHost": "smtp.example.invalid"
+      "smtpHost": "smtp.example.invalid",
+      "smtpUser": "user",
+      "smtpPassword": "password",
+      "smtpPort": 587,
+      "smtpAuth": false
     }
   },
   "credentials": {

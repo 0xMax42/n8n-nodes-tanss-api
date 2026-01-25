@@ -19,6 +19,6 @@
   "expected": {
     "kind": "throws",
     "name": "NodeOperationError",
-    "messageIncludes": "receiver cannot be empty"
+    "messageIncludes": "mailObject.smtpAddress must be a string"
   }
 }
