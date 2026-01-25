@@ -133,6 +133,7 @@ const updateManufacturerFields = {
 
 export const handleManufacturers = createCrudHandler({
 	operationField: 'operation',
+	credentialType: 'user',
 
 	operations: {
 		createManufacturer: {
