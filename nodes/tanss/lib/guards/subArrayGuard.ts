@@ -25,6 +25,8 @@ export function createSubArrayGuard<T extends SubGuardSpecMap>(
 
 		if (config?.allowEmpty === true && Object.keys(input).length === 0) {
 			return [] as Array<InferSpec<T>>;
+		} else if (Object.keys(input).length === 0) {
+			throw new NodeOperationError(executeFunctions.getNode(), `${name} cannot be empty`);
 		}
 
 		const item: Record<string, unknown> = {};

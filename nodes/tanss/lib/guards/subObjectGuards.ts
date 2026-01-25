@@ -44,6 +44,8 @@ export function createSubObjectGuard<T extends SubGuardSpecMap>(
 
 		if (config?.allowEmpty === true && Object.keys(input).length === 0) {
 			return {} as InferSpec<T>;
+		} else if (Object.keys(input).length === 0) {
+			throw new NodeOperationError(executeFunctions.getNode(), `${name} cannot be empty`);
 		}
 
 		const out: Record<string, unknown> = {};
