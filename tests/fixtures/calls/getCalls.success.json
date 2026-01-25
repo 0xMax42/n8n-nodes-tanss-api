@@ -4,8 +4,12 @@
     "parameters": {
         "operation": "getCalls",
         "getCallsFilters": {
-            "timeFrom": 1700000000,
-            "timeTo": 1700003600,
+            "timeframe": {
+                "range": {
+                    "from": 1700000000,
+                    "to": 1700003600
+                }
+            },
             "numberFilters": "+49111,+49222",
             "employeeIdFilter": 42,
             "companyIdFilter": 77,

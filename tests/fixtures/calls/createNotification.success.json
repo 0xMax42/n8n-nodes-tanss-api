@@ -4,6 +4,7 @@
     "parameters": {
         "operation": "createNotification",
         "notificationFields": {
+            "id": 123,
             "callId": "abc-123",
             "direction": "INCOMING",
             "fromPhoneNumber": "+49111",
@@ -28,6 +29,7 @@
                     "apiToken": "Bearer TOKEN-123"
                 },
                 "body": {
+                    "id": 123,
                     "callId": "abc-123",
                     "direction": "INCOMING",
                     "fromPhoneNumber": "+49111",

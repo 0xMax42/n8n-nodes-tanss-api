@@ -4,7 +4,9 @@
     "parameters": {
         "operation": "updateCall",
         "phoneCallId": 42,
-        "callJson": "{\"direction\":\"OUTGOING\"}"
+        "createCallFields": {
+            "direction": "OUTGOING"
+        }
     },
     "credentials": {
         "tanssApi": {
