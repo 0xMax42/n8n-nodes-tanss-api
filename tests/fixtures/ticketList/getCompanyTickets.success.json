@@ -16,7 +16,6 @@
                 "url": "https://example.invalid/backend/api/v1/tickets/company/10",
                 "json": true,
                 "headers": {
-                    "Content-Type": "application/json",
                     "apiToken": "Bearer TOKEN-123"
                 }
             },
