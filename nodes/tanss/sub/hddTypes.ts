@@ -86,6 +86,8 @@ export const hddTypesFields: INodeProperties[] = [
 
 export const handleHddTypes = createCrudHandler({
 	operationField: 'operation',
+	credentialType: 'user',
+
 	operations: {
 		createHddType: {
 			fields: {
