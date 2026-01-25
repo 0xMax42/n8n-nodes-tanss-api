@@ -18,7 +18,6 @@
         "url": "https://example.invalid/backend/api/v1/manufacturers",
         "json": true,
         "headers": {
-          "Content-Type": "application/json",
           "apiToken": "Bearer TOKEN-123"
         }
       },

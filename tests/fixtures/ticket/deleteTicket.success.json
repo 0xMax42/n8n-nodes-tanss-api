@@ -20,7 +20,6 @@
                 "url": "https://example.invalid/backend/api/v1/tickets/1?targetTicketId=2",
                 "json": true,
                 "headers": {
-                    "Content-Type": "application/json",
                     "apiToken": "Bearer TOKEN-123"
                 }
             },
