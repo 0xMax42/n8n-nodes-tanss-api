@@ -6,6 +6,7 @@ import {
 	positiveNumberGuard,
 	stringGuard,
 	createCrudHandler,
+	nullOrGuard,
 } from '../lib';
 
 export const ticketStatesOperations: INodeProperties[] = [
@@ -184,27 +185,27 @@ export const handleTicketStates = createCrudHandler({
 				name: {
 					location: 'body',
 					defaultValue: '',
-					guard: stringGuard,
+					guard: nullOrGuard(stringGuard),
 				},
 				image: {
 					location: 'body',
 					defaultValue: '',
-					guard: stringGuard,
+					guard: nullOrGuard(stringGuard),
 				},
 				waitState: {
 					location: 'body',
 					defaultValue: false,
-					guard: booleanGuard,
+					guard: nullOrGuard(booleanGuard),
 				},
 				rank: {
 					location: 'body',
 					defaultValue: 0,
-					guard: numberGuard,
+					guard: nullOrGuard(numberGuard),
 				},
 				active: {
 					location: 'body',
 					defaultValue: true,
-					guard: booleanGuard,
+					guard: nullOrGuard(booleanGuard),
 				},
 			},
 			httpMethod: 'PUT',
