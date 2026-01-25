@@ -3,12 +3,10 @@ import {
 	arrayGuard,
 	booleanGuard,
 	createCrudHandler,
-	createSubArrayGuard,
 	createSubObjectGuard,
 	CrudFieldMap,
 	csvGuard,
 	jsonGuard,
-	nonEmptyRecordGuard,
 	nonEmptyStringGuard,
 	nullOrGuard,
 	numberGuard,
@@ -559,11 +557,16 @@ const createCallFields = {
 				guard: nullOrGuard(jsonGuard),
 			},
 			phoneParticipants: {
-				guard: createSubArrayGuard(
+				guard: createSubObjectGuard(
 					{
 						participant: {
 							spread: true,
-							guard: arrayGuard(nonEmptyRecordGuard),
+							guard: arrayGuard(
+								createSubObjectGuard({
+									idString: { guard: nonEmptyStringGuard },
+									employeeId: { guard: positiveNumberGuard },
+								}),
+							),
 						},
 					},
 					{ allowEmpty: true },
@@ -652,11 +655,16 @@ const notificationFields = {
 			// TODO: Check if this can be removed
 			phoneParticipantsJson: { guard: nullOrGuard(jsonGuard) },
 			phoneParticipants: {
-				guard: createSubArrayGuard(
+				guard: createSubObjectGuard(
 					{
 						participant: {
 							spread: true,
-							guard: arrayGuard(nonEmptyRecordGuard),
+							guard: arrayGuard(
+								createSubObjectGuard({
+									idString: { guard: nonEmptyStringGuard },
+									employeeId: { guard: positiveNumberGuard },
+								}),
+							),
 						},
 					},
 					{ allowEmpty: true },

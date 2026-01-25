@@ -3,9 +3,7 @@ import {
 	arrayGuard,
 	booleanGuard,
 	createCrudHandler,
-	createSubArrayGuard,
 	createSubObjectGuard,
-	nonEmptyRecordGuard,
 	nonEmptyStringGuard,
 	nullOrGuard,
 	positiveNumberGuard,
@@ -196,11 +194,15 @@ export const handleEmployees = createCrudHandler({
 						restrictedUserLicense: { guard: nullOrGuard(booleanGuard) },
 						birthday: { guard: nullOrGuard(stringGuard) },
 						companyAssignments: {
-							guard: createSubArrayGuard(
+							guard: createSubObjectGuard(
 								{
 									assignment: {
 										spread: true,
-										guard: arrayGuard(nonEmptyRecordGuard),
+										guard: arrayGuard(
+											createSubObjectGuard({
+												companyId: { guard: positiveNumberGuard },
+											}),
+										),
 									},
 								},
 								{ allowEmpty: true },
