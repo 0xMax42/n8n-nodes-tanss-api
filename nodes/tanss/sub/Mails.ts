@@ -96,6 +96,7 @@ const mailObjectField = {
 
 export const handleMails = createCrudHandler({
 	operationField: 'operation',
+	credentialType: 'user',
 
 	operations: {
 		testSmtp: {
