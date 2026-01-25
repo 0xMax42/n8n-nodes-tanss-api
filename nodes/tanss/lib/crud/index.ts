@@ -9,3 +9,4 @@ export type {
 	CrudOperationsConfig,
 	NodeHandler,
 } from './crudTypes';
+export { createCrudFieldMap } from './crudUtils';

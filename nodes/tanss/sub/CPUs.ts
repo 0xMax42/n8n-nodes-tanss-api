@@ -1,5 +1,6 @@
 import { INodeProperties } from 'n8n-workflow';
 import {
+	createCrudFieldMap,
 	createCrudHandler,
 	createSubObjectGuard,
 	CrudFieldMap,
@@ -95,22 +96,20 @@ const cpuIdField = {
 	},
 } satisfies CrudFieldMap;
 
-function createCrudFieldMap(fieldKey: string) {
-	return {
-		[fieldKey]: {
-			location: 'body',
-			spread: true,
-			guard: createSubObjectGuard({
-				id: {
-					guard: nullOrGuard(positiveNumberGuard),
-				},
-				name: {
-					guard: nullOrGuard(stringGuard),
-				},
-			}),
-		},
-	} satisfies CrudFieldMap;
-}
+const createAndUpdateCpuFields = {
+	operation: {
+		location: 'body',
+		spread: true,
+		guard: createSubObjectGuard({
+			id: {
+				guard: nullOrGuard(positiveNumberGuard),
+			},
+			name: {
+				guard: nullOrGuard(stringGuard),
+			},
+		}),
+	},
+} satisfies CrudFieldMap;
 
 export const handleCpu = createCrudHandler({
 	operationField: 'operation',
@@ -120,7 +119,10 @@ export const handleCpu = createCrudHandler({
 			httpMethod: 'POST',
 			subPath: '/cpus',
 			fields: {
-				...createCrudFieldMap('createCpuFields'),
+				...createCrudFieldMap(
+					{ fromKey: 'operation', toKey: 'createCpuFields' },
+					createAndUpdateCpuFields,
+				),
 			},
 		},
 		deleteCpu: {
@@ -147,7 +149,10 @@ export const handleCpu = createCrudHandler({
 			subPath: '/cpus/{cpuId}',
 			fields: {
 				...cpuIdField,
-				...createCrudFieldMap('updateCpuFields'),
+				...createCrudFieldMap(
+					{ fromKey: 'operation', toKey: 'updateCpuFields' },
+					createAndUpdateCpuFields,
+				),
 			},
 		},
 	},

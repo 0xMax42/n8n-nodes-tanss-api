@@ -1,5 +1,5 @@
 export { generateTOTP } from './2fa';
-export { createCrudHandler } from './crud/index';
+export { createCrudHandler, createCrudFieldMap } from './crud/index';
 export type {
 	HttpMethod,
 	CrudFieldLocation,
