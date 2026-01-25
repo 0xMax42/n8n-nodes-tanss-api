@@ -309,7 +309,7 @@ export const pcFields: INodeProperties[] = [
 
 export const handlePc = createCrudHandler({
 	operationField: 'operation',
-	credentialType: 'system',
+	credentialType: 'user',
 
 	operations: {
 		getPcById: {
