@@ -1,0 +1,62 @@
+{
+    "name": "getCustomTicketList returns success wrapper",
+    "itemIndex": 0,
+    "parameters": {
+        "operation": "getCustomTicketList",
+        "customTicketQuery": {
+            "includeDoneTickets": false,
+            "isRepair": false,
+            "itemsPerPage": 20,
+            "notAssignedToEmployees": [5, 6],
+            "page": 1,
+            "phaseId": 1,
+            "projectId": 1,
+            "remitterId": 1,
+            "staff": [7, 8],
+            "states": ["open", "closed"],
+            "types": ["incident", "service"]
+        }
+    },
+    "credentials": {
+        "tanssApi": {
+            "baseURL": "https://example.invalid",
+            "authentication": "apiToken",
+            "apiToken": "TOKEN-123"
+        }
+    },
+    "http": [
+        {
+            "expect": {
+                "method": "PUT",
+                "url": "https://example.invalid/backend/api/v1/tickets",
+                "json": true,
+                "headers": {
+                    "Content-Type": "application/json",
+                    "apiToken": "Bearer TOKEN-123"
+                },
+                "body": {
+                    "includeDoneTickets": false,
+                    "isRepair": false,
+                    "itemsPerPage": 20,
+                    "notAssignedToEmployees": [5, 6],
+                    "page": 1,
+                    "phaseId": 1,
+                    "projectId": 1,
+                    "remitterId": 1,
+                    "staff": [7, 8],
+                    "states": ["open", "closed"],
+                    "types": ["incident", "service"]
+                }
+            },
+            "reply": {
+                "statusCode": 200,
+                "body": { "items": [] },
+                "headers": { "content-type": "application/json" }
+            }
+        }
+    ],
+    "expected": {
+        "kind": "returns",
+        "matchObject": { "success": true, "statusCode": 200 }
+    }
+}

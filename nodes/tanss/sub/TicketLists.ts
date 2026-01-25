@@ -221,13 +221,13 @@ const customTicketQueryField = {
 		spread: true,
 		guard: createSubObjectGuard({
 			companies: {
-				guard: arrayGuard(positiveNumberGuard),
+				guard: nullOrGuard(arrayGuard(positiveNumberGuard)),
 			},
 			departments: {
-				guard: arrayGuard(positiveNumberGuard),
+				guard: nullOrGuard(arrayGuard(positiveNumberGuard)),
 			},
 			ids: {
-				guard: arrayGuard(positiveNumberGuard),
+				guard: nullOrGuard(arrayGuard(positiveNumberGuard)),
 			},
 			includeDoneTickets: {
 				guard: nullOrGuard(booleanGuard),
@@ -239,13 +239,15 @@ const customTicketQueryField = {
 				guard: nullOrGuard(positiveNumberGuard),
 			},
 			modifiedWithinTimeframe: {
-				guard: createSubObjectGuard({
-					from: { guard: nullOrGuard(positiveNumberGuard) },
-					to: { guard: nullOrGuard(positiveNumberGuard) },
-				}),
+				guard: nullOrGuard(
+					createSubObjectGuard({
+						from: { guard: nullOrGuard(positiveNumberGuard) },
+						to: { guard: nullOrGuard(positiveNumberGuard) },
+					}),
+				),
 			},
 			notAssignedToEmployees: {
-				guard: arrayGuard(positiveNumberGuard),
+				guard: nullOrGuard(arrayGuard(positiveNumberGuard)),
 			},
 			page: {
 				guard: nullOrGuard(positiveNumberGuard),
@@ -260,13 +262,13 @@ const customTicketQueryField = {
 				guard: nullOrGuard(positiveNumberGuard),
 			},
 			staff: {
-				guard: arrayGuard(positiveNumberGuard),
+				guard: nullOrGuard(arrayGuard(positiveNumberGuard)),
 			},
 			states: {
-				guard: arrayGuard(stringGuard),
+				guard: nullOrGuard(arrayGuard(stringGuard)),
 			},
 			types: {
-				guard: arrayGuard(stringGuard),
+				guard: nullOrGuard(arrayGuard(stringGuard)),
 			},
 		}),
 	},
