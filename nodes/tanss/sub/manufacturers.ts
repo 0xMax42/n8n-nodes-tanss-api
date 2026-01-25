@@ -1,5 +1,14 @@
 import { INodeProperties } from 'n8n-workflow';
-import { nonEmptyRecordGuard, numberGuard, createCrudHandler } from '../lib';
+import {
+	numberGuard,
+	createCrudHandler,
+	CrudFieldMap,
+	createSubObjectGuard,
+	nullOrGuard,
+	stringGuard,
+	positiveNumberGuard,
+	nonEmptyStringGuard,
+} from '../lib';
 
 export const manufacturersOperations: INodeProperties[] = [
 	{
@@ -84,30 +93,56 @@ export const manufacturersFields: INodeProperties[] = [
 	},
 ];
 
+const manufacturerIdField = {
+	manufacturerId: {
+		location: 'path',
+		defaultValue: 0,
+		guard: numberGuard,
+	},
+} satisfies CrudFieldMap;
+
+const createManufacturerFields = {
+	createManufacturerFields: {
+		location: 'body',
+		spread: true,
+		guard: createSubObjectGuard({
+			id: {
+				guard: positiveNumberGuard,
+			},
+			name: {
+				guard: nonEmptyStringGuard,
+			},
+		}),
+	},
+} satisfies CrudFieldMap;
+
+const updateManufacturerFields = {
+	updateManufacturerFields: {
+		location: 'body',
+		spread: true,
+		guard: createSubObjectGuard({
+			id: {
+				guard: nullOrGuard(positiveNumberGuard),
+			},
+			name: {
+				guard: nullOrGuard(stringGuard),
+			},
+		}),
+	},
+} satisfies CrudFieldMap;
+
 export const handleManufacturers = createCrudHandler({
 	operationField: 'operation',
 
 	operations: {
 		createManufacturer: {
-			fields: {
-				createManufacturerFields: {
-					location: 'body',
-					defaultValue: {},
-					guard: nonEmptyRecordGuard,
-				},
-			},
+			fields: createManufacturerFields,
 			httpMethod: 'POST',
 			subPath: 'manufacturers',
 		},
 
 		deleteManufacturer: {
-			fields: {
-				manufacturerId: {
-					location: 'path',
-					defaultValue: 0,
-					guard: numberGuard,
-				},
-			},
+			fields: manufacturerIdField,
 			httpMethod: 'DELETE',
 			subPath: 'manufacturers/{manufacturerId}',
 		},
@@ -119,29 +154,15 @@ export const handleManufacturers = createCrudHandler({
 		},
 
 		getManufacturerById: {
-			fields: {
-				manufacturerId: {
-					location: 'path',
-					defaultValue: 0,
-					guard: numberGuard,
-				},
-			},
+			fields: manufacturerIdField,
 			httpMethod: 'GET',
 			subPath: 'manufacturers/{manufacturerId}',
 		},
 
 		updateManufacturer: {
 			fields: {
-				manufacturerId: {
-					location: 'path',
-					defaultValue: 0,
-					guard: numberGuard,
-				},
-				updateManufacturerFields: {
-					location: 'body',
-					defaultValue: {},
-					guard: nonEmptyRecordGuard,
-				},
+				...manufacturerIdField,
+				...updateManufacturerFields,
 			},
 			httpMethod: 'PUT',
 			subPath: 'manufacturers/{manufacturerId}',
