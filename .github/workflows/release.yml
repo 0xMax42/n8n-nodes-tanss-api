@@ -16,3 +16,5 @@ jobs:
         uses: https://git.0xmax42.io/actions/auto-changelog-release-action@v1
         with:
           token: ${{ secrets.RELEASE_PUBLISH_TOKEN }}
+          version_file: package.json
+          version_regex: '^\s*"version"\s*:\s*"([^"]+)"\s*,?\s*$'
