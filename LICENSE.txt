@@ -20,7 +20,9 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
---- Until commit 7c77ead116f6b3ff137a14092bca51219d76eda6 ---
+--- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
+ --- Until commit 7c77ead116f6b3ff137a14092bca51219d76eda6 ---
+      --- https://github.com/BuddiesD/n8n-nodes-tanss ---
 
 MIT License
 
