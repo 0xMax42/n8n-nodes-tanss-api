@@ -267,11 +267,11 @@ Progress: **93 / 256 (1 not in API Docs; login not necessary)** (36%)
   - [ ] [PUT] Updates a service
   - [ ] [DEL] Deletes a service
 
-- [ ] **ip [0/4]**
-  - [ ] [GET] Gets ip addresses
-  - [ ] [POST] Creates an ip address
-  - [ ] [PUT] Update ip address
-  - [ ] [DEL] Deletes an ip address
+- [x] **ip [0/4]**
+  - [x] [GET] Gets ip addresses
+  - [x] [POST] Creates an ip address
+  - [x] [PUT] Update ip address
+  - [x] [DEL] Deletes an ip address
 
 - [ ] **company [0/2]**
   - [ ] [POST] Creates a new company
