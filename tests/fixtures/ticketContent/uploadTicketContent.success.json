@@ -5,7 +5,8 @@
         "operation": "uploadTicketContent",
         "ticketId": 10,
         "binaryPropertyName": "data",
-        "descriptions": "test"
+        "descriptions": "test",
+        "internal": false
     },
     "credentials": {
         "tanssApi": {
