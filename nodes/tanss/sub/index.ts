@@ -17,6 +17,7 @@ export { ticketContentOperations, ticketContentFields, handleTicketContent } fro
 export { ticketListOperations, ticketListFields, handleTicketList } from './TicketLists';
 export { ticketStatesOperations, ticketStatesFields, handleTicketStates } from './TicketSates';
 export { ticketOperations, ticketFields, handleTicket } from './Tickets';
+export { callbackOperations, callbackFields, handleCallback } from './callback';
 export { callsOperations, callsFields, handleCalls } from './calls';
 export { callsUserOperations, callsUserFields, handleCallsUser } from './callsuser';
 export { hddTypesOperations, hddTypesFields, handleHddTypes } from './hddTypes';
