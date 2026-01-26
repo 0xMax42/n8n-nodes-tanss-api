@@ -1,0 +1,97 @@
+{
+    "name": "updateCallback returns success wrapper",
+    "itemIndex": 0,
+    "parameters": {
+        "operation": "updateCallback",
+        "callbackId": 77,
+        "createUpdateCallbackFields": {
+            "info": "Updated info",
+            "state": "BUSY",
+            "priority": 5
+        }
+    },
+    "credentials": {
+        "tanssApi": {
+            "baseURL": "https://example.invalid",
+            "authentication": "loginTotp",
+            "username": "user",
+            "password": "pass"
+        }
+    },
+    "http": [
+        {
+            "expect": {
+                "method": "POST",
+                "url": "https://example.invalid/backend/api/v1/login",
+                "json": true,
+                "returnFullResponse": true,
+                "headers": {
+                    "Content-Type": "application/json"
+                },
+                "body": {
+                    "username": "user",
+                    "password": "pass"
+                }
+            },
+            "reply": {
+                "statusCode": 200,
+                "body": {
+                    "content": {
+                        "apiKey": "TOKEN-123"
+                    }
+                },
+                "headers": {
+                    "content-type": "application/json"
+                }
+            }
+        },
+        {
+            "expect": {
+                "method": "PUT",
+                "url": "https://example.invalid/backend/api/v1/callbacks/77",
+                "json": true,
+                "returnFullResponse": true,
+                "headers": {
+                    "Content-Type": "application/json",
+                    "apiToken": "Bearer TOKEN-123"
+                },
+                "body": {
+                    "info": "Updated info",
+                    "state": "BUSY",
+                    "priority": 5
+                }
+            },
+            "reply": {
+                "statusCode": 201,
+                "body": {
+                    "meta": {
+                        "linkedEntities": {},
+                        "properties": {},
+                        "listProperties": {}
+                    },
+                    "content": {
+                        "fromEmployeeId": 2,
+                        "toEmployeeId": 1234,
+                        "date": 1576234800,
+                        "companyId": 100000,
+                        "phoneNumber": "06154/6006-0",
+                        "state": "BUSY",
+                        "priority": 5,
+                        "info": "Updated info",
+                        "stateLog": []
+                    }
+                },
+                "headers": {
+                    "content-type": "application/json"
+                }
+            }
+        }
+    ],
+    "expected": {
+        "kind": "returns",
+        "matchObject": {
+            "success": true,
+            "statusCode": 201
+        }
+    }
+}

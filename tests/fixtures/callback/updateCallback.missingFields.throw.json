@@ -1,0 +1,23 @@
+{
+    "name": "updateCallback throws NodeOperationError on missing createUpdateCallbackFields",
+    "itemIndex": 0,
+    "parameters": {
+        "operation": "updateCallback",
+        "callbackId": 77,
+        "createUpdateCallbackFields": {}
+    },
+    "credentials": {
+        "tanssApi": {
+            "baseURL": "https://example.invalid",
+            "authentication": "loginTotp",
+            "username": "user",
+            "password": "pass"
+        }
+    },
+    "http": [],
+    "expected": {
+        "kind": "throws",
+        "name": "NodeOperationError",
+        "messageIncludes": "createUpdateCallbackFields cannot be empty"
+    }
+}
