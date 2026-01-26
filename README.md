@@ -35,18 +35,12 @@ Optionally, a dev container configuration is included to provide a ready-to-use 
 
 ### Implementation Progress
 
-Progress: **94 / 256 (1 not in API Docs)** (36%)
+Progress: **94 / 256 (1 not in API Docs; login not necessary)** (36%)
 
 <details>
 <summary><strong>Complete overview</strong></summary>
 
 <br>
-<details>
-<summary><strong>security [1/1] - Done</strong></summary>
-
-  - [x] Login with Username & Password
-  - [x] 2FA Auth Support  
-</details>
 <details>
 <summary><strong>tickets [6/6] - Done</strong></summary>
 
