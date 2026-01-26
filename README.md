@@ -196,11 +196,11 @@ Progress: **93 / 256 (1 not in API Docs; login not necessary)** (36%)
   - [ ] [PUT] Assigns multiple tags
   - [ ] [GET] List of tags logs to an assignment
 
-- [ ] **callback [0/4]**
-  - [ ] [POST] Creates a callback
-  - [ ] [PUT] Get a list of callbacks
-  - [ ] [GET] Gets a callback
-  - [ ] [PUT] Updates a callback
+- [x] **callback [0/4]**
+  - [x] [POST] Creates a callback
+  - [x] [PUT] Get a list of callbacks
+  - [x] [GET] Gets a callback
+  - [x] [PUT] Updates a callback
 
 - [ ] **search [0/1]**
   - [ ] [PUT] global search
