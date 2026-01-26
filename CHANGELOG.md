@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 
 ## [unreleased]
 
+### 🚀 Features
+
+- 🔀 *(tanss)* **Add ip endpoint implementation** - ([2744ddf](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/2744ddf7d6222401151407b45b473b48110c6155))
+    - **docs**:*(readme)* Mark ip endpoints as implemented in progress overview - ([d84ab75](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/d84ab7506b1ca247a2e988be2543dc77d6951fc4))
+    - *(tanss)* Wire ips resource into tanss node configuration - ([fd92887](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/fd928873c5e88bd31d3313f22a0e9497770cc9ca))
+    - **chore**:*(tanss)* Export ips sub handler from index barrel - ([8f7ef46](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/8f7ef4672d47d57be15c09e8ece16ca4da6fba50))
+    - *(tanss)* Add ips sub handler for CRUD operations - ([4cc2d19](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/4cc2d195ae842285b5086b613ba0781ed6835346))
+    - **test**:*(ips)* Add handler fixtures and tests for ips operations - ([379820b](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/379820baac46eb6378c8bdc2cd683c45e084fc03))
+
 ### ⚙️ Miscellaneous Tasks
 
 - *(github)* Add workflow to sync releases to github - ([e7b37ea](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/e7b37eaca9489d1f0591a94da58c27402c2451ac))
