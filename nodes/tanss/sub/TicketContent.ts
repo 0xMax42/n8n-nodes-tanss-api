@@ -11,7 +11,7 @@ export const ticketContentOperations: INodeProperties[] = [
 	{
 		displayName: 'Operation',
 		name: 'operation',
-		type: 'options' as const,
+		type: 'options',
 		noDataExpression: true,
 		displayOptions: {
 			show: {
@@ -20,28 +20,28 @@ export const ticketContentOperations: INodeProperties[] = [
 		},
 		options: [
 			{
-				name: 'Get Ticket Documents',
-				value: 'getTicketDocuments',
-				description: 'Gets all documents attached to a ticket (list)',
-				action: 'Get ticket documents',
-			},
-			{
 				name: 'Get Ticket Document',
 				value: 'getTicketDocument',
 				description: 'Generates a one-time download URL for a specific ticket document',
 				action: 'Get a ticket document',
 			},
 			{
-				name: 'Get Ticket Images',
-				value: 'getTicketImages',
-				description: 'Gets all images (screenshots) attached to a ticket (list)',
-				action: 'Get ticket images',
+				name: 'Get Ticket Documents',
+				value: 'getTicketDocuments',
+				description: 'Gets all documents attached to a ticket (list)',
+				action: 'Get ticket documents',
 			},
 			{
 				name: 'Get Ticket Image',
 				value: 'getTicketImage',
 				description: 'Generates a one-time download URL for a specific ticket image',
 				action: 'Get a ticket image',
+			},
+			{
+				name: 'Get Ticket Images',
+				value: 'getTicketImages',
+				description: 'Gets all images (screenshots) attached to a ticket (list)',
+				action: 'Get ticket images',
 			},
 			{
 				name: 'Upload Document / Image',
@@ -58,7 +58,7 @@ export const ticketContentFields: INodeProperties[] = [
 	{
 		displayName: 'API Token',
 		name: 'apiToken',
-		type: 'string' as const,
+		type: 'string',
 		required: true,
 		typeOptions: { password: true },
 		default: '',
@@ -72,7 +72,7 @@ export const ticketContentFields: INodeProperties[] = [
 	{
 		displayName: 'Ticket ID',
 		name: 'ticketId',
-		type: 'number' as const,
+		type: 'number',
 		displayOptions: {
 			show: {
 				resource: ['ticketContent'],
@@ -84,7 +84,7 @@ export const ticketContentFields: INodeProperties[] = [
 	{
 		displayName: 'Document ID',
 		name: 'documentId',
-		type: 'number' as const,
+		type: 'number',
 		displayOptions: {
 			show: {
 				resource: ['ticketContent'],
@@ -97,7 +97,7 @@ export const ticketContentFields: INodeProperties[] = [
 	{
 		displayName: 'Image ID',
 		name: 'imageId',
-		type: 'number' as const,
+		type: 'number',
 		displayOptions: {
 			show: {
 				resource: ['ticketContent'],
@@ -110,7 +110,7 @@ export const ticketContentFields: INodeProperties[] = [
 	{
 		displayName: 'Binary Property Name',
 		name: 'binaryPropertyName',
-		type: 'string' as const,
+		type: 'string',
 		default: 'data',
 		description: 'Name of the binary property that contains the file to upload',
 		displayOptions: {
@@ -123,7 +123,7 @@ export const ticketContentFields: INodeProperties[] = [
 	{
 		displayName: 'Descriptions',
 		name: 'descriptions',
-		type: 'string' as const,
+		type: 'string',
 		default: '',
 		description: 'Description for the uploaded file(s) (if multiple, separate by newline)',
 		displayOptions: {
@@ -136,9 +136,9 @@ export const ticketContentFields: INodeProperties[] = [
 	{
 		displayName: 'Internal',
 		name: 'internal',
-		type: 'boolean' as const,
+		type: 'boolean',
 		default: false,
-		description: 'Mark the uploaded file(s) as internal',
+		description: 'Whether the uploaded file(s) should be marked as internal',
 		displayOptions: {
 			show: {
 				resource: ['ticketContent'],
