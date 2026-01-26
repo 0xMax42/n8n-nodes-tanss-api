@@ -1,21 +1,21 @@
 {
-    "name": "n8n-nodes-tanss",
-    "version": "1.0.7",
+    "name": "n8n-nodes-tanss-api",
+    "version": "0.1.0",
     "description": "n8n community node to use the TANSS API",
     "license": "MIT",
-    "homepage": "https://github.com/BuddiesD",
+    "homepage": "https://github.com/0xMax42/n8n-nodes-tanss-api",
     "keywords": [
         "n8n-community-node-package",
-        "n8n-nodes-tanss",
+        "n8n-nodes-tanss-api",
         "Tanss"
     ],
     "author": {
-        "name": "J.W",
-        "email": "dev@buddies-dev.de"
+        "name": "0xMax42",
+        "email": "git@0xmax42.io"
     },
     "repository": {
         "type": "git",
-        "url": "https://github.com/BuddiesD/n8n-nodes-tanss.git"
+        "url": "https://github.com/0xMax42/n8n-nodes-tanss-api.git"
     },
     "scripts": {
         "build": "n8n-node build",
