@@ -35,15 +35,9 @@ Optionally, a dev container configuration is included to provide a ready-to-use 
 
 ### Implementation Progress
 
-Progress: **94 / 256 (1 not in API Docs; login not necessary)** (36%)
+Progress: **93 / 256 (1 not in API Docs; login not necessary)** (36%)
 
-<details>
-<summary><strong>Complete overview</strong></summary>
-
-<br>
-<details>
-<summary><strong>tickets [6/6] - Done</strong></summary>
-
+- [x] **tickets [6/6]**
   - [x] [POST] Creates a ticket in the database
   - [x] [GET] Gets a ticket by id
   - [x] [DEL] Deletes a ticket by id
@@ -51,10 +45,8 @@ Progress: **94 / 256 (1 not in API Docs; login not necessary)** (36%)
   - [x] [GET] Gets a ticket history
   - [x] [POST] Creates a comment
   - [x] [PUT] Merge two Tickets (not in API Docs)
-</details>
-<details>
-<summary><strong>ticket lists [10/10] - Done</strong></summary>
 
+- [x] **ticket lists [10/10]**
   - [x] [GET] gets a list of own tickets (assigned to currently logged in employee)
   - [x] [GET] gets a list of general tickets (assigned to no employee)
   - [x] [GET] gets a list of company tickets
@@ -65,27 +57,21 @@ Progress: **94 / 256 (1 not in API Docs; login not necessary)** (36%)
   - [x] [GET] gets a list of all tickets which are assigned to local ticket admins
   - [x] [GET] gets a list of all ticket which a technician has a role in
   - [x] [PUT] Get a (custom) ticket list
-</details>
-<details>
-<summary><strong>ticket content [5/5] - Done</strong></summary>
 
+- [x] **ticket content [5/5]**
   - [x] [GET] Gets all ticket documents
   - [x] [GET] Gets a ticket document
   - [x] [GET] Gets all ticket images
   - [x] [GET] Gets a ticket image
   - [x] [POST] upload a document/image
-</details>
-<details>
-<summary><strong>ticket states [4/4] - Done</strong></summary>
 
+- [x] **ticket states [4/4]**
   - [x] [GET] Gets a list of all ticket states
   - [x] [POST] Creates a ticket state
   - [x] [PUT] Updates a ticket state
   - [x] [DEL] Deletes a ticket state
-</details>
-<details>
-<summary><strong>timestamp [15/15] - Testing</strong></summary>
 
+- [x] **timestamp [15/15]**
   - [x] [GET] gets a list of timestamps from a given period
   - [x] [POST] writes a timestamp into the database
   - [x] [PUT] edits a single timestamp
@@ -101,10 +87,8 @@ Progress: **94 / 256 (1 not in API Docs; login not necessary)** (36%)
   - [x] [POST] creates a pause config
   - [x] [PUT] updates a pause config
   - [x] [DEL] deletes a pause config
-</details>
-<details>
-<summary><strong>calls [9/9] - Testing</strong></summary>
 
+- [x] **calls [9/9]**
   - [x] [POST] Creates/imports a phone call into the database
   - [x] [PUT] Get a list of phone calls
   - [x] [GET] Get phone call by id
@@ -114,17 +98,13 @@ Progress: **94 / 256 (1 not in API Docs; login not necessary)** (36%)
   - [x] [POST] Creates a new employee assignment
   - [x] [DEL] Deletes an employee assignment
   - [x] [POST] Creates a call notification
-</details>
-<details>
-<summary><strong>calls (user context) [3/3] - Done</strong></summary>
 
+- [x] **calls (user context) [3/3]**
   - [x] [PUT] Get a list of phone calls
   - [x] [GET] Get phone call by id
   - [x] [POST] identifies a phone call
-</details>
-<details>
-<summary><strong>remote supports [11/11] - Testing</strong></summary>
 
+- [x] **remote supports [11/11]**
   - [x] [POST] Creates/imports a remote support into the database
   - [x] [PUT] Get list of remote supports
   - [x] [GET] Get remote support by id
@@ -136,10 +116,8 @@ Progress: **94 / 256 (1 not in API Docs; login not necessary)** (36%)
   - [x] [GET] Gets all technician assignments
   - [x] [POST] Creates a technician assignment
   - [x] [DEL] Delets a technician assignment
-</details>
-<details>
-<summary><strong>monitoring [0/7] - ToDo</strong></summary>
 
+- [ ] **monitoring [0/7]**
   - [ ] [POST] Creates a ticket, using the monitoring api
   - [ ] [POST] Assigns a groupName to a company or device
   - [ ] [DEL] Delete a group assignment
@@ -147,10 +125,8 @@ Progress: **94 / 256 (1 not in API Docs; login not necessary)** (36%)
   - [ ] [GET] Gets ticket(s), based on a given group
   - [ ] [GET] Gets a ticket (created by the monitoring api) by id
   - [ ] [PUT] Updates a ticket (created by the monitoring api) by id
-</details>
-<details>
-<summary><strong>erp [0/16] - ?</strong></summary>
 
+- [ ] **erp [0/16]**
   - [ ] [POST] Insert new invoices
   - [ ] [GET] Gets a list of billable supports
   - [ ] [GET] Get a list of customers and employees
@@ -167,10 +143,8 @@ Progress: **94 / 256 (1 not in API Docs; login not necessary)** (36%)
   - [ ] [GET] search for a company
   - [ ] [GET] gets all departments of a employee
   - [ ] [GET] gets all users with the associated departments
-</details>
-<details>
-<summary><strong>chats [0/10] - ToDo</strong></summary>
 
+- [ ] **chats [0/10]**
   - [ ] [POST] Creates a new chat
   - [ ] [PUT] Get a list of chats
   - [ ] [GET] Gets a chat
@@ -181,10 +155,8 @@ Progress: **94 / 256 (1 not in API Docs; login not necessary)** (36%)
   - [ ] [POST] Closes a chat
   - [ ] [PUT] Accept/decline close request
   - [ ] [POST] re-opens a chat
-</details>
-<details>
-<summary><strong>offer [0/16] - ?</strong></summary>
 
+- [ ] **offer [0/16]**
   - [ ] [POST] Creates a new erp selection
   - [ ] [GET] Fetches an erp selection
   - [ ] [PUT] Updates an erp selection
@@ -201,26 +173,18 @@ Progress: **94 / 256 (1 not in API Docs; login not necessary)** (36%)
   - [ ] [GET] Gets an offer
   - [ ] [PUT] Updates an offer
   - [ ] [DEL] Deletes an offer
-</details>
-<details>
-<summary><strong>availability [1/1] - Done</strong></summary>
 
+- [x] **availability [1/1]**
   - [x] [GET] Fetches availability infos
-</details>
-<details>
-<summary><strong>employees [2/2] - Done</strong></summary>
 
+- [x] **employees [2/2]**
   - [x] [GET] Gets all technicians
   - [x] [POST] creates an employee
-</details>
-<details>
-<summary><strong>mails [1/1] - Done</strong></summary>
 
+- [x] **mails [1/1]**
   - [x] [POST] Test email smtp settings
-</details>
-<details>
-<summary><strong>tags [0/10] - ToDo</strong></summary>
 
+- [ ] **tags [0/10]**
   - [ ] [POST] Creates a new tag
   - [ ] [GET] Get all tags
   - [ ] [GET] Gets a tag
@@ -231,41 +195,31 @@ Progress: **94 / 256 (1 not in API Docs; login not necessary)** (36%)
   - [ ] [GET] List of tags to an assignment
   - [ ] [PUT] Assigns multiple tags
   - [ ] [GET] List of tags logs to an assignment
-</details>
-<details>
-<summary><strong>callback [0/4] - ToDo</strong></summary>
 
+- [ ] **callback [0/4]**
   - [ ] [POST] Creates a callback
   - [ ] [PUT] Get a list of callbacks
   - [ ] [GET] Gets a callback
   - [ ] [PUT] Updates a callback
-</details>
-<details>
-<summary><strong>search [0/1] - ToDo</strong></summary>
 
+- [ ] **search [0/1]**
   - [ ] [PUT] global search
-</details>
-<details>
-<summary><strong>checklists [0/5] - ToDo</strong></summary>
 
+- [ ] **checklist [0/5]**
   - [ ] [POST] Assigns a checklist to a ticket
   - [ ] [DEL] Removes a checklist from a ticket
   - [ ] [GET] Gets checklists for a ticket
   - [ ] [GET] Gets checklist for ticket
   - [ ] [PUT] Check an item
-</details>
-<details>
-<summary><strong>supports [0/5] - ToDo</strong></summary>
 
+- [ ] **supports [0/5]**
   - [ ] [PUT] Get a support list
   - [ ] [POST] Creates a support/appointment
   - [ ] [GET] Gets a support/appointment
   - [ ] [PUT] Edits a support/appointment
   - [ ] [POST] Uploads a signature for supports
-</details>
-<details>
-<summary><strong>timers [0/8] - ?</strong></summary>
 
+- [ ] **timers [0/8]**
   - [ ] [GET] Get all timers of current user
   - [ ] [POST] Creates a timer
   - [ ] [DEL] Deletes a timer
@@ -274,19 +228,15 @@ Progress: **94 / 256 (1 not in API Docs; login not necessary)** (36%)
   - [ ] [GET] Get all timer fragments
   - [ ] [DEL] Deletes a timer fragment
   - [ ] [PUT] Updates a timer fragment
-</details>
-<details>
-<summary><strong>pc [5/5] - Done</strong></summary>
 
+- [x] **pc [5/5]**
   - [x] [GET] Gets a pc by id
   - [x] [PUT] Updates a pc
   - [x] [DEL] Deletes a pc
   - [x] [POST] Creates a pc
   - [x] [PUT] Gets a list of pcs
-</details>
-<details>
-<summary><strong>periphery [0/11] - ?</strong></summary>
 
+- [ ] **periphery [0/11]**
   - [ ] [GET] Gets a periphery by id
   - [ ] [PUT] Updates a periphery
   - [ ] [DEL] Deletes a periphery
@@ -298,10 +248,8 @@ Progress: **94 / 256 (1 not in API Docs; login not necessary)** (36%)
   - [ ] [DEL] Delete periphery type
   - [ ] [POST] Assign periphery
   - [ ] [DEL] Delete periphery assignment
-</details>
-<details>
-<summary><strong>components [0/9] - ?</strong></summary>
 
+- [ ] **components [0/9]**
   - [ ] [GET] Gets a component by id
   - [ ] [PUT] Updates a component
   - [ ] [DEL] Deletes a component
@@ -311,33 +259,25 @@ Progress: **94 / 256 (1 not in API Docs; login not necessary)** (36%)
   - [ ] [POST] Create component type
   - [ ] [PUT] Update component type
   - [ ] [DEL] Delete component type
-</details>
-<details>
-<summary><strong>services [0/5] - ?</strong></summary>
 
+- [ ] **services [0/5]**
   - [ ] [POST] Creates a service
   - [ ] [GET] Gets a list of all services
   - [ ] [GET] Gets a service by id
   - [ ] [PUT] Updates a service
   - [ ] [DEL] Deletes a service
-</details>
-<details>
-<summary><strong>ips [0/4] - ?</strong></summary>
 
+- [ ] **ip [0/4]**
   - [ ] [GET] Gets ip addresses
   - [ ] [POST] Creates an ip address
   - [ ] [PUT] Update ip address
   - [ ] [DEL] Deletes an ip address
-</details>
-<details>
-<summary><strong>company [0/2] - ToDo</strong></summary>
 
+- [ ] **company [0/2]**
   - [ ] [POST] Creates a new company
   - [ ] [GET] Gets all employees of a company
-</details>
-<details>
-<summary><strong>company category [0/10] - ?</strong></summary>
 
+- [ ] **company category [0/10]**
   - [ ] [GET] list of categories
   - [ ] [POST] Creates a new company category
   - [ ] [GET] gets a category
@@ -348,30 +288,24 @@ Progress: **94 / 256 (1 not in API Docs; login not necessary)** (36%)
   - [ ] [GET] gets a company type
   - [ ] [PUT] updates a company type
   - [ ] [DEL] Deletes a company type
-</details>
-<details>
-<summary><strong>documents [0/6] - ?</strong></summary>
 
+- [ ] **documents [0/6]**
   - [ ] [PUT] Get a list of company documents
   - [ ] [POST] Creates a document
   - [ ] [GET] Get a single document (including content)
   - [ ] [PUT] Updates a document
   - [ ] [DEL] Deletes a document
   - [ ] [POST] Uploads a file
-</details>
-<details>
-<summary><strong>webHooks [0/6] - ?</strong></summary>
 
+- [ ] **webHooks [0/6]**
   - [ ] [POST] creates a rule
   - [ ] [PUT] get a list of rules
   - [ ] [PUT] updates a rule
   - [ ] [GET] gets a rule
   - [ ] [DEL] deletes a rule
   - [ ] [PUT] test a rule
-</details>
-<details>
-<summary><strong>ticket board [0/10] - ?</strong></summary>
 
+- [ ] **ticket board [0/10]**
   - [ ] [GET] Gets the ticket board with all panels
   - [ ] [GET] Gets an empty ticket board panel
   - [ ] [POST] Creates a new ticket board panel
@@ -382,61 +316,47 @@ Progress: **94 / 256 (1 not in API Docs; login not necessary)** (36%)
   - [ ] [GET] Gets a ticket board from a project
   - [ ] [GET] Gets all registers from a ticket board project
   - [ ] [GET] Get global ticket panels
-</details>
-<details>
-<summary><strong>operating systems [5/5] - Done</strong></summary>
 
+- [x] **operating systems [5/5]**
   - [x] [POST] Creates a new os
   - [x] [GET] Get a list of all os
   - [x] [PUT] Updates a os
   - [x] [GET] Get a specific os
   - [x] [DEL] Deletes a specific os
-</details>
-<details>
-<summary><strong>manufacturer [5/5] - Done</strong></summary>
 
+- [x] **manufacturer [5/5]**
   - [x] [POST] Creates a new manufacturer
   - [x] [GET] Get a list of all manufacturers
   - [x] [PUT] Updates a manufacturer
   - [x] [GET] Get a manufacturer
   - [x] [DEL] Deletes a manufacturer
-</details>
-<details>
-<summary><strong>cpus [5/5] - Done</strong></summary>
 
+- [x] **cpus [5/5]**
   - [x] [POST] Creates a new cpu
   - [x] [GET] Get a list of all cpus
   - [x] [PUT] Updates a cpu
   - [x] [GET] Get a cpu
   - [x] [DEL] Deletes a cpu
-</details>
-<details>
-<summary><strong>hddTypes [5/5] - Done</strong></summary>
 
+- [x] **hddTypes [5/5]**
   - [x] [POST] Creates a new hdd type
   - [x] [GET] Get a list of all hdd types
   - [x] [PUT] Updates a hdd type
   - [x] [GET] Get a hdd type
   - [x] [DEL] Deletes a hdd type
-</details>
-<details>
-<summary><strong>identify [0/1] - ToDo</strong></summary>
 
+- [ ] **identify [0/1]**
   - [ ] [POST] identifies items
-</details>
-<details>
-<summary><strong>emailAccounts [0/6] - ?</strong></summary>
 
+- [ ] **emailAccounts [0/6]**
   - [ ] [POST] Creates an email account
   - [ ] [GET] List accounts of company
   - [ ] [GET] Gets an account
   - [ ] [PUT] Edit an accounts
   - [ ] [DEL] Deletes an account
   - [ ] [GET] List account types
-</details>
-<details>
-<summary><strong>vacationRequests [0/7] - ToDo</strong></summary>
 
+- [ ] **vacationRequests [0/7]**
   - [ ] [PUT] Gets a list of vacation requests
   - [ ] [GET] Gets a list of absence/custom types
   - [ ] [POST] creates a vacation request
@@ -444,13 +364,8 @@ Progress: **94 / 256 (1 not in API Docs; login not necessary)** (36%)
   - [ ] [DEL] deletes a vacation request
   - [ ] [GET] gets the available vacation days per year
   - [ ] [POST] sets the available vacation days per year
-</details>
-<details>
-<summary><strong>activityFeed [0/3] - ?</strong></summary>
 
+- [ ] **activityFeed [0/3]**
   - [ ] [PUT] List of user items
   - [ ] [GET] Number of unseen events
   - [ ] [POST] Marks all as seen
-</details>
-
-</details>
