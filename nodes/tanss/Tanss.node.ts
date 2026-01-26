@@ -4,38 +4,56 @@ import {
 	IExecuteFunctions,
 	NodeOperationError,
 } from 'n8n-workflow';
-import { handlePc, pcOperations, pcFields } from './sub/PCs';
-import { handleTicket, ticketOperations, ticketFields } from './sub/Tickets';
-import { handleTicketList, ticketListOperations, ticketListFields } from './sub/TicketLists';
 import {
-	handleTicketContent,
-	ticketContentOperations,
-	ticketContentFields,
-} from './sub/TicketContent';
-import { handleTicketStates, ticketStatesOperations, ticketStatesFields } from './sub/TicketSates';
-import { handleTimestamps, timestampOperations, timestampFields } from './sub/timestamp';
-import { handleAvailability, availabilityOperations, availabilityFields } from './sub/Availability';
-import { handleEmployees, employeesOperations, employeesFields } from './sub/Employees';
-import { handleMails, mailsOperations, mailsFields } from './sub/Mails';
-import { handleCalls, callsOperations, callsFields } from './sub/calls';
-import { handleCallsUser, callsUserOperations, callsUserFields } from './sub/callsuser';
-import {
-	handleRemoteSupports,
-	remoteSupportsOperations,
-	remoteSupportsFields,
-} from './sub/RemoteSupports';
-import { handleCpu, cpuOperations, cpuFields } from './sub/CPUs';
-import { handleHddTypes, hddTypesOperations, hddTypesFields } from './sub/hddTypes';
-import {
+	availabilityFields,
+	availabilityOperations,
+	callsFields,
+	callsOperations,
+	callsUserFields,
+	callsUserOperations,
+	cpuFields,
+	cpuOperations,
+	employeesFields,
+	employeesOperations,
+	handleAvailability,
+	handleCalls,
+	handleCallsUser,
+	handleCpu,
+	handleEmployees,
+	handleHddTypes,
+	handleMails,
 	handleManufacturers,
-	manufacturersOperations,
-	manufacturersFields,
-} from './sub/manufacturers';
-import {
 	handleOperatingSystems,
-	operatingSystemsOperations,
+	handlePc,
+	handleRemoteSupports,
+	handleTicket,
+	handleTicketContent,
+	handleTicketList,
+	handleTicketStates,
+	handleTimestamps,
+	hddTypesFields,
+	hddTypesOperations,
+	mailsFields,
+	mailsOperations,
+	manufacturersFields,
+	manufacturersOperations,
 	operatingSystemsFields,
-} from './sub/OperatingSystems';
+	operatingSystemsOperations,
+	pcFields,
+	pcOperations,
+	remoteSupportsFields,
+	remoteSupportsOperations,
+	ticketContentFields,
+	ticketContentOperations,
+	ticketFields,
+	ticketListFields,
+	ticketListOperations,
+	ticketOperations,
+	ticketStatesFields,
+	ticketStatesOperations,
+	timestampFields,
+	timestampOperations,
+} from './sub';
 
 export class Tanss implements INodeType {
 	description: INodeTypeDescription = {
