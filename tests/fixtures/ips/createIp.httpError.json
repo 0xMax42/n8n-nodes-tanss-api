@@ -1,0 +1,86 @@
+{
+    "name": "createIp returns http-error wrapper",
+    "itemIndex": 0,
+    "parameters": {
+        "operation": "createIp",
+        "assignmentType": "PC",
+        "assignmentId": 10,
+        "createUpdateIpFields": {
+            "ipAddress": "192.168.1.1",
+            "macAddress": "a1:bc:12:f3:fe:00",
+            "remarks": "",
+            "dhcp": true
+        }
+    },
+    "credentials": {
+        "tanssApi": {
+            "baseURL": "https://example.invalid",
+            "authentication": "loginTotp",
+            "username": "user",
+            "password": "pass"
+        }
+    },
+    "http": [
+        {
+            "expect": {
+                "method": "POST",
+                "url": "https://example.invalid/backend/api/v1/login",
+                "json": true,
+                "returnFullResponse": true,
+                "headers": {
+                    "Content-Type": "application/json"
+                },
+                "body": {
+                    "username": "user",
+                    "password": "pass"
+                }
+            },
+            "reply": {
+                "statusCode": 200,
+                "body": {
+                    "content": {
+                        "apiKey": "TOKEN-123"
+                    }
+                },
+                "headers": {
+                    "content-type": "application/json"
+                }
+            }
+        },
+        {
+            "expect": {
+                "method": "POST",
+                "url": "https://example.invalid/backend/api/v1/ips/PC/10",
+                "json": true,
+                "returnFullResponse": true,
+                "headers": {
+                    "Content-Type": "application/json",
+                    "apiToken": "Bearer TOKEN-123"
+                },
+                "body": {
+                    "ip": "192.168.1.1",
+                    "mac": "a1:bc:12:f3:fe:00",
+                    "remark": "",
+                    "dhcp": true
+                }
+            },
+            "throw": {
+                "kind": "axios",
+                "statusCode": 409,
+                "data": {
+                    "message": "conflict"
+                }
+            }
+        }
+    ],
+    "expected": {
+        "kind": "returns",
+        "matchObject": {
+            "success": false,
+            "statusCode": 409,
+            "body": {
+                "message": "conflict"
+            }
+        }
+    }
+}

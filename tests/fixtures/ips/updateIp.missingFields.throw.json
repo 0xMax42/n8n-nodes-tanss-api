@@ -1,0 +1,23 @@
+{
+    "name": "updateIp throws NodeOperationError on missing updateIpFields",
+    "itemIndex": 0,
+    "parameters": {
+        "operation": "updateIp",
+        "ipId": 99,
+        "createUpdateIpFields": {}
+    },
+    "credentials": {
+        "tanssApi": {
+            "baseURL": "https://example.invalid",
+            "authentication": "loginTotp",
+            "username": "user",
+            "password": "pass"
+        }
+    },
+    "http": [],
+    "expected": {
+        "kind": "throws",
+        "name": "NodeOperationError",
+        "messageIncludes": "createUpdateIpFields cannot be empty"
+    }
+}

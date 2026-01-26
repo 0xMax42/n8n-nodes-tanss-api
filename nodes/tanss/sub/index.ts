@@ -20,5 +20,6 @@ export { ticketOperations, ticketFields, handleTicket } from './Tickets';
 export { callsOperations, callsFields, handleCalls } from './calls';
 export { callsUserOperations, callsUserFields, handleCallsUser } from './callsuser';
 export { hddTypesOperations, hddTypesFields, handleHddTypes } from './hddTypes';
+export { ipsOperations, ipsFields, handleIps } from './ips';
 export { manufacturersOperations, manufacturersFields, handleManufacturers } from './manufacturers';
 export { timestampOperations, timestampFields, handleTimestamps } from './timestamp';
