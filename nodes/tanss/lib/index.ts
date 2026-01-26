@@ -1,6 +1,7 @@
 export { generateTOTP } from './2fa';
 export {
 	JsonBodyStrategy,
+	TicketContentMultipartBodyStrategy,
 	createCrudHandler,
 	createRecordFromFields,
 	createCrudFieldMap,

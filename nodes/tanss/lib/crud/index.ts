@@ -1,4 +1,4 @@
-export { JsonBodyStrategy } from './IRequestBodyStrategy';
+export { JsonBodyStrategy, TicketContentMultipartBodyStrategy } from './IRequestBodyStrategy';
 export type { IRequestBodyStrategy } from './IRequestBodyStrategy';
 export { createCrudHandler, createRecordFromFields } from './crud';
 export type {
