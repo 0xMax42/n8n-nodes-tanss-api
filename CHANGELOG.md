@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [unreleased]
+
+### ⚙️ Miscellaneous Tasks
+
+- *(github)* Add workflow to sync releases to github - ([e7b37ea](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/e7b37eaca9489d1f0591a94da58c27402c2451ac))
+
 ## [0.1.0-pre.0] (pre-release) - 2026-01-26
 
 ### 🚀 Features
