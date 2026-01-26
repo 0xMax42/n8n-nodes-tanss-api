@@ -1,6 +1,12 @@
 export { generateTOTP } from './2fa';
-export { createCrudHandler, createCrudFieldMap } from './crud/index';
+export {
+	JsonBodyStrategy,
+	createCrudHandler,
+	createRecordFromFields,
+	createCrudFieldMap,
+} from './crud/index';
 export type {
+	IRequestBodyStrategy,
 	HttpMethod,
 	CrudFieldLocation,
 	CrudField,
@@ -9,6 +15,7 @@ export type {
 	CrudOperationFieldMap,
 	CrudOperationsConfig,
 	NodeHandler,
+	CreateRecordFromFields,
 } from './crud/index';
 export {
 	nullOrGuard,

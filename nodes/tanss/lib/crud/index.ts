@@ -1,4 +1,6 @@
-export { createCrudHandler } from './crud';
+export { JsonBodyStrategy } from './IRequestBodyStrategy';
+export type { IRequestBodyStrategy } from './IRequestBodyStrategy';
+export { createCrudHandler, createRecordFromFields } from './crud';
 export type {
 	HttpMethod,
 	CrudFieldLocation,
@@ -8,5 +10,6 @@ export type {
 	CrudOperationFieldMap,
 	CrudOperationsConfig,
 	NodeHandler,
+	CreateRecordFromFields,
 } from './crudTypes';
 export { createCrudFieldMap } from './crudUtils';
