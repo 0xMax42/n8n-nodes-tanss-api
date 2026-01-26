@@ -16,7 +16,7 @@ export const callsUserOperations: INodeProperties[] = [
 	{
 		displayName: 'Operation',
 		name: 'operation',
-		type: 'options' as const,
+		type: 'options',
 		noDataExpression: true,
 		displayOptions: {
 			show: { resource: ['callsuser'] },
@@ -49,7 +49,7 @@ export const callsUserFields: INodeProperties[] = [
 	{
 		displayName: 'Use Raw Filter JSON (Optional)',
 		name: 'filterJson',
-		type: 'string' as const,
+		type: 'string',
 		default: '',
 		description:
 			'If provided (valid JSON), this object will be sent as the request body for the list call (overrides Filter Settings)',
@@ -61,11 +61,52 @@ export const callsUserFields: INodeProperties[] = [
 	{
 		displayName: 'Filter Settings',
 		name: 'getCallsFilters',
-		type: 'collection' as const,
+		type: 'collection',
 		placeholder: 'Add Filter',
 		displayOptions: { show: { resource: ['callsuser'], operation: ['getCalls'] } },
 		default: {},
 		options: [
+			{
+				displayName: 'Company ID',
+				name: 'companyIdFilter',
+				type: 'number',
+				default: null,
+			},
+			{
+				displayName: 'Directions',
+				name: 'directions',
+				type: 'multiOptions',
+				options: [
+					{ name: 'INTERNAL', value: 'INTERNAL' },
+					{ name: 'INCOMING', value: 'INCOMING' },
+					{ name: 'OUTGOING', value: 'OUTGOING' },
+				],
+				default: [],
+			},
+			{
+				displayName: 'Employee ID',
+				name: 'employeeIdFilter',
+				type: 'number',
+				default: null,
+			},
+			{
+				displayName: 'Number Filters (Comma Separated)',
+				name: 'numberFilters',
+				type: 'string',
+				default: '',
+			},
+			{
+				displayName: 'Number Infos',
+				name: 'numberInfos',
+				type: 'boolean',
+				default: false,
+			},
+			{
+				displayName: 'Show Tries As Well',
+				name: 'showTrysAsWell',
+				type: 'boolean',
+				default: false,
+			},
 			{
 				displayName: 'Timeframe',
 				name: 'timeframe',
@@ -92,54 +133,13 @@ export const callsUserFields: INodeProperties[] = [
 					},
 				],
 			},
-			{
-				displayName: 'Show Tries As Well',
-				name: 'showTrysAsWell',
-				type: 'boolean' as const,
-				default: false,
-			},
-			{
-				displayName: 'Number Filters (Comma Separated)',
-				name: 'numberFilters',
-				type: 'string' as const,
-				default: '',
-			},
-			{
-				displayName: 'Employee ID',
-				name: 'employeeIdFilter',
-				type: 'number' as const,
-				default: null,
-			},
-			{
-				displayName: 'Company ID',
-				name: 'companyIdFilter',
-				type: 'number' as const,
-				default: null,
-			},
-			{
-				displayName: 'Number Infos',
-				name: 'numberInfos',
-				type: 'boolean' as const,
-				default: false,
-			},
-			{
-				displayName: 'Directions',
-				name: 'directions',
-				type: 'multiOptions' as const,
-				options: [
-					{ name: 'INTERNAL', value: 'INTERNAL' },
-					{ name: 'INCOMING', value: 'INCOMING' },
-					{ name: 'OUTGOING', value: 'OUTGOING' },
-				],
-				default: [],
-			},
 		],
 	},
 
 	{
 		displayName: 'Phone Call ID',
 		name: 'phoneCallId',
-		type: 'number' as const,
+		type: 'number',
 		default: -1,
 		description: 'ID of the phone call to fetch',
 		displayOptions: {
@@ -149,7 +149,7 @@ export const callsUserFields: INodeProperties[] = [
 	{
 		displayName: 'From Phone Number',
 		name: 'fromPhoneNumber',
-		type: 'string' as const,
+		type: 'string',
 		default: '',
 		required: true,
 		description: 'Phone number of the caller (= "from" number)',
@@ -160,7 +160,7 @@ export const callsUserFields: INodeProperties[] = [
 	{
 		displayName: 'To Phone Number',
 		name: 'toPhoneNumber',
-		type: 'string' as const,
+		type: 'string',
 		default: '',
 		required: true,
 		description: 'Phone number of the called (= "to" number)',
