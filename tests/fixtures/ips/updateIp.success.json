@@ -1,0 +1,97 @@
+{
+    "name": "updateIp returns success wrapper",
+    "itemIndex": 0,
+    "parameters": {
+        "operation": "updateIp",
+        "ipId": 99,
+        "createUpdateIpFields": {
+            "ipAddress": "192.168.1.2",
+            "macAddress": "a1:bc:12:f3:fe:00",
+            "remarks": "updated",
+            "dhcp": false
+        }
+    },
+    "credentials": {
+        "tanssApi": {
+            "baseURL": "https://example.invalid",
+            "authentication": "loginTotp",
+            "username": "user",
+            "password": "pass"
+        }
+    },
+    "http": [
+        {
+            "expect": {
+                "method": "POST",
+                "url": "https://example.invalid/backend/api/v1/login",
+                "json": true,
+                "returnFullResponse": true,
+                "headers": {
+                    "Content-Type": "application/json"
+                },
+                "body": {
+                    "username": "user",
+                    "password": "pass"
+                }
+            },
+            "reply": {
+                "statusCode": 200,
+                "body": {
+                    "content": {
+                        "apiKey": "TOKEN-123"
+                    }
+                },
+                "headers": {
+                    "content-type": "application/json"
+                }
+            }
+        },
+        {
+            "expect": {
+                "method": "PUT",
+                "url": "https://example.invalid/backend/api/v1/ips/99",
+                "json": true,
+                "returnFullResponse": true,
+                "headers": {
+                    "Content-Type": "application/json",
+                    "apiToken": "Bearer TOKEN-123"
+                },
+                "body": {
+                    "ip": "192.168.1.2",
+                    "mac": "a1:bc:12:f3:fe:00",
+                    "remark": "updated",
+                    "dhcp": false
+                }
+            },
+            "reply": {
+                "statusCode": 200,
+                "body": {
+                    "meta": {
+                        "linkedEntities": {},
+                        "properties": {},
+                        "listProperties": {}
+                    },
+                    "content": {
+                        "ip": "192.168.1.2",
+                        "mac": "a1:bc:12:f3:fe:00",
+                        "remark": "updated",
+                        "dhcp": false,
+                        "id": 99,
+                        "assignmentType": "PC",
+                        "assignmentId": 10
+                    }
+                },
+                "headers": {
+                    "content-type": "application/json"
+                }
+            }
+        }
+    ],
+    "expected": {
+        "kind": "returns",
+        "matchObject": {
+            "success": true,
+            "statusCode": 200
+        }
+    }
+}
