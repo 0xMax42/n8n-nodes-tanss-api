@@ -5,7 +5,7 @@ export const hddTypesOperations: INodeProperties[] = [
 	{
 		displayName: 'Operation',
 		name: 'operation',
-		type: 'options' as const,
+		type: 'options',
 		noDataExpression: true,
 		displayOptions: { show: { resource: ['hddTypes'] } },
 		options: [
@@ -48,7 +48,7 @@ export const hddTypesFields: INodeProperties[] = [
 	{
 		displayName: 'HDD Type ID',
 		name: 'hddTypeId',
-		type: 'number' as const,
+		type: 'number',
 		default: 0,
 		description: 'ID of the HDD type',
 		displayOptions: {
@@ -59,27 +59,27 @@ export const hddTypesFields: INodeProperties[] = [
 		},
 	},
 	{
-		displayName: 'Create HDD Type Fields',
+		displayName: 'Create Fields',
 		name: 'createHddTypeFields',
-		type: 'collection' as const,
+		type: 'collection',
 		placeholder: 'Add Field',
 		default: {},
 		displayOptions: { show: { resource: ['hddTypes'], operation: ['createHddType'] } },
 		options: [
-			{ displayName: 'ID', name: 'id', type: 'number' as const, default: 0 },
-			{ displayName: 'Name', name: 'name', type: 'string' as const, default: '' },
+			{ displayName: 'ID', name: 'id', type: 'number', default: 0 },
+			{ displayName: 'Name', name: 'name', type: 'string', default: '' },
 		],
 	},
 	{
-		displayName: 'Update HDD Type Fields',
+		displayName: 'Update Fields',
 		name: 'updateHddTypeFields',
-		type: 'collection' as const,
+		type: 'collection',
 		placeholder: 'Add Field',
 		default: {},
 		displayOptions: { show: { resource: ['hddTypes'], operation: ['updateHddType'] } },
 		options: [
-			{ displayName: 'ID', name: 'id', type: 'number' as const, default: 0 },
-			{ displayName: 'Name', name: 'name', type: 'string' as const, default: '' },
+			{ displayName: 'ID', name: 'id', type: 'number', default: 0 },
+			{ displayName: 'Name', name: 'name', type: 'string', default: '' },
 		],
 	},
 ];
