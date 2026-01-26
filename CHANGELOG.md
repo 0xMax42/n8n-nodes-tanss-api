@@ -144,6 +144,7 @@ All notable changes to this project will be documented in this file.
 
 ### ⚙️ Miscellaneous Tasks
 
+- *(github)* Adjust ci triggers and job ordering - ([c8b5591](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/c8b5591549551590d372fb370405b4f4ff013528))
 - *(github)* Simplify ci trigger and normalize workflow quoting - ([51a4720](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/51a4720676b0f4e3c2b0cc2f2d765a78b37851ed))
 - *(github)* Add workflow for automated changelog and release - ([2dc64d5](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/2dc64d506ee3edce43393f796f0592550b3ae67e))
 - Update license footer with commit and repository reference - ([1b980fd](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/1b980fd61f9e00530bb2bbe145cd1bf0defe25ac))
