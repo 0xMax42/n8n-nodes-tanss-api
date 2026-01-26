@@ -47,6 +47,7 @@
                 "method": "POST",
                 "url": "https://example.invalid/backend/api/v1/timestamps?autoPause=true",
                 "json": true,
+                "returnFullResponse": true,
                 "headers": {
                     "Content-Type": "application/json",
                     "apiToken": "Bearer TOKEN-123"

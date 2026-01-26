@@ -22,7 +22,7 @@
             "expect": {
                 "method": "POST",
                 "url": "https://example.invalid/backend/api/v1/tickets/10/upload",
-                "json": false,
+                "returnFullResponse": true,
                 "headers": { "apiToken": "Bearer TOKEN-123" }
             },
             "reply": {

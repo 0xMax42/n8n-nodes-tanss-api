@@ -18,7 +18,7 @@
             "expect": {
                 "method": "GET",
                 "url": "https://example.invalid/backend/api/v1/tickets/10/documents/5",
-                "json": true,
+                "returnFullResponse": true,
                 "headers": {
                     "Content-Type": "application/json",
                     "apiToken": "Bearer TOKEN-123"

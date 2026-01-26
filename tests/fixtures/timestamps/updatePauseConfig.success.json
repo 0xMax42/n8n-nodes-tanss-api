@@ -45,6 +45,7 @@
                 "method": "PUT",
                 "url": "https://example.invalid/backend/api/v1/timestamps/pauseConfigs/1",
                 "json": true,
+                "returnFullResponse": true,
                 "headers": {
                     "Content-Type": "application/json",
                     "apiToken": "Bearer TOKEN-123"

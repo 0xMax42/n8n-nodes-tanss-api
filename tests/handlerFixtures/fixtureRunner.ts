@@ -78,7 +78,6 @@ function buildHttpRequestMock(queue: HttpMock[]) {
 		if ('returnFullResponse' in expected) delete expected.returnFullResponse;
 		try {
 			const actual = { ...(options as Record<string, unknown>) } as Record<string, unknown>;
-			if ('returnFullResponse' in actual) delete actual.returnFullResponse;
 			matchSubset(expected, actual);
 		} catch (e) {
 			throw new Error(

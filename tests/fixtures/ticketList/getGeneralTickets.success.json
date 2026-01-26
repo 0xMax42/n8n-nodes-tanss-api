@@ -39,7 +39,7 @@
             "expect": {
                 "method": "GET",
                 "url": "https://example.invalid/backend/api/v1/tickets/general",
-                "json": true,
+                "returnFullResponse": true,
                 "headers": {
                     "apiToken": "Bearer TOKEN-123"
                 }

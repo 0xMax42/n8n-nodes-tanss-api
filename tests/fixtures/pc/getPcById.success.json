@@ -42,7 +42,6 @@
             "expect": {
                 "method": "GET",
                 "url": "https://example.invalid/backend/api/v1/pcs/10",
-                "json": true,
                 "headers": {
                     "apiToken": "Bearer TOKEN-123"
                 }

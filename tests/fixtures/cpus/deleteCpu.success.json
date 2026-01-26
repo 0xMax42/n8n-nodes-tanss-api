@@ -39,7 +39,7 @@
             "expect": {
                 "method": "DELETE",
                 "url": "https://example.invalid/backend/api/v1/cpus/7",
-                "json": true,
+                "returnFullResponse": true,
                 "headers": {
                     "apiToken": "Bearer TOKEN-123"
                 }

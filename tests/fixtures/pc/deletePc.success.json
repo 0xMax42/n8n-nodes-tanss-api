@@ -42,10 +42,10 @@
             "expect": {
                 "method": "DELETE",
                 "url": "https://example.invalid/backend/api/v1/pcs/99",
-                "json": true,
                 "headers": {
                     "apiToken": "Bearer TOKEN-123"
-                }
+                },
+                "returnFullResponse": true
             },
             "reply": {
                 "statusCode": 204,

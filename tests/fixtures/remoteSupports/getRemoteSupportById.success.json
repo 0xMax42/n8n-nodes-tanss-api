@@ -14,7 +14,7 @@
             "expect": {
                 "method": "GET",
                 "url": "https://example.invalid/backend/api/remoteSupports/v1/5",
-                "json": true,
+                "returnFullResponse": true,
                 "headers": { "apiToken": "Bearer TOKEN-123" }
             },
             "reply": {
