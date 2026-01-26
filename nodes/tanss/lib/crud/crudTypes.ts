@@ -1,7 +1,7 @@
 import { IExecuteFunctions } from 'n8n-workflow';
 import { NodeParameterGuard } from '../guards';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { JsonBodyStrategy, RequestBodyStrategy } from './RequestBodyStrategys';
+import { JsonBodyStrategy, IRequestBodyStrategy } from './IRequestBodyStrategy';
 
 /**
  * HTTP methods used by the node.
@@ -77,7 +77,7 @@ export interface CrudOperation<T extends CrudFieldMap = CrudFieldMap> {
 	 * An optional strategy to build the request body for the operation.
 	 * Defaults to {@link JsonBodyStrategy} if not provided.
 	 */
-	requestBodyStrategy?: RequestBodyStrategy;
+	requestBodyStrategy?: IRequestBodyStrategy;
 }
 
 /**

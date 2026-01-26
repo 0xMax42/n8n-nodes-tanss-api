@@ -9,7 +9,7 @@ import { generateAPIEndpointURL, getNodeParameter } from '../utils';
 import { addAuthorizationHeader, obtainToken } from '../token/token';
 import { httpRequest } from '../httpRequest/httpRequest';
 import { nonEmptyStringGuard } from '../guards';
-import { JsonBodyStrategy } from './RequestBodyStrategys';
+import { JsonBodyStrategy } from './IRequestBodyStrategy';
 
 /**
  * Creates a CRUD handler function for n8n nodes based on the provided configuration.

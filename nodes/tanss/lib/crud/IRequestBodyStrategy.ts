@@ -4,7 +4,7 @@ import { CreateRecordFromFields, CrudOperation } from './crudTypes';
 /**
  * Strategy interface for building request bodies for CRUD operations.
  */
-export interface RequestBodyStrategy {
+export interface IRequestBodyStrategy {
 	build(
 		ctx: IExecuteFunctions,
 		itemIndex: number,
@@ -21,7 +21,7 @@ export interface RequestBodyStrategy {
  * Default JSON body strategy implementation.
  * Constructs a JSON body from the 'body' fields of the CRUD operation.
  */
-export const JsonBodyStrategy: RequestBodyStrategy = {
+export const JsonBodyStrategy: IRequestBodyStrategy = {
 	async build(ctx, i, config, createRecordFromFields) {
 		const body = createRecordFromFields.call(ctx, config.fields, i, 'body');
 
