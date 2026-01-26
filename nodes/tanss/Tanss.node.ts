@@ -7,6 +7,8 @@ import {
 import {
 	availabilityFields,
 	availabilityOperations,
+	callbackFields,
+	callbackOperations,
 	callsFields,
 	callsOperations,
 	callsUserFields,
@@ -90,6 +92,7 @@ export class Tanss implements INodeType {
 					{ name: 'Availability', value: 'availability' },
 					{ name: 'Call', value: 'calls' },
 					{ name: 'Call User', value: 'callsuser' },
+					{ name: 'Callback', value: 'callback' },
 					{ name: 'CPU', value: 'cpus' },
 					{ name: 'Employee', value: 'employees' },
 					{ name: 'HDD Type', value: 'hddTypes' },
@@ -143,6 +146,8 @@ export class Tanss implements INodeType {
 			...remoteSupportsFields,
 			...ipsOperations,
 			...ipsFields,
+			...callbackOperations,
+			...callbackFields,
 		],
 	};
 
