@@ -18,6 +18,7 @@ import {
 	employeesFields,
 	employeesOperations,
 	handleAvailability,
+	handleCallback,
 	handleCalls,
 	handleCallsUser,
 	handleCpu,
@@ -177,6 +178,7 @@ export class Tanss implements INodeType {
 			else if (resource === 'operatingSystems')
 				responseData = await handleOperatingSystems.call(this, i);
 			else if (resource === 'ips') responseData = await handleIps.call(this, i);
+			else if (resource === 'callback') responseData = await handleCallback.call(this, i);
 			else
 				throw new NodeOperationError(this.getNode(), `Unknown resource: ${resource}`, {
 					itemIndex: i,
