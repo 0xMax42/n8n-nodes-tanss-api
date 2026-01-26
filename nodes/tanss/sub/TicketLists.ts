@@ -14,7 +14,7 @@ export const ticketListOperations: INodeProperties[] = [
 	{
 		displayName: 'Operation',
 		name: 'operation',
-		type: 'options' as const,
+		type: 'options',
 		noDataExpression: true,
 		displayOptions: {
 			show: {
@@ -91,7 +91,7 @@ export const ticketListFields: INodeProperties[] = [
 	{
 		displayName: 'Company ID',
 		name: 'companyId',
-		type: 'number' as const,
+		type: 'number',
 		displayOptions: {
 			show: {
 				resource: ['ticketList'],
@@ -104,7 +104,7 @@ export const ticketListFields: INodeProperties[] = [
 	{
 		displayName: 'Custom Ticket Query',
 		name: 'customTicketQuery',
-		type: 'collection' as const,
+		type: 'collection',
 		displayOptions: {
 			show: {
 				resource: ['ticketList'],
@@ -117,36 +117,36 @@ export const ticketListFields: INodeProperties[] = [
 			{
 				displayName: 'Companies',
 				name: 'companies',
-				type: 'string' as const,
+				type: 'string',
 				typeOptions: { multipleValues: true },
 				default: [],
 			},
 			{
 				displayName: 'Departments',
 				name: 'departments',
-				type: 'string' as const,
+				type: 'string',
 				typeOptions: { multipleValues: true },
 				default: [],
 			},
 			{
 				displayName: 'IDs',
 				name: 'ids',
-				type: 'string' as const,
+				type: 'string',
 				typeOptions: { multipleValues: true },
 				default: [],
 			},
 			{
 				displayName: 'Include Done Tickets',
 				name: 'includeDoneTickets',
-				type: 'boolean' as const,
+				type: 'boolean',
 				default: false,
 			},
-			{ displayName: 'Is Repair', name: 'isRepair', type: 'boolean' as const, default: false },
-			{ displayName: 'Items Per Page', name: 'itemsPerPage', type: 'number' as const, default: 20 },
+			{ displayName: 'Is Repair', name: 'isRepair', type: 'boolean', default: false },
+			{ displayName: 'Items Per Page', name: 'itemsPerPage', type: 'number', default: 20 },
 			{
 				displayName: 'Modified Within Timeframe',
 				name: 'modifiedWithinTimeframe',
-				type: 'fixedCollection' as const,
+				type: 'fixedCollection',
 				typeOptions: { multipleValues: false },
 				default: {},
 				options: [
@@ -157,14 +157,14 @@ export const ticketListFields: INodeProperties[] = [
 							{
 								displayName: 'From',
 								name: 'from',
-								type: 'number' as const,
+								type: 'number',
 								default: 0,
 								description: 'Unix timestamp of the "from" date',
 							},
 							{
 								displayName: 'To',
 								name: 'to',
-								type: 'number' as const,
+								type: 'number',
 								default: 0,
 								description: 'Unix timestamp of the "to" date',
 							},
@@ -175,32 +175,32 @@ export const ticketListFields: INodeProperties[] = [
 			{
 				displayName: 'Not Assigned To Employees',
 				name: 'notAssignedToEmployees',
-				type: 'multiOptions' as const,
+				type: 'multiOptions',
 				typeOptions: { multipleValues: true },
 				default: [],
 			},
-			{ displayName: 'Page', name: 'page', type: 'number' as const, default: 1 },
-			{ displayName: 'Phase ID', name: 'phaseId', type: 'number' as const, default: 0 },
-			{ displayName: 'Project ID', name: 'projectId', type: 'number' as const, default: 0 },
-			{ displayName: 'Remitter ID', name: 'remitterId', type: 'number' as const, default: 0 },
+			{ displayName: 'Page', name: 'page', type: 'number', default: 1 },
+			{ displayName: 'Phase ID', name: 'phaseId', type: 'number', default: 0 },
+			{ displayName: 'Project ID', name: 'projectId', type: 'number', default: 0 },
+			{ displayName: 'Remitter ID', name: 'remitterId', type: 'number', default: 0 },
 			{
 				displayName: 'Staff',
 				name: 'staff',
-				type: 'string' as const,
+				type: 'string',
 				typeOptions: { multipleValues: true },
 				default: [],
 			},
 			{
 				displayName: 'States',
 				name: 'states',
-				type: 'multiOptions' as const,
+				type: 'multiOptions',
 				typeOptions: { multipleValues: true },
 				default: [],
 			},
 			{
 				displayName: 'Types',
 				name: 'types',
-				type: 'multiOptions' as const,
+				type: 'multiOptions',
 				typeOptions: { multipleValues: true },
 				default: [],
 			},

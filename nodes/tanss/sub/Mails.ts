@@ -12,7 +12,7 @@ export const mailsOperations: INodeProperties[] = [
 	{
 		displayName: 'Operation',
 		name: 'operation',
-		type: 'options' as const,
+		type: 'options',
 		noDataExpression: true,
 		displayOptions: { show: { resource: ['mails'] } },
 		options: [
@@ -31,7 +31,7 @@ export const mailsFields: INodeProperties[] = [
 	{
 		displayName: 'Receiver',
 		name: 'receiver',
-		type: 'string' as const,
+		type: 'string',
 		required: true,
 		default: '',
 		description: 'Receiver of the test message',
@@ -40,26 +40,17 @@ export const mailsFields: INodeProperties[] = [
 	{
 		displayName: 'Email Settings',
 		name: 'mailObject',
-		type: 'collection' as const,
+		type: 'collection',
 		placeholder: 'Add Field',
 		displayOptions: { show: { resource: ['mails'], operation: ['testSmtp'] } },
 		default: {},
 		options: [
-			{ displayName: 'SMTP Address', name: 'smtpAddress', type: 'string' as const, default: '' },
-			{ displayName: 'SMTP Host', name: 'smtpHost', type: 'string' as const, default: '' },
-			{ displayName: 'SMTP User', name: 'smtpUser', type: 'string' as const, default: '' },
-			{
-				displayName: 'SMTP Password',
-				name: 'smtpPassword',
-				type: 'string' as const,
-				default: '',
-				typeOptions: { password: true },
-			},
-			{ displayName: 'SMTP Auth', name: 'smtpAuth', type: 'boolean' as const, default: false },
+			{ displayName: 'SMTP Address', name: 'smtpAddress', type: 'string', default: '' },
+			{ displayName: 'SMTP Auth', name: 'smtpAuth', type: 'boolean', default: false },
 			{
 				displayName: 'SMTP Encryption Type',
 				name: 'smtpEncryptionType',
-				type: 'options' as const,
+				type: 'options',
 				default: 'NONE',
 				options: [
 					{ name: 'NONE', value: 'NONE' },
@@ -67,12 +58,21 @@ export const mailsFields: INodeProperties[] = [
 					{ name: 'TLS', value: 'TLS' },
 				],
 			},
+			{ displayName: 'SMTP Host', name: 'smtpHost', type: 'string', default: '' },
+			{
+				displayName: 'SMTP Password',
+				name: 'smtpPassword',
+				type: 'string',
+				default: '',
+				typeOptions: { password: true },
+			},
 			{
 				displayName: 'SMTP Sender Name',
 				name: 'smtpSenderName',
-				type: 'string' as const,
+				type: 'string',
 				default: '',
 			},
+			{ displayName: 'SMTP User', name: 'smtpUser', type: 'string', default: '' },
 		],
 	},
 ];

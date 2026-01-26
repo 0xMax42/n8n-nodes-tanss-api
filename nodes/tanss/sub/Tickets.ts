@@ -12,7 +12,7 @@ export const ticketOperations: INodeProperties[] = [
 	{
 		displayName: 'Operation',
 		name: 'operation',
-		type: 'options' as const,
+		type: 'options',
 		noDataExpression: true,
 		displayOptions: {
 			show: {
@@ -71,7 +71,7 @@ export const ticketFields: INodeProperties[] = [
 	{
 		displayName: 'Ticket ID',
 		name: 'ticketId',
-		type: 'number' as const,
+		type: 'number',
 		displayOptions: {
 			show: {
 				resource: ['ticket'],
@@ -91,7 +91,7 @@ export const ticketFields: INodeProperties[] = [
 	{
 		displayName: 'Target Ticket ID',
 		name: 'targetTicketId',
-		type: 'number' as const,
+		type: 'number',
 		displayOptions: {
 			show: {
 				resource: ['ticket'],
@@ -104,7 +104,7 @@ export const ticketFields: INodeProperties[] = [
 	{
 		displayName: 'Comment Title',
 		name: 'commentTitle',
-		type: 'string' as const,
+		type: 'string',
 		displayOptions: {
 			show: {
 				resource: ['ticket'],
@@ -117,7 +117,7 @@ export const ticketFields: INodeProperties[] = [
 	{
 		displayName: 'Comment Content',
 		name: 'commentContent',
-		type: 'string' as const,
+		type: 'string',
 		displayOptions: {
 			show: {
 				resource: ['ticket'],
@@ -130,7 +130,7 @@ export const ticketFields: INodeProperties[] = [
 	{
 		displayName: 'Internal',
 		name: 'internal',
-		type: 'boolean' as const,
+		type: 'boolean',
 		displayOptions: {
 			show: {
 				resource: ['ticket'],
@@ -143,7 +143,7 @@ export const ticketFields: INodeProperties[] = [
 	{
 		displayName: 'Update Fields',
 		name: 'updateFields',
-		type: 'collection' as const,
+		type: 'collection',
 		placeholder: 'Add Field',
 		displayOptions: {
 			show: {
@@ -156,19 +156,19 @@ export const ticketFields: INodeProperties[] = [
 			{
 				displayName: 'Assigned to Department ID',
 				name: 'assignedToDepartmentId',
-				type: 'number' as const,
+				type: 'number',
 				default: 0,
 			},
 			{
 				displayName: 'Assigned to Employee ID',
 				name: 'assignedToEmployeeId',
-				type: 'number' as const,
+				type: 'number',
 				default: 0,
 			},
 			{
 				displayName: 'Attention',
 				name: 'attention',
-				type: 'options' as const,
+				type: 'options',
 				options: [
 					{ name: 'No', value: 'NO' },
 					{ name: 'Yes', value: 'YES' },
@@ -177,26 +177,26 @@ export const ticketFields: INodeProperties[] = [
 				],
 				default: 'NO',
 			},
-			{ displayName: 'Company ID', name: 'companyId', type: 'number' as const, default: 0 },
-			{ displayName: 'Content', name: 'content', type: 'string' as const, default: '' },
-			{ displayName: 'Deadline Date', name: 'deadlineDate', type: 'number' as const, default: 0 },
-			{ displayName: 'Due Date', name: 'dueDate', type: 'number' as const, default: 0 },
+			{ displayName: 'Company ID', name: 'companyId', type: 'number', default: 0 },
+			{ displayName: 'Content', name: 'content', type: 'string', default: '' },
+			{ displayName: 'Deadline Date', name: 'deadlineDate', type: 'number', default: 0 },
+			{ displayName: 'Due Date', name: 'dueDate', type: 'number', default: 0 },
 			{
 				displayName: 'Estimated Minutes',
 				name: 'estimatedMinutes',
-				type: 'number' as const,
+				type: 'number',
 				default: 0,
 			},
 			{
 				displayName: 'External Ticket ID',
 				name: 'extTicketId',
-				type: 'string' as const,
+				type: 'string',
 				default: '',
 			},
 			{
 				displayName: 'Installation Fee',
 				name: 'installationFee',
-				type: 'options' as const,
+				type: 'options',
 				options: [
 					{ name: 'No', value: 'NO' },
 					{ name: 'Yes', value: 'YES' },
@@ -204,36 +204,36 @@ export const ticketFields: INodeProperties[] = [
 				],
 				default: 'NO',
 			},
-			{ displayName: 'Order Number', name: 'orderNumber', type: 'string' as const, default: '' },
-			{ displayName: 'Phase ID', name: 'phaseId', type: 'number' as const, default: 0 },
+			{ displayName: 'Order Number', name: 'orderNumber', type: 'string', default: '' },
+			{ displayName: 'Phase ID', name: 'phaseId', type: 'number', default: 0 },
 			{
 				displayName: 'Relationship Link ID',
 				name: 'relationshipLinkId',
-				type: 'number' as const,
+				type: 'number',
 				default: 0,
 			},
 			{
 				displayName: 'Relationship Link Type ID',
 				name: 'relationshipLinkTypeId',
-				type: 'number' as const,
+				type: 'number',
 				default: 0,
 			},
-			{ displayName: 'Remitter ID', name: 'remitterId', type: 'number' as const, default: 0 },
+			{ displayName: 'Remitter ID', name: 'remitterId', type: 'number', default: 0 },
 			{
 				displayName: 'Resubmission Date',
 				name: 'resubmissionDate',
-				type: 'number' as const,
+				type: 'number',
 				default: 0,
 			},
-			{ displayName: 'Status ID', name: 'statusId', type: 'number' as const, default: 0 },
-			{ displayName: 'Title', name: 'title', type: 'string' as const, default: '' },
-			{ displayName: 'Type ID', name: 'typeId', type: 'number' as const, default: 0 },
+			{ displayName: 'Status ID', name: 'statusId', type: 'number', default: 0 },
+			{ displayName: 'Title', name: 'title', type: 'string', default: '' },
+			{ displayName: 'Type ID', name: 'typeId', type: 'number', default: 0 },
 		],
 	},
 	{
 		displayName: 'Create Ticket Fields',
 		name: 'createTicketFields',
-		type: 'collection' as const,
+		type: 'collection',
 		placeholder: 'Add Field',
 		displayOptions: {
 			show: {
@@ -246,19 +246,19 @@ export const ticketFields: INodeProperties[] = [
 			{
 				displayName: 'Assigned to Department ID',
 				name: 'assignedToDepartmentId',
-				type: 'number' as const,
+				type: 'number',
 				default: 0,
 			},
 			{
 				displayName: 'Assigned to Employee ID',
 				name: 'assignedToEmployeeId',
-				type: 'number' as const,
+				type: 'number',
 				default: 0,
 			},
 			{
 				displayName: 'Attention',
 				name: 'attention',
-				type: 'options' as const,
+				type: 'options',
 				options: [
 					{ name: 'No', value: 'NO' },
 					{ name: 'Yes', value: 'YES' },
@@ -270,7 +270,7 @@ export const ticketFields: INodeProperties[] = [
 			{
 				displayName: 'Clearance Mode',
 				name: 'clearanceMode',
-				type: 'options' as const,
+				type: 'options',
 				options: [
 					{ name: 'Default', value: 'DEFAULT' },
 					{ name: "Don't Clear Supports", value: 'DONT_CLEAR_SUPPORTS' },
@@ -278,31 +278,31 @@ export const ticketFields: INodeProperties[] = [
 				],
 				default: 'DEFAULT',
 			},
-			{ displayName: 'Company ID', name: 'companyId', type: 'number' as const, default: 0 },
-			{ displayName: 'Content', name: 'content', type: 'string' as const, default: '' },
+			{ displayName: 'Company ID', name: 'companyId', type: 'number', default: 0 },
+			{ displayName: 'Content', name: 'content', type: 'string', default: '' },
 			{
 				displayName: 'Deadline Date (Timestamp)',
 				name: 'deadlineDate',
-				type: 'number' as const,
+				type: 'number',
 				default: 0,
 			},
-			{ displayName: 'Due Date (Timestamp)', name: 'dueDate', type: 'number' as const, default: 0 },
+			{ displayName: 'Due Date (Timestamp)', name: 'dueDate', type: 'number', default: 0 },
 			{
 				displayName: 'Estimated Minutes',
 				name: 'estimatedMinutes',
-				type: 'number' as const,
+				type: 'number',
 				default: 0,
 			},
 			{
 				displayName: 'External Ticket ID',
 				name: 'extTicketId',
-				type: 'string' as const,
+				type: 'string',
 				default: '',
 			},
 			{
 				displayName: 'Installation Fee',
 				name: 'installationFee',
-				type: 'options' as const,
+				type: 'options',
 				options: [
 					{ name: 'No', value: 'NO' },
 					{ name: 'Yes', value: 'YES' },
@@ -313,13 +313,13 @@ export const ticketFields: INodeProperties[] = [
 			{
 				displayName: 'Installation Fee Amount',
 				name: 'installationFeeAmount',
-				type: 'number' as const,
+				type: 'number',
 				default: 0,
 			},
 			{
 				displayName: 'Installation Fee Drive Mode',
 				name: 'installationFeeDriveMode',
-				type: 'options' as const,
+				type: 'options',
 				options: [
 					{ name: 'None (Default Behavior)', value: 'NONE' },
 					{ name: 'Drive Included', value: 'DRIVE_INCLUDED' },
@@ -327,18 +327,18 @@ export const ticketFields: INodeProperties[] = [
 				],
 				default: 'NONE',
 			},
-			{ displayName: 'Link ID', name: 'linkId', type: 'number' as const, default: 0 },
-			{ displayName: 'Link Type ID', name: 'linkTypeId', type: 'number' as const, default: 0 },
+			{ displayName: 'Link ID', name: 'linkId', type: 'number', default: 0 },
+			{ displayName: 'Link Type ID', name: 'linkTypeId', type: 'number', default: 0 },
 			{
 				displayName: 'Local Ticket Admin Employee ID',
 				name: 'localTicketAdminEmployeeId',
-				type: 'number' as const,
+				type: 'number',
 				default: 0,
 			},
 			{
 				displayName: 'Local Ticket Admin Flag',
 				name: 'localTicketAdminFlag',
-				type: 'options' as const,
+				type: 'options',
 				options: [
 					{ name: 'None', value: 'NONE' },
 					{ name: 'Local Admin', value: 'LOCAL_ADMIN' },
@@ -346,73 +346,73 @@ export const ticketFields: INodeProperties[] = [
 				],
 				default: 'NONE',
 			},
-			{ displayName: 'Order By ID', name: 'orderById', type: 'number' as const, default: 0 },
-			{ displayName: 'Order Number', name: 'orderNumber', type: 'string' as const, default: '' },
-			{ displayName: 'Phase ID', name: 'phaseId', type: 'number' as const, default: 0 },
-			{ displayName: 'Project', name: 'project', type: 'boolean' as const, default: false },
-			{ displayName: 'Project ID', name: 'projectId', type: 'number' as const, default: 0 },
+			{ displayName: 'Order By ID', name: 'orderById', type: 'number', default: 0 },
+			{ displayName: 'Order Number', name: 'orderNumber', type: 'string', default: '' },
+			{ displayName: 'Phase ID', name: 'phaseId', type: 'number', default: 0 },
+			{ displayName: 'Project', name: 'project', type: 'boolean', default: false },
+			{ displayName: 'Project ID', name: 'projectId', type: 'number', default: 0 },
 			{
 				displayName: 'Relationship Link ID',
 				name: 'relationshipLinkId',
-				type: 'number' as const,
+				type: 'number',
 				default: 0,
 			},
 			{
 				displayName: 'Relationship Link Type ID',
 				name: 'relationshipLinkTypeId',
-				type: 'number' as const,
+				type: 'number',
 				default: 0,
 			},
 			{
 				displayName: 'Reminder (Timestamp)',
 				name: 'reminder',
-				type: 'number' as const,
+				type: 'number',
 				default: 0,
 			},
-			{ displayName: 'Remitter ID', name: 'remitterId', type: 'number' as const, default: 0 },
-			{ displayName: 'Repair', name: 'repair', type: 'boolean' as const, default: false },
+			{ displayName: 'Remitter ID', name: 'remitterId', type: 'number', default: 0 },
+			{ displayName: 'Repair', name: 'repair', type: 'boolean', default: false },
 			{
 				displayName: 'Resubmission Date (Timestamp)',
 				name: 'resubmissionDate',
-				type: 'number' as const,
+				type: 'number',
 				default: 0,
 			},
 			{
 				displayName: 'Resubmission Text',
 				name: 'resubmissionText',
-				type: 'string' as const,
+				type: 'string',
 				default: '',
 			},
 			{
 				displayName: 'Separate Billing',
 				name: 'separateBilling',
-				type: 'boolean' as const,
+				type: 'boolean',
 				default: false,
 			},
 			{
 				displayName: 'Service Cap Amount',
 				name: 'serviceCapAmount',
-				type: 'number' as const,
+				type: 'number',
 				default: 0,
 			},
-			{ displayName: 'Status ID', name: 'statusId', type: 'number' as const, default: 0 },
+			{ displayName: 'Status ID', name: 'statusId', type: 'number', default: 0 },
 			{
 				displayName: 'Sub Tickets',
 				name: 'subTickets',
-				type: 'json' as const,
+				type: 'json',
 				default: '',
 				description: 'An array of objects to immediately assign sub-tickets if creating a project',
 			},
 			{
 				displayName: 'Tags',
 				name: 'tags',
-				type: 'json' as const,
+				type: 'json',
 				default: '',
 				description:
 					'An array of objects with tag assignments which will be assigned to the ticket',
 			},
-			{ displayName: 'Title', name: 'title', type: 'string' as const, default: '' },
-			{ displayName: 'Type ID', name: 'typeId', type: 'number' as const, default: 0 },
+			{ displayName: 'Title', name: 'title', type: 'string', default: '' },
+			{ displayName: 'Type ID', name: 'typeId', type: 'number', default: 0 },
 		],
 	},
 ];

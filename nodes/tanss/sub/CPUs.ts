@@ -12,7 +12,7 @@ export const cpuOperations: INodeProperties[] = [
 	{
 		displayName: 'Operation',
 		name: 'operation',
-		type: 'options' as const,
+		type: 'options',
 		noDataExpression: true,
 		displayOptions: { show: { resource: ['cpus'] } },
 		options: [
@@ -32,7 +32,7 @@ export const cpuOperations: INodeProperties[] = [
 				name: 'Get All CPUs',
 				value: 'getAllCpus',
 				description: 'Gets a list of all CPUs',
-				action: 'Get all CPUs',
+				action: 'Get all CPU records',
 			},
 			{
 				name: 'Get CPU',
@@ -55,7 +55,7 @@ export const cpuFields: INodeProperties[] = [
 	{
 		displayName: 'CPU ID',
 		name: 'cpuId',
-		type: 'number' as const,
+		type: 'number',
 		default: 0,
 		description: 'ID of the CPU',
 		displayOptions: {
@@ -63,27 +63,27 @@ export const cpuFields: INodeProperties[] = [
 		},
 	},
 	{
-		displayName: 'Create CPU Fields',
+		displayName: 'Create Fields',
 		name: 'createCpuFields',
-		type: 'collection' as const,
+		type: 'collection',
 		placeholder: 'Add Field',
 		default: {},
 		displayOptions: { show: { resource: ['cpus'], operation: ['createCpu'] } },
 		options: [
-			{ displayName: 'ID', name: 'id', type: 'number' as const, default: 0 },
-			{ displayName: 'Name', name: 'name', type: 'string' as const, default: '' },
+			{ displayName: 'ID', name: 'id', type: 'number', default: 0 },
+			{ displayName: 'Name', name: 'name', type: 'string', default: '' },
 		],
 	},
 	{
-		displayName: 'Update CPU Fields',
+		displayName: 'Update Fields',
 		name: 'updateCpuFields',
-		type: 'collection' as const,
+		type: 'collection',
 		placeholder: 'Add Field',
 		default: {},
 		displayOptions: { show: { resource: ['cpus'], operation: ['updateCpu'] } },
 		options: [
-			{ displayName: 'ID', name: 'id', type: 'number' as const, default: 0 },
-			{ displayName: 'Name', name: 'name', type: 'string' as const, default: '' },
+			{ displayName: 'ID', name: 'id', type: 'number', default: 0 },
+			{ displayName: 'Name', name: 'name', type: 'string', default: '' },
 		],
 	},
 ];

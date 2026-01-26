@@ -18,7 +18,7 @@ export const timestampOperations: INodeProperties[] = [
 	{
 		displayName: 'Operation',
 		name: 'operation',
-		type: 'options' as const,
+		type: 'options',
 		noDataExpression: true,
 		displayOptions: {
 			show: {
@@ -27,10 +27,52 @@ export const timestampOperations: INodeProperties[] = [
 		},
 		options: [
 			{
-				name: 'Get Timestamps',
-				value: 'getTimestamps',
-				description: 'Gets a list of timestamps from a given period',
-				action: 'Get timestamps',
+				name: 'Create Day Closing(s)',
+				value: 'createDayClosing',
+				description: 'Creates one or more day closings',
+				action: 'Create one or more day closings',
+			},
+			{
+				name: 'Create Day Closings Till Date',
+				value: 'createDayClosingsTillDate',
+				description: 'Creates missing dayClosings for given employees till a date',
+				action: 'Create day closings till date',
+			},
+			{
+				name: 'Create Pause Config',
+				value: 'createPauseConfig',
+				description: 'Creates a pause config',
+				action: 'Create pause config',
+			},
+			{
+				name: 'Create Timestamp',
+				value: 'createTimestamp',
+				description: 'Writes a timestamp into the database',
+				action: 'Create timestamp',
+			},
+			{
+				name: 'Delete Day Closing(s)',
+				value: 'deleteDayClosing',
+				description: 'Deletes one or more day closings (undo)',
+				action: 'Delete one or more day closings',
+			},
+			{
+				name: 'Delete Pause Config',
+				value: 'deletePauseConfig',
+				description: 'Deletes a pause config',
+				action: 'Delete pause config',
+			},
+			{
+				name: 'Get Day Closing Till Date',
+				value: 'getDayClosingTillDate',
+				description: 'Gets all infos about last dayclosings for employees',
+				action: 'Get day closing till date',
+			},
+			{
+				name: 'Get Pause Configs',
+				value: 'getPauseConfigs',
+				description: 'Gets a list of all pause configs',
+				action: 'Get pause configs',
 			},
 			{
 				name: 'Get Timestamp Info',
@@ -45,16 +87,10 @@ export const timestampOperations: INodeProperties[] = [
 				action: 'Get timestamp statistics',
 			},
 			{
-				name: 'Create Timestamp',
-				value: 'createTimestamp',
-				description: 'Writes a timestamp into the database',
-				action: 'Create timestamp',
-			},
-			{
-				name: 'Update Timestamp',
-				value: 'updateTimestamp',
-				description: 'Edits a single timestamp',
-				action: 'Update timestamp',
+				name: 'Get Timestamps',
+				value: 'getTimestamps',
+				description: 'Gets a list of timestamps from a given period',
+				action: 'Get timestamps',
 			},
 			{
 				name: 'Save Day Timestamps',
@@ -63,46 +99,10 @@ export const timestampOperations: INodeProperties[] = [
 				action: 'Save day timestamps',
 			},
 			{
-				name: 'Create Day Closing(s)',
-				value: 'createDayClosing',
-				description: 'Creates one or more day closings',
-				action: 'Create day closing(s)',
-			},
-			{
-				name: 'Delete Day Closing(s)',
-				value: 'deleteDayClosing',
-				description: 'Deletes one or more day closings (undo)',
-				action: 'Delete day closing(s)',
-			},
-			{
-				name: 'Get Day Closing Till Date',
-				value: 'getDayClosingTillDate',
-				description: 'Gets all infos about last dayclosings for employees',
-				action: 'Get day closing till date',
-			},
-			{
-				name: 'Create Day Closings Till Date',
-				value: 'createDayClosingsTillDate',
-				description: 'Creates missing dayClosings for given employees till a date',
-				action: 'Create day closings till date',
-			},
-			{
 				name: 'Set Initial Balance',
 				value: 'setInitialBalance',
 				description: 'Sets the initial balance for an employee',
 				action: 'Set initial balance',
-			},
-			{
-				name: 'Get Pause Configs',
-				value: 'getPauseConfigs',
-				description: 'Gets a list of all pause configs',
-				action: 'Get pause configs',
-			},
-			{
-				name: 'Create Pause Config',
-				value: 'createPauseConfig',
-				description: 'Creates a pause config',
-				action: 'Create pause config',
 			},
 			{
 				name: 'Update Pause Config',
@@ -111,10 +111,10 @@ export const timestampOperations: INodeProperties[] = [
 				action: 'Update pause config',
 			},
 			{
-				name: 'Delete Pause Config',
-				value: 'deletePauseConfig',
-				description: 'Deletes a pause config',
-				action: 'Delete pause config',
+				name: 'Update Timestamp',
+				value: 'updateTimestamp',
+				description: 'Edits a single timestamp',
+				action: 'Update timestamp',
 			},
 		],
 		default: 'getTimestamps',
@@ -126,7 +126,7 @@ export const timestampFields: INodeProperties[] = [
 	{
 		displayName: 'From (Timestamp)',
 		name: 'from',
-		type: 'number' as const,
+		type: 'number',
 		default: 0,
 		description:
 			'Timestamp of start of period. If omitted, beginning of current day is used by the API.',
@@ -140,7 +140,7 @@ export const timestampFields: INodeProperties[] = [
 	{
 		displayName: 'Till (Timestamp)',
 		name: 'till',
-		type: 'number' as const,
+		type: 'number',
 		default: 0,
 		description: 'Timestamp of end of period. If omitted, end of current day is used by the API.',
 		displayOptions: {
@@ -153,7 +153,7 @@ export const timestampFields: INodeProperties[] = [
 	{
 		displayName: 'Employee IDs (Comma Separated)',
 		name: 'employeeIds',
-		type: 'string' as const,
+		type: 'string',
 		default: '',
 		description:
 			'Comma-separated list of employee IDs for which statistics shall be generated (only for statistics operation)',
@@ -164,15 +164,15 @@ export const timestampFields: INodeProperties[] = [
 	{
 		displayName: 'Auto Pause',
 		name: 'autoPause',
-		type: 'boolean' as const,
+		type: 'boolean',
 		default: false,
-		description: 'If true, a pause will automatically be inserted if minimum pause is not met',
+		description: 'Whether a pause should be automatically inserted if minimum pause is not met',
 		displayOptions: { show: { resource: ['timestamps'], operation: ['createTimestamp'] } },
 	},
 	{
 		displayName: 'Employee ID',
 		name: 'employeeId',
-		type: 'number' as const,
+		type: 'number',
 		default: 0,
 		description: 'ID of the employee',
 		displayOptions: {
@@ -182,7 +182,7 @@ export const timestampFields: INodeProperties[] = [
 	{
 		displayName: 'Date (Timestamp)',
 		name: 'date',
-		type: 'number' as const,
+		type: 'number',
 		default: 0,
 		description: 'Timestamp (integer) for the timestamp date',
 		displayOptions: {
@@ -192,7 +192,7 @@ export const timestampFields: INodeProperties[] = [
 	{
 		displayName: 'State',
 		name: 'state',
-		type: 'options' as const,
+		type: 'options',
 		options: [
 			{ name: 'ON', value: 'ON' },
 			{ name: 'OFF', value: 'OFF' },
@@ -208,17 +208,17 @@ export const timestampFields: INodeProperties[] = [
 	{
 		displayName: 'Type',
 		name: 'type',
-		type: 'options' as const,
+		type: 'options',
 		options: [
-			{ name: 'WORK', value: 'WORK' },
-			{ name: 'INHOUSE', value: 'INHOUSE' },
-			{ name: 'ERRAND', value: 'ERRAND' },
-			{ name: 'VACATION', value: 'VACATION' },
-			{ name: 'ILLNESS', value: 'ILLNESS' },
 			{ name: 'ABSENCE_PAID', value: 'ABSENCE_PAID' },
 			{ name: 'ABSENCE_UNPAID', value: 'ABSENCE_UNPAID' },
-			{ name: 'OVERTIME', value: 'OVERTIME' },
 			{ name: 'DOCUMENTED_SUPPORT', value: 'DOCUMENTED_SUPPORT' },
+			{ name: 'ERRAND', value: 'ERRAND' },
+			{ name: 'ILLNESS', value: 'ILLNESS' },
+			{ name: 'INHOUSE', value: 'INHOUSE' },
+			{ name: 'OVERTIME', value: 'OVERTIME' },
+			{ name: 'VACATION', value: 'VACATION' },
+			{ name: 'WORK', value: 'WORK' },
 		],
 		default: 'WORK',
 		description: 'Determines the type for the timestamp',
@@ -231,7 +231,7 @@ export const timestampFields: INodeProperties[] = [
 	{
 		displayName: 'Timestamp ID',
 		name: 'timestampId',
-		type: 'number' as const,
+		type: 'number',
 		default: 0,
 		description: 'ID of the timestamp to edit',
 		displayOptions: { show: { resource: ['timestamps'], operation: ['updateTimestamp'] } },
@@ -241,7 +241,7 @@ export const timestampFields: INodeProperties[] = [
 	{
 		displayName: 'Employee ID (Day)',
 		name: 'employeeIdDay',
-		type: 'number' as const,
+		type: 'number',
 		default: 0,
 		description: 'Employee ID for saving day timestamps (path param)',
 		displayOptions: { show: { resource: ['timestamps'], operation: ['saveDayTimestamps'] } },
@@ -249,7 +249,7 @@ export const timestampFields: INodeProperties[] = [
 	{
 		displayName: 'Day',
 		name: 'day',
-		type: 'string' as const,
+		type: 'string',
 		default: '',
 		description: 'Day in YYYY-mm-dd format',
 		displayOptions: { show: { resource: ['timestamps'], operation: ['saveDayTimestamps'] } },
@@ -257,7 +257,7 @@ export const timestampFields: INodeProperties[] = [
 	{
 		displayName: 'Timestamps JSON',
 		name: 'timestampsJson',
-		type: 'string' as const,
+		type: 'string',
 		default: '[]',
 		description: 'JSON array of timestamp objects to save for the day (see docs)',
 		displayOptions: { show: { resource: ['timestamps'], operation: ['saveDayTimestamps'] } },
@@ -267,7 +267,7 @@ export const timestampFields: INodeProperties[] = [
 	{
 		displayName: 'Day Closings JSON',
 		name: 'dayClosingsJson',
-		type: 'string' as const,
+		type: 'string',
 		default: '[]',
 		description:
 			'JSON array of day closing identifiers [{ "employeeId": 1, "date":"YYYY-mm-dd" }, ...]',
@@ -280,7 +280,7 @@ export const timestampFields: INodeProperties[] = [
 	{
 		displayName: 'Till Date',
 		name: 'tillDate',
-		type: 'string' as const,
+		type: 'string',
 		default: '',
 		description: 'End date (YYYY-MM-DD) to create dayClosings till',
 		displayOptions: {
@@ -290,7 +290,7 @@ export const timestampFields: INodeProperties[] = [
 	{
 		displayName: 'Employee IDs JSON',
 		name: 'employeeIdsJson',
-		type: 'string' as const,
+		type: 'string',
 		default: '[]',
 		description: 'JSON array of integers: employee IDs to create dayClosings for',
 		displayOptions: {
@@ -302,7 +302,7 @@ export const timestampFields: INodeProperties[] = [
 	{
 		displayName: 'Employee ID (Initial)',
 		name: 'employeeIdInitial',
-		type: 'number' as const,
+		type: 'number',
 		default: 0,
 		description: 'Employee ID (path param) for initial balance',
 		displayOptions: { show: { resource: ['timestamps'], operation: ['setInitialBalance'] } },
@@ -310,7 +310,7 @@ export const timestampFields: INodeProperties[] = [
 	{
 		displayName: 'Initial Balance (Minutes)',
 		name: 'initialBalance',
-		type: 'number' as const,
+		type: 'number',
 		default: 0,
 		description: 'Initial balance in minutes',
 		displayOptions: { show: { resource: ['timestamps'], operation: ['setInitialBalance'] } },
@@ -320,7 +320,7 @@ export const timestampFields: INodeProperties[] = [
 	{
 		displayName: 'Pause Config ID',
 		name: 'pauseConfigId',
-		type: 'number' as const,
+		type: 'number',
 		default: 0,
 		description: 'ID of the pause config (for update/delete)',
 		displayOptions: {
@@ -330,7 +330,7 @@ export const timestampFields: INodeProperties[] = [
 	{
 		displayName: 'From Minutes',
 		name: 'fromMinutes',
-		type: 'number' as const,
+		type: 'number',
 		default: 0,
 		description: 'Minutes needed to require a minimum pause',
 		displayOptions: {
@@ -340,7 +340,7 @@ export const timestampFields: INodeProperties[] = [
 	{
 		displayName: 'Minimum Pause (Minutes)',
 		name: 'minimumPause',
-		type: 'number' as const,
+		type: 'number',
 		default: 0,
 		description: 'Minimum pause in minutes',
 		displayOptions: {

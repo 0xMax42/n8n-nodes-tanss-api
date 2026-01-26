@@ -13,7 +13,7 @@ export const ticketStatesOperations: INodeProperties[] = [
 	{
 		displayName: 'Operation',
 		name: 'operation',
-		type: 'options' as const,
+		type: 'options',
 		noDataExpression: true,
 		displayOptions: {
 			show: {
@@ -55,7 +55,7 @@ export const ticketStatesFields: INodeProperties[] = [
 	{
 		displayName: 'Ticket State ID',
 		name: 'id',
-		type: 'number' as const,
+		type: 'number',
 		default: 0,
 		description: 'ID of the ticket state',
 		displayOptions: {
@@ -69,7 +69,7 @@ export const ticketStatesFields: INodeProperties[] = [
 	{
 		displayName: 'Name',
 		name: 'name',
-		type: 'string' as const,
+		type: 'string',
 		default: '',
 		required: true,
 		displayOptions: {
@@ -83,7 +83,7 @@ export const ticketStatesFields: INodeProperties[] = [
 	{
 		displayName: 'Image',
 		name: 'image',
-		type: 'string' as const,
+		type: 'string',
 		default: '',
 		displayOptions: {
 			show: {
@@ -96,7 +96,7 @@ export const ticketStatesFields: INodeProperties[] = [
 	{
 		displayName: 'Wait State',
 		name: 'waitState',
-		type: 'boolean' as const,
+		type: 'boolean',
 		default: false,
 		displayOptions: {
 			show: {
@@ -104,12 +104,12 @@ export const ticketStatesFields: INodeProperties[] = [
 				operation: ['createTicketState', 'updateTicketState'],
 			},
 		},
-		description: 'Determines if this state is a waiting state',
+		description: 'Whether this state is a wait state',
 	},
 	{
 		displayName: 'Rank',
 		name: 'rank',
-		type: 'number' as const,
+		type: 'number',
 		default: 0,
 		displayOptions: {
 			show: {
@@ -122,7 +122,7 @@ export const ticketStatesFields: INodeProperties[] = [
 	{
 		displayName: 'Active',
 		name: 'active',
-		type: 'boolean' as const,
+		type: 'boolean',
 		default: true,
 		displayOptions: {
 			show: {
@@ -130,7 +130,7 @@ export const ticketStatesFields: INodeProperties[] = [
 				operation: ['createTicketState', 'updateTicketState'],
 			},
 		},
-		description: "Is this an active state? (otherwise won't be shown)",
+		description: "Whether the ticket state is active (won't show in ticket state lists if not)",
 	},
 ];
 

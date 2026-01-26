@@ -14,7 +14,7 @@ export const manufacturersOperations: INodeProperties[] = [
 	{
 		displayName: 'Operation',
 		name: 'operation',
-		type: 'options' as const,
+		type: 'options',
 		noDataExpression: true,
 		displayOptions: { show: { resource: ['manufacturers'] } },
 		options: [
@@ -57,7 +57,7 @@ export const manufacturersFields: INodeProperties[] = [
 	{
 		displayName: 'Manufacturer ID',
 		name: 'manufacturerId',
-		type: 'number' as const,
+		type: 'number',
 		default: 0,
 		description: 'ID of the manufacturer',
 		displayOptions: {
@@ -68,27 +68,27 @@ export const manufacturersFields: INodeProperties[] = [
 		},
 	},
 	{
-		displayName: 'Create Manufacturer Fields',
+		displayName: 'Create Fields',
 		name: 'createManufacturerFields',
-		type: 'collection' as const,
+		type: 'collection',
 		placeholder: 'Add Field',
 		default: {},
 		displayOptions: { show: { resource: ['manufacturers'], operation: ['createManufacturer'] } },
 		options: [
-			{ displayName: 'ID', name: 'id', type: 'number' as const, default: 0 },
-			{ displayName: 'Name', name: 'name', type: 'string' as const, default: '' },
+			{ displayName: 'ID', name: 'id', type: 'number', default: 0 },
+			{ displayName: 'Name', name: 'name', type: 'string', default: '' },
 		],
 	},
 	{
-		displayName: 'Update Manufacturer Fields',
+		displayName: 'Update Fields',
 		name: 'updateManufacturerFields',
-		type: 'collection' as const,
+		type: 'collection',
 		placeholder: 'Add Field',
 		default: {},
 		displayOptions: { show: { resource: ['manufacturers'], operation: ['updateManufacturer'] } },
 		options: [
-			{ displayName: 'ID', name: 'id', type: 'number' as const, default: 0 },
-			{ displayName: 'Name', name: 'name', type: 'string' as const, default: '' },
+			{ displayName: 'ID', name: 'id', type: 'number', default: 0 },
+			{ displayName: 'Name', name: 'name', type: 'string', default: '' },
 		],
 	},
 ];
