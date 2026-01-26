@@ -12,7 +12,7 @@ export const pcOperations: INodeProperties[] = [
 	{
 		displayName: 'Operation',
 		name: 'operation',
-		type: 'options' as const,
+		type: 'options',
 		noDataExpression: true,
 		displayOptions: {
 			show: {
@@ -59,7 +59,7 @@ export const pcFields: INodeProperties[] = [
 	{
 		displayName: 'PC ID',
 		name: 'pcId',
-		type: 'number' as const,
+		type: 'number',
 		displayOptions: {
 			show: {
 				resource: ['pc'],
@@ -72,7 +72,7 @@ export const pcFields: INodeProperties[] = [
 	{
 		displayName: 'Company ID',
 		name: 'companyId',
-		type: 'number' as const,
+		type: 'number',
 		required: true,
 		displayOptions: {
 			show: {
@@ -86,7 +86,7 @@ export const pcFields: INodeProperties[] = [
 	{
 		displayName: 'Model',
 		name: 'model',
-		type: 'string' as const,
+		type: 'string',
 		required: true,
 		displayOptions: {
 			show: {
@@ -100,7 +100,7 @@ export const pcFields: INodeProperties[] = [
 	{
 		displayName: 'PC Data',
 		name: 'pcData',
-		type: 'collection' as const,
+		type: 'collection',
 		displayOptions: {
 			show: {
 				resource: ['pc'],
@@ -110,103 +110,103 @@ export const pcFields: INodeProperties[] = [
 		default: {},
 		placeholder: 'Add Field',
 		options: [
-			{ displayName: 'Active', name: 'active', type: 'boolean' as const, default: false },
-			{ displayName: 'AnyDesk ID', name: 'anydeskId', type: 'string' as const, default: '' },
+			{ displayName: 'Active', name: 'active', type: 'boolean', default: false },
+			{ displayName: 'AnyDesk ID', name: 'anydeskId', type: 'string', default: '' },
 			{
 				displayName: 'AnyDesk Password',
 				name: 'anydeskPassword',
-				type: 'string' as const,
+				type: 'string',
 				default: '',
 				typeOptions: { password: true },
 			},
 			{
 				displayName: 'Article Number',
 				name: 'articleNumber',
-				type: 'string' as const,
+				type: 'string',
 				default: '',
 			},
 			{
 				displayName: 'Billing Number',
 				name: 'billingNumber',
-				type: 'string' as const,
+				type: 'string',
 				default: '',
 			},
-			{ displayName: 'BIOS', name: 'bios', type: 'string' as const, default: '' },
-			{ displayName: 'BIOS Release', name: 'biosRelease', type: 'string' as const, default: '' },
-			{ displayName: 'CPU Frequency', name: 'cpuFrequency', type: 'number' as const, default: 0 },
+			{ displayName: 'BIOS', name: 'bios', type: 'string', default: '' },
+			{ displayName: 'BIOS Release', name: 'biosRelease', type: 'string', default: '' },
+			{ displayName: 'CPU Frequency', name: 'cpuFrequency', type: 'number', default: 0 },
 			{
 				displayName: 'CPU Manufacturer ID',
 				name: 'cpuManufacturerId',
-				type: 'number' as const,
+				type: 'number',
 				default: 0,
 			},
-			{ displayName: 'CPU Number', name: 'cpuNumber', type: 'number' as const, default: 0 },
-			{ displayName: 'CPU Type ID', name: 'cpuTypeId', type: 'number' as const, default: 0 },
-			{ displayName: 'Date', name: 'date', type: 'number' as const, default: 0 },
-			{ displayName: 'Description', name: 'description', type: 'string' as const, default: '' },
-			{ displayName: 'Employee ID', name: 'employeeId', type: 'number' as const, default: 0 },
-			{ displayName: 'Host ID', name: 'hostId', type: 'number' as const, default: 0 },
+			{ displayName: 'CPU Number', name: 'cpuNumber', type: 'number', default: 0 },
+			{ displayName: 'CPU Type ID', name: 'cpuTypeId', type: 'number', default: 0 },
+			{ displayName: 'Date', name: 'date', type: 'number', default: 0 },
+			{ displayName: 'Description', name: 'description', type: 'string', default: '' },
+			{ displayName: 'Employee ID', name: 'employeeId', type: 'number', default: 0 },
+			{ displayName: 'Host ID', name: 'hostId', type: 'number', default: 0 },
 			{
 				displayName: 'Internal Remark',
 				name: 'internalRemark',
-				type: 'string' as const,
+				type: 'string',
 				default: '',
 			},
 			{
 				displayName: 'Inventory Number',
 				name: 'inventoryNumber',
-				type: 'string' as const,
+				type: 'string',
 				default: '',
 			},
 			{
 				displayName: 'Keyboard Serial Number',
 				name: 'keyboardSerialNumber',
-				type: 'string' as const,
+				type: 'string',
 				default: '',
 			},
-			{ displayName: 'Location', name: 'location', type: 'string' as const, default: '' },
+			{ displayName: 'Location', name: 'location', type: 'string', default: '' },
 			{
 				displayName: 'Mainboard Manufacturer ID',
 				name: 'mainboardManufacturerId',
-				type: 'number' as const,
+				type: 'number',
 				default: 0,
 			},
 			{
 				displayName: 'Mainboard Manufacturer Revision',
 				name: 'mainboardManufacturerRevision',
-				type: 'string' as const,
+				type: 'string',
 				default: '',
 			},
 			{
 				displayName: 'Mainboard Serial Number',
 				name: 'mainboardSerialNumber',
-				type: 'string' as const,
+				type: 'string',
 				default: '',
 			},
 			{
 				displayName: 'Manufacturer ID',
 				name: 'manufacturerId',
-				type: 'number' as const,
+				type: 'number',
 				default: 0,
 			},
 			{
 				displayName: 'Manufacturer Number',
 				name: 'manufacturerNumber',
-				type: 'string' as const,
+				type: 'string',
 				default: '',
 			},
 			{
 				displayName: 'Mouse Serial Number',
 				name: 'mouseSerialNumber',
-				type: 'string' as const,
+				type: 'string',
 				default: '',
 			},
-			{ displayName: 'Name', name: 'name', type: 'string' as const, default: '' },
-			{ displayName: 'OS ID', name: 'osId', type: 'number' as const, default: 0 },
+			{ displayName: 'Name', name: 'name', type: 'string', default: '' },
+			{ displayName: 'OS ID', name: 'osId', type: 'number', default: 0 },
 			{
 				displayName: 'Ownage Type',
 				name: 'ownageType',
-				type: 'options' as const,
+				type: 'options',
 				options: [
 					{ name: 'Foreign', value: 'FOREIGN' },
 					{ name: 'Foreign Rent', value: 'FOREIGN_RENT' },
@@ -215,33 +215,33 @@ export const pcFields: INodeProperties[] = [
 				],
 				default: 'OWN',
 			},
-			{ displayName: 'Purchase Price', name: 'purchasePrice', type: 'number' as const, default: 0 },
-			{ displayName: 'Remark', name: 'remark', type: 'string' as const, default: '' },
-			{ displayName: 'Reserved CPU', name: 'reservedCpu', type: 'number' as const, default: 0 },
+			{ displayName: 'Purchase Price', name: 'purchasePrice', type: 'number', default: 0 },
+			{ displayName: 'Remark', name: 'remark', type: 'string', default: '' },
+			{ displayName: 'Reserved CPU', name: 'reservedCpu', type: 'number', default: 0 },
 			{
 				displayName: 'Reserved Hard Disk',
 				name: 'reservedHardDisk',
-				type: 'number' as const,
+				type: 'number',
 				default: 0,
 			},
-			{ displayName: 'Reserved RAM', name: 'reservedRam', type: 'number' as const, default: 0 },
-			{ displayName: 'Selling Price', name: 'sellingPrice', type: 'number' as const, default: 0 },
-			{ displayName: 'Serial Number', name: 'serialNumber', type: 'string' as const, default: '' },
-			{ displayName: 'Server', name: 'server', type: 'boolean' as const, default: false },
+			{ displayName: 'Reserved RAM', name: 'reservedRam', type: 'number', default: 0 },
+			{ displayName: 'Selling Price', name: 'sellingPrice', type: 'number', default: 0 },
+			{ displayName: 'Serial Number', name: 'serialNumber', type: 'string', default: '' },
+			{ displayName: 'Server', name: 'server', type: 'boolean', default: false },
 			{
 				displayName: 'Service Technician ID',
 				name: 'serviceTechnicianId',
-				type: 'number' as const,
+				type: 'number',
 				default: 0,
 			},
-			{ displayName: 'Show Remark', name: 'showRemark', type: 'boolean' as const, default: false },
-			{ displayName: 'Software', name: 'software', type: 'string' as const, default: '' },
-			{ displayName: 'Storage ID', name: 'storageId', type: 'number' as const, default: 0 },
-			{ displayName: 'TeamViewer ID', name: 'teamviewerId', type: 'string' as const, default: '' },
+			{ displayName: 'Show Remark', name: 'showRemark', type: 'boolean', default: false },
+			{ displayName: 'Software', name: 'software', type: 'string', default: '' },
+			{ displayName: 'Storage ID', name: 'storageId', type: 'number', default: 0 },
+			{ displayName: 'TeamViewer ID', name: 'teamviewerId', type: 'string', default: '' },
 			{
 				displayName: 'TeamViewer Password',
 				name: 'teamviewerPassword',
-				type: 'string' as const,
+				type: 'string',
 				default: '',
 				typeOptions: { password: true },
 			},
@@ -250,7 +250,7 @@ export const pcFields: INodeProperties[] = [
 	{
 		displayName: 'List Query',
 		name: 'listQuery',
-		type: 'collection' as const,
+		type: 'collection',
 		displayOptions: {
 			show: {
 				resource: ['pc'],
@@ -263,7 +263,7 @@ export const pcFields: INodeProperties[] = [
 			{
 				displayName: 'Active',
 				name: 'active',
-				type: 'options' as const,
+				type: 'options',
 				options: [
 					{ name: 'Active Only', value: 'ACTIVE_ONLY' },
 					{ name: 'Inactive Only', value: 'INACTIVE_ONLY' },
@@ -274,7 +274,7 @@ export const pcFields: INodeProperties[] = [
 			{
 				displayName: 'Branches',
 				name: 'branches',
-				type: 'options' as const,
+				type: 'options',
 				options: [
 					{ name: 'Company Only', value: 'COMPANY_ONLY' },
 					{ name: 'Branches Only', value: 'BRANCHES_ONLY' },
@@ -283,11 +283,11 @@ export const pcFields: INodeProperties[] = [
 				],
 				default: 'COMPANY_ONLY',
 			},
-			{ displayName: 'Company ID', name: 'companyId', type: 'number' as const, default: 0 },
+			{ displayName: 'Company ID', name: 'companyId', type: 'number', default: 0 },
 			{
 				displayName: 'OS IDs',
 				name: 'osIds',
-				type: 'multiOptions' as const,
+				type: 'multiOptions',
 				typeOptions: { multipleValues: true },
 				options: [],
 				default: [],
@@ -295,7 +295,7 @@ export const pcFields: INodeProperties[] = [
 			{
 				displayName: 'Type',
 				name: 'type',
-				type: 'options' as const,
+				type: 'options',
 				options: [
 					{ name: 'PCs Only', value: 'PCS_ONLY' },
 					{ name: 'Servers Only', value: 'SERVERS_ONLY' },
