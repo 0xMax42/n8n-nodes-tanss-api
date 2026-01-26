@@ -133,6 +133,7 @@ All notable changes to this project will be documented in this file.
 
 ### 📚 Documentation
 
+- *(readme)* Simplify implementation progress overview layout - ([4aa2950](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/4aa29501ce4ada3f275063b1b2db3fc90fdf724e))
 - *(readme)* Update implementation progress and remove security section - ([dc47144](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/dc471449134481e916a9e2bb006daf16bde5a6dc))
 - Document development and dev container setup in readme - ([42556cd](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/42556cd9b816202351f90c8ae877ea3f37cbc6e5))
 - Document api token credential option in readme - ([bfc8c15](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/bfc8c1547acda95bf6334df360f25b1cd9c34337))
