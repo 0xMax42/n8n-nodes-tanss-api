@@ -1,0 +1,50 @@
+{
+    "name": "createNotification returns success wrapper",
+    "itemIndex": 0,
+    "parameters": {
+        "operation": "createNotification",
+        "notificationFields": {
+            "id": 123,
+            "callId": "abc-123",
+            "direction": "INCOMING",
+            "fromPhoneNumber": "+49111",
+            "toPhoneNumber": "+49222"
+        }
+    },
+    "credentials": {
+        "tanssApi": {
+            "baseURL": "https://example.invalid",
+            "authentication": "apiToken",
+            "apiToken": "TOKEN-123"
+        }
+    },
+    "http": [
+        {
+            "expect": {
+                "method": "POST",
+                "url": "https://example.invalid/backend/api/calls/v1/notification",
+                "json": true,
+                "headers": {
+                    "Content-Type": "application/json",
+                    "apiToken": "Bearer TOKEN-123"
+                },
+                "body": {
+                    "id": 123,
+                    "callId": "abc-123",
+                    "direction": "INCOMING",
+                    "fromPhoneNumber": "+49111",
+                    "toPhoneNumber": "+49222"
+                }
+            },
+            "reply": {
+                "statusCode": 201,
+                "body": { "ok": true },
+                "headers": { "content-type": "application/json" }
+            }
+        }
+    ],
+    "expected": {
+        "kind": "returns",
+        "matchObject": { "success": true, "statusCode": 201 }
+    }
+}

@@ -1,0 +1,128 @@
+{
+    "name": "createEmployee returns success wrapper",
+    "itemIndex": 0,
+    "parameters": {
+        "operation": "createEmployee",
+        "employeeObject": {
+            "id": 123,
+            "name": "Max Mustermann",
+            "firstName": "Max",
+            "lastName": "Mustermann",
+            "salutationId": 1,
+            "departmentId": 2,
+            "room": "2.15",
+            "telephoneNumber": "+49 30 123456",
+            "emailAddress": "max@example.invalid",
+            "carId": 3,
+            "mobilePhone": "+49 171 111111",
+            "initials": "MM",
+            "workingHourModelId": 4,
+            "accountingTypeId": 5,
+            "active": true,
+            "erpNumber": "ERP-001",
+            "personalFaxNumber": "+49 30 654321",
+            "role": "Technician",
+            "titleId": 6,
+            "language": "de",
+            "telephoneNumberTwo": "+49 30 222222",
+            "mobileNumberTwo": "+49 171 222222",
+            "restrictedUserLicense": false,
+            "birthday": "1990-01-02",
+            "companyAssignments": {
+                "assignment": [
+                    { "companyId": 10 },
+                    { "companyId": 20 }
+                ]
+            }
+        }
+    },
+    "credentials": {
+        "tanssApi": {
+            "baseURL": "https://example.invalid",
+            "authentication": "loginTotp",
+            "username": "user",
+            "password": "pass"
+        }
+    },
+    "http": [
+        {
+            "expect": {
+                "method": "POST",
+                "url": "https://example.invalid/backend/api/v1/login",
+                "json": true,
+                "returnFullResponse": true,
+                "headers": {
+                    "Content-Type": "application/json"
+                },
+                "body": {
+                    "username": "user",
+                    "password": "pass"
+                }
+            },
+            "reply": {
+                "statusCode": 200,
+                "body": {
+                    "content": {
+                        "apiKey": "TOKEN-123"
+                    }
+                },
+                "headers": { "content-type": "application/json" }
+            }
+        },
+        {
+            "expect": {
+                "method": "POST",
+                "url": "https://example.invalid/backend/api/v1/employees",
+                "json": true,
+                "returnFullResponse": true,
+                "headers": {
+                    "Content-Type": "application/json",
+                    "apiToken": "Bearer TOKEN-123"
+                },
+                "body": {
+                    "id": 123,
+                    "name": "Max Mustermann",
+                    "firstName": "Max",
+                    "lastName": "Mustermann",
+                    "salutationId": 1,
+                    "departmentId": 2,
+                    "room": "2.15",
+                    "telephoneNumber": "+49 30 123456",
+                    "emailAddress": "max@example.invalid",
+                    "carId": 3,
+                    "mobilePhone": "+49 171 111111",
+                    "initials": "MM",
+                    "workingHourModelId": 4,
+                    "accountingTypeId": 5,
+                    "active": true,
+                    "erpNumber": "ERP-001",
+                    "personalFaxNumber": "+49 30 654321",
+                    "role": "Technician",
+                    "titleId": 6,
+                    "language": "de",
+                    "telephoneNumberTwo": "+49 30 222222",
+                    "mobileNumberTwo": "+49 171 222222",
+                    "restrictedUserLicense": false,
+                    "birthday": "1990-01-02",
+                    "companyAssignments": [
+                        { "companyId": 10 },
+                        { "companyId": 20 }
+                    ]
+                }
+            },
+            "reply": {
+                "statusCode": 201,
+                "body": { "id": 99, "name": "Max" },
+                "headers": { "content-type": "application/json" }
+            }
+        }
+    ],
+    "expected": {
+        "kind": "returns",
+        "matchObject": {
+            "success": true,
+            "statusCode": 201,
+            "body": { "id": 99, "name": "Max" }
+        }
+    }
+}

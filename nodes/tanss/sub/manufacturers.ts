@@ -1,4 +1,14 @@
-import { IExecuteFunctions, INodeProperties, NodeOperationError } from 'n8n-workflow';
+import { INodeProperties } from 'n8n-workflow';
+import {
+	numberGuard,
+	createCrudHandler,
+	CrudFieldMap,
+	createSubObjectGuard,
+	nullOrGuard,
+	stringGuard,
+	positiveNumberGuard,
+	nonEmptyStringGuard,
+} from '../lib';
 
 export const manufacturersOperations: INodeProperties[] = [
 	{
@@ -45,16 +55,6 @@ export const manufacturersOperations: INodeProperties[] = [
 
 export const manufacturersFields: INodeProperties[] = [
 	{
-		displayName: 'API Token',
-		name: 'apiToken',
-		type: 'string' as const,
-		required: true,
-		typeOptions: { password: true },
-		default: '',
-		description: 'API token obtained from the TANSS API login',
-		displayOptions: { show: { resource: ['manufacturers'] } },
-	},
-	{
 		displayName: 'Manufacturer ID',
 		name: 'manufacturerId',
 		type: 'number' as const,
@@ -93,96 +93,80 @@ export const manufacturersFields: INodeProperties[] = [
 	},
 ];
 
-export async function handleManufacturers(this: IExecuteFunctions, i: number) {
-	const operation = this.getNodeParameter('operation', i) as string;
-	const credentials = await this.getCredentials('tanssApi');
-	if (!credentials) throw new NodeOperationError(this.getNode(), 'No credentials returned!');
+const manufacturerIdField = {
+	manufacturerId: {
+		location: 'path',
+		defaultValue: 0,
+		guard: numberGuard,
+	},
+} satisfies CrudFieldMap;
 
-	const apiToken = this.getNodeParameter('apiToken', i, '') as string;
-	const manufacturerId = this.getNodeParameter('manufacturerId', i, 0) as number;
+const createManufacturerFields = {
+	createManufacturerFields: {
+		location: 'body',
+		spread: true,
+		guard: createSubObjectGuard({
+			id: {
+				guard: positiveNumberGuard,
+			},
+			name: {
+				guard: nonEmptyStringGuard,
+			},
+		}),
+	},
+} satisfies CrudFieldMap;
 
-	let url = '';
-	const requestOptions: {
-		method: 'GET' | 'POST' | 'PUT' | 'DELETE';
-		headers: { apiToken: string; 'Content-Type': string };
-		json: boolean;
-		body?: Record<string, unknown>;
-		url: string;
-		returnFullResponse?: boolean;
-	} = {
-		method: 'GET',
-		headers: { apiToken, 'Content-Type': 'application/json' },
-		json: true,
-		url,
-	};
+const updateManufacturerFields = {
+	updateManufacturerFields: {
+		location: 'body',
+		spread: true,
+		guard: createSubObjectGuard({
+			id: {
+				guard: nullOrGuard(positiveNumberGuard),
+			},
+			name: {
+				guard: nullOrGuard(stringGuard),
+			},
+		}),
+	},
+} satisfies CrudFieldMap;
 
-	switch (operation) {
-		case 'createManufacturer': {
-			url = `${credentials.baseURL}/backend/api/v1/manufacturers`;
-			requestOptions.method = 'POST';
-			const createManufacturerFields = this.getNodeParameter(
-				'createManufacturerFields',
-				i,
-				{},
-			) as Record<string, unknown>;
-			if (Object.keys(createManufacturerFields).length === 0)
-				throw new NodeOperationError(
-					this.getNode(),
-					'No fields provided for manufacturer creation.',
-				);
-			requestOptions.body = createManufacturerFields;
-			break;
-		}
-		case 'deleteManufacturer': {
-			url = `${credentials.baseURL}/backend/api/v1/manufacturers/${manufacturerId}`;
-			requestOptions.method = 'DELETE';
-			break;
-		}
-		case 'getAllManufacturers': {
-			url = `${credentials.baseURL}/backend/api/v1/manufacturers`;
-			requestOptions.method = 'GET';
-			break;
-		}
-		case 'getManufacturerById': {
-			url = `${credentials.baseURL}/backend/api/v1/manufacturers/${manufacturerId}`;
-			requestOptions.method = 'GET';
-			break;
-		}
-		case 'updateManufacturer': {
-			url = `${credentials.baseURL}/backend/api/v1/manufacturers/${manufacturerId}`;
-			requestOptions.method = 'PUT';
-			const updateManufacturerFields = this.getNodeParameter(
-				'updateManufacturerFields',
-				i,
-				{},
-			) as Record<string, unknown>;
-			if (Object.keys(updateManufacturerFields).length === 0)
-				throw new NodeOperationError(this.getNode(), 'No fields provided for manufacturer update.');
-			requestOptions.body = updateManufacturerFields;
-			break;
-		}
-		default:
-			throw new NodeOperationError(
-				this.getNode(),
-				`The operation "${operation}" is not recognized for Manufacturers.`,
-			);
-	}
+export const handleManufacturers = createCrudHandler({
+	operationField: 'operation',
+	credentialType: 'user',
 
-	requestOptions.url = url;
+	operations: {
+		createManufacturer: {
+			fields: createManufacturerFields,
+			httpMethod: 'POST',
+			subPath: 'manufacturers',
+		},
 
-	try {
-		type FullResponse = { statusCode: number; body?: unknown };
-		const options = {
-			...requestOptions,
-			returnFullResponse: true,
-		} as unknown as import('n8n-workflow').IHttpRequestOptions;
-		const fullResponse = (await this.helpers.httpRequest(options)) as unknown as FullResponse;
-		if (requestOptions.method === 'DELETE') {
-			return { success: fullResponse.statusCode === 204, statusCode: fullResponse.statusCode };
-		}
-		return fullResponse.body ?? (fullResponse as unknown);
-	} catch (error: unknown) {
-		const errorMessage = error instanceof Error ? error.message : String(error);
-		throw new NodeOperationError(this.getNode(), `Failed to execute ${operation}: ${errorMessage}`);
-	}
-}
+		deleteManufacturer: {
+			fields: manufacturerIdField,
+			httpMethod: 'DELETE',
+			subPath: 'manufacturers/{manufacturerId}',
+		},
+
+		getAllManufacturers: {
+			fields: {},
+			httpMethod: 'GET',
+			subPath: 'manufacturers',
+		},
+
+		getManufacturerById: {
+			fields: manufacturerIdField,
+			httpMethod: 'GET',
+			subPath: 'manufacturers/{manufacturerId}',
+		},
+
+		updateManufacturer: {
+			fields: {
+				...manufacturerIdField,
+				...updateManufacturerFields,
+			},
+			httpMethod: 'PUT',
+			subPath: 'manufacturers/{manufacturerId}',
+		},
+	},
+});

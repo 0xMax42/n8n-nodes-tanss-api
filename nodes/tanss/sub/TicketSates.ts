@@ -1,10 +1,13 @@
+import { INodeProperties } from 'n8n-workflow';
 import {
-	IExecuteFunctions,
-	INodeProperties,
-	NodeOperationError,
-	IDataObject,
-	IHttpRequestOptions,
-} from 'n8n-workflow';
+	booleanGuard,
+	nonEmptyStringGuard,
+	numberGuard,
+	positiveNumberGuard,
+	stringGuard,
+	createCrudHandler,
+	nullOrGuard,
+} from '../lib';
 
 export const ticketStatesOperations: INodeProperties[] = [
 	{
@@ -48,20 +51,6 @@ export const ticketStatesOperations: INodeProperties[] = [
 ];
 
 export const ticketStatesFields: INodeProperties[] = [
-	{
-		displayName: 'API Token',
-		name: 'apiToken',
-		type: 'string' as const,
-		required: true,
-		typeOptions: { password: true },
-		default: '',
-		description: 'API token obtained from the TANSS API login',
-		displayOptions: {
-			show: {
-				resource: ['ticketStates'],
-			},
-		},
-	},
 	// ID field used by update/delete (single fetch removed)
 	{
 		displayName: 'Ticket State ID',
@@ -145,148 +134,94 @@ export const ticketStatesFields: INodeProperties[] = [
 	},
 ];
 
-export async function handleTicketStates(this: IExecuteFunctions, i: number) {
-	const operation = this.getNodeParameter('operation', i) as string;
-	const allowed = [
-		'getTicketStates',
-		'createTicketState',
-		'updateTicketState',
-		'deleteTicketState',
-	] as const;
-	if (!allowed.includes(operation as (typeof allowed)[number])) {
-		throw new NodeOperationError(
-			this.getNode(),
-			`Operation "${operation}" not supported by TicketStates.`,
-		);
-	}
+export const handleTicketStates = createCrudHandler({
+	operationField: 'operation',
+	credentialType: 'user',
 
-	const credentials = await this.getCredentials('tanssApi');
-	if (!credentials) throw new NodeOperationError(this.getNode(), 'No credentials returned!');
+	operations: {
+		getTicketStates: {
+			fields: {},
+			httpMethod: 'GET',
+			subPath: 'admin/ticketStates',
+		},
 
-	const apiToken = this.getNodeParameter('apiToken', i, '') as string;
-	const typedCredentials = credentials as { baseURL?: string };
-	const baseURL = typedCredentials.baseURL;
-	if (!baseURL) throw new NodeOperationError(this.getNode(), 'No baseURL in credentials');
+		createTicketState: {
+			fields: {
+				name: {
+					location: 'body',
+					defaultValue: '',
+					guard: nonEmptyStringGuard,
+				},
+				image: {
+					location: 'body',
+					defaultValue: '',
+					guard: stringGuard,
+				},
+				waitState: {
+					location: 'body',
+					defaultValue: false,
+					guard: booleanGuard,
+				},
+				rank: {
+					location: 'body',
+					defaultValue: 0,
+					guard: numberGuard,
+				},
+				active: {
+					location: 'body',
+					defaultValue: true,
+					guard: booleanGuard,
+				},
+			},
+			httpMethod: 'POST',
+			subPath: 'admin/ticketStates',
+		},
 
-	// GET list
-	if (operation === 'getTicketStates') {
-		const url = `${baseURL}/backend/api/v1/admin/ticketStates`;
-		const requestOptions: IDataObject = {
-			method: 'GET',
-			url,
-			headers: { apiToken, 'Content-Type': 'application/json' },
-			json: true,
-		};
-		try {
-			const response = await this.helpers.httpRequest(
-				requestOptions as unknown as IHttpRequestOptions,
-			);
-			return response;
-		} catch (error: unknown) {
-			const message = error instanceof Error ? error.message : String(error);
-			throw new NodeOperationError(this.getNode(), `Failed to fetch ticket states: ${message}`);
-		}
-	}
+		updateTicketState: {
+			fields: {
+				id: {
+					location: 'path',
+					guard: positiveNumberGuard,
+				},
+				name: {
+					location: 'body',
+					defaultValue: '',
+					guard: nullOrGuard(stringGuard),
+				},
+				image: {
+					location: 'body',
+					defaultValue: '',
+					guard: nullOrGuard(stringGuard),
+				},
+				waitState: {
+					location: 'body',
+					defaultValue: false,
+					guard: nullOrGuard(booleanGuard),
+				},
+				rank: {
+					location: 'body',
+					defaultValue: 0,
+					guard: nullOrGuard(numberGuard),
+				},
+				active: {
+					location: 'body',
+					defaultValue: true,
+					guard: nullOrGuard(booleanGuard),
+				},
+			},
+			httpMethod: 'PUT',
+			subPath: 'admin/ticketStates/{id}',
+		},
 
-	// CREATE
-	if (operation === 'createTicketState') {
-		const name = this.getNodeParameter('name', i) as string;
-		if (!name)
-			throw new NodeOperationError(this.getNode(), 'Name is required to create a ticket state.');
-		const image = this.getNodeParameter('image', i, '') as string;
-		const waitState = this.getNodeParameter('waitState', i, false) as boolean;
-		const rank = this.getNodeParameter('rank', i, 0) as number;
-		const active = this.getNodeParameter('active', i, true) as boolean;
-
-		const body: IDataObject = {
-			name,
-			image,
-			waitState,
-			rank,
-			active,
-		};
-
-		const url = `${baseURL}/backend/api/v1/admin/ticketStates`;
-		const requestOptions: IDataObject = {
-			method: 'POST',
-			url,
-			headers: { apiToken, 'Content-Type': 'application/json' },
-			body,
-			json: true,
-		};
-
-		try {
-			const response = await this.helpers.httpRequest(
-				requestOptions as unknown as IHttpRequestOptions,
-			);
-			return response;
-		} catch (error: unknown) {
-			const message = error instanceof Error ? error.message : String(error);
-			throw new NodeOperationError(this.getNode(), `Failed to create ticket state: ${message}`);
-		}
-	}
-
-	// UPDATE
-	if (operation === 'updateTicketState') {
-		const id = this.getNodeParameter('id', i, 0) as number;
-		if (!id || id <= 0)
-			throw new NodeOperationError(this.getNode(), 'Valid ID is required to update.');
-		const name = this.getNodeParameter('name', i, '') as string;
-		const image = this.getNodeParameter('image', i, '') as string;
-		const waitState = this.getNodeParameter('waitState', i, false) as boolean;
-		const rank = this.getNodeParameter('rank', i, 0) as number;
-		const active = this.getNodeParameter('active', i, true) as boolean;
-
-		const body: IDataObject = {
-			name,
-			image,
-			waitState,
-			rank,
-			active,
-		};
-
-		const url = `${baseURL}/backend/api/v1/admin/ticketStates/${id}`;
-		const requestOptions: IDataObject = {
-			method: 'PUT',
-			url,
-			headers: { apiToken, 'Content-Type': 'application/json' },
-			body,
-			json: true,
-		};
-
-		try {
-			const response = await this.helpers.httpRequest(
-				requestOptions as unknown as IHttpRequestOptions,
-			);
-			return response;
-		} catch (error: unknown) {
-			const message = error instanceof Error ? error.message : String(error);
-			throw new NodeOperationError(this.getNode(), `Failed to update ticket state: ${message}`);
-		}
-	}
-
-	// DELETE
-	if (operation === 'deleteTicketState') {
-		const id = this.getNodeParameter('id', i, 0) as number;
-		if (!id || id <= 0)
-			throw new NodeOperationError(this.getNode(), 'Valid ID is required to delete.');
-		const url = `${baseURL}/backend/api/v1/admin/ticketStates/${id}`;
-		const requestOptions: IDataObject = {
-			method: 'DELETE',
-			url,
-			headers: { apiToken, 'Content-Type': 'application/json' },
-			json: true,
-		};
-		try {
-			const response = await this.helpers.httpRequest(
-				requestOptions as unknown as IHttpRequestOptions,
-			);
-			return response;
-		} catch (error: unknown) {
-			const message = error instanceof Error ? error.message : String(error);
-			throw new NodeOperationError(this.getNode(), `Failed to delete ticket state: ${message}`);
-		}
-	}
-
-	throw new NodeOperationError(this.getNode(), 'Unhandled operation');
-}
+		deleteTicketState: {
+			fields: {
+				id: {
+					location: 'path',
+					guard: positiveNumberGuard,
+				},
+			},
+			httpMethod: 'DELETE',
+			subPath: 'admin/ticketStates/{id}',
+		},
+	},
+});

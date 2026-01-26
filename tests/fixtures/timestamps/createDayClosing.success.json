@@ -1,0 +1,64 @@
+{
+    "name": "createDayClosing returns success wrapper",
+    "itemIndex": 0,
+    "parameters": {
+        "operation": "createDayClosing",
+        "dayClosingsJson": "[{\"employeeId\":1,\"date\":\"2024-01-01\"}]"
+    },
+    "credentials": {
+        "tanssApi": {
+            "baseURL": "https://example.invalid",
+            "authentication": "loginTotp",
+            "username": "user",
+            "password": "pass"
+        }
+    },
+    "http": [
+        {
+            "expect": {
+                "method": "POST",
+                "url": "https://example.invalid/backend/api/v1/login",
+                "json": true,
+                "returnFullResponse": true,
+                "headers": {
+                    "Content-Type": "application/json"
+                },
+                "body": {
+                    "username": "user",
+                    "password": "pass"
+                }
+            },
+            "reply": {
+                "statusCode": 200,
+                "body": {
+                    "content": {
+                        "apiKey": "TOKEN-123"
+                    }
+                },
+                "headers": { "content-type": "application/json" }
+            }
+        },
+        {
+            "expect": {
+                "method": "POST",
+                "url": "https://example.invalid/backend/api/v1/timestamps/dayClosing",
+                "json": true,
+                "returnFullResponse": true,
+                "headers": {
+                    "Content-Type": "application/json",
+                    "apiToken": "Bearer TOKEN-123"
+                },
+                "body": [{ "employeeId": 1, "date": "2024-01-01" }]
+            },
+            "reply": {
+                "statusCode": 201,
+                "body": { "ok": true },
+                "headers": { "content-type": "application/json" }
+            }
+        }
+    ],
+    "expected": {
+        "kind": "returns",
+        "matchObject": { "success": true, "statusCode": 201 }
+    }
+}

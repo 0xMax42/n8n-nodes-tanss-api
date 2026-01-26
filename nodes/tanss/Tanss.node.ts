@@ -4,7 +4,6 @@ import {
 	IExecuteFunctions,
 	NodeOperationError,
 } from 'n8n-workflow';
-import { handleAuth, authOperations, authFields } from './sub/Authentication';
 import { handlePc, pcOperations, pcFields } from './sub/PCs';
 import { handleTicket, ticketOperations, ticketFields } from './sub/Tickets';
 import { handleTicketList, ticketListOperations, ticketListFields } from './sub/TicketLists';
@@ -67,7 +66,6 @@ export class Tanss implements INodeType {
 				type: 'options',
 				noDataExpression: true,
 				options: [
-					{ name: 'Authentication', value: 'authentication' },
 					{ name: 'Availability', value: 'availability' },
 					{ name: 'Call', value: 'calls' },
 					{ name: 'Call User', value: 'callsuser' },
@@ -85,12 +83,10 @@ export class Tanss implements INodeType {
 					{ name: 'Ticket State', value: 'ticketStates' },
 					{ name: 'Timestamp', value: 'timestamps' },
 				],
-				default: 'authentication',
+				default: 'availability',
 				description: 'Select which TANSS API resource to interact with',
 			},
 
-			...authOperations,
-			...authFields,
 			...pcOperations,
 			...pcFields,
 			...ticketOperations,
@@ -133,8 +129,7 @@ export class Tanss implements INodeType {
 
 		for (let i = 0; i < items.length; i++) {
 			let responseData;
-			if (resource === 'authentication') responseData = await handleAuth.call(this, i);
-			else if (resource === 'pc') responseData = await handlePc.call(this, i);
+			if (resource === 'pc') responseData = await handlePc.call(this, i);
 			else if (resource === 'cpus') responseData = await handleCpu.call(this, i);
 			else if (resource === 'ticket') responseData = await handleTicket.call(this, i);
 			else if (resource === 'ticketContent') responseData = await handleTicketContent.call(this, i);

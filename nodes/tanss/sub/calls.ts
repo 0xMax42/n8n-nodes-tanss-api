@@ -1,4 +1,18 @@
-import { IExecuteFunctions, INodeProperties, NodeOperationError, IDataObject } from 'n8n-workflow';
+import { INodeProperties } from 'n8n-workflow';
+import {
+	arrayGuard,
+	booleanGuard,
+	createCrudHandler,
+	createSubObjectGuard,
+	CrudFieldMap,
+	csvGuard,
+	jsonGuard,
+	nonEmptyStringGuard,
+	nullOrGuard,
+	numberGuard,
+	positiveNumberGuard,
+	stringGuard,
+} from '../lib';
 
 export const callsOperations: INodeProperties[] = [
 	{
@@ -72,48 +86,6 @@ export const callsOperations: INodeProperties[] = [
 ];
 
 export const callsFields: INodeProperties[] = [
-	{
-		displayName: 'API Token',
-		name: 'apiToken',
-		type: 'string' as const,
-		required: true,
-		typeOptions: { password: true },
-		default: '',
-		description: 'API token obtained from the TANSS web interface (must be generated in TANSS)',
-		displayOptions: {
-			show: {
-				resource: ['calls'],
-			},
-		},
-	},
-	{
-		displayName: 'Use Raw Call JSON (Optional)',
-		name: 'callJson',
-		type: 'string' as const,
-		default: '',
-		description:
-			'If provided (valid JSON), this object will be posted as-is. Otherwise the fields below / collection are used to build the payload.',
-		displayOptions: {
-			show: {
-				resource: ['calls'],
-				operation: ['createCall', 'updateCall'],
-			},
-		},
-	},
-
-	{
-		displayName: 'Use Raw Notification JSON (Optional)',
-		name: 'notificationJson',
-		type: 'string' as const,
-		default: '',
-		description: 'If provided (valid JSON), this object will be posted as-is',
-		displayOptions: {
-			show: {
-				resource: ['calls'],
-				operation: ['createNotification'],
-			},
-		},
-	},
 	{
 		displayName: 'Notification Fields',
 		name: 'notificationFields',
@@ -230,22 +202,6 @@ export const callsFields: INodeProperties[] = [
 			},
 		],
 	},
-
-	{
-		displayName: 'Use Raw Filter JSON (Optional)',
-		name: 'filterJson',
-		type: 'string' as const,
-		default: '',
-		description:
-			'If provided (valid JSON), this object will be sent as the request body for the list call',
-		displayOptions: {
-			show: {
-				resource: ['calls'],
-				operation: ['getCalls'],
-			},
-		},
-	},
-
 	{
 		displayName: 'Filter Settings',
 		name: 'getCallsFilters',
@@ -260,18 +216,30 @@ export const callsFields: INodeProperties[] = [
 		default: {},
 		options: [
 			{
-				displayName: 'Timeframe From (Timestamp)',
-				name: 'timeFrom',
-				type: 'number' as const,
-				default: 0,
-				description: 'Unix timestamp of the "from" date',
-			},
-			{
-				displayName: 'Timeframe To (Timestamp)',
-				name: 'timeTo',
-				type: 'number' as const,
-				default: 0,
-				description: 'Unix timestamp of the "to" date',
+				displayName: 'Timeframe',
+				name: 'timeframe',
+				type: 'fixedCollection',
+				default: {},
+				options: [
+					{
+						name: 'range',
+						displayName: 'Range',
+						values: [
+							{
+								displayName: 'From (Timestamp)',
+								name: 'from',
+								type: 'number',
+								default: null,
+							},
+							{
+								displayName: 'To (Timestamp)',
+								name: 'to',
+								type: 'number',
+								default: null,
+							},
+						],
+					},
+				],
 			},
 			{
 				displayName: 'Show Tries As Well',
@@ -337,19 +305,6 @@ export const callsFields: INodeProperties[] = [
 		},
 	},
 	{
-		displayName: 'Use Raw Identify JSON (Optional)',
-		name: 'identifyJson',
-		type: 'string' as const,
-		default: '',
-		description: 'If provided (valid JSON), this object will be posted as-is to identify endpoint',
-		displayOptions: {
-			show: {
-				resource: ['calls'],
-				operation: ['identifyCall'],
-			},
-		},
-	},
-	{
 		displayName: 'Identify Fields',
 		name: 'identifyFields',
 		type: 'collection' as const,
@@ -379,20 +334,6 @@ export const callsFields: INodeProperties[] = [
 		],
 	},
 
-	{
-		displayName: 'Use Raw Employee Assignment JSON (Optional)',
-		name: 'employeeAssignmentJson',
-		type: 'string' as const,
-		default: '',
-		description:
-			'If provided (valid JSON), this object will be posted as-is to employeeAssignment endpoints',
-		displayOptions: {
-			show: {
-				resource: ['calls'],
-				operation: ['createEmployeeAssignment', 'deleteEmployeeAssignment'],
-			},
-		},
-	},
 	{
 		displayName: 'Employee Assignment Fields',
 		name: 'employeeAssignmentFields',
@@ -562,615 +503,256 @@ export const callsFields: INodeProperties[] = [
 	},
 ];
 
-export async function handleCalls(this: IExecuteFunctions, i: number) {
-	const operation = this.getNodeParameter('operation', i) as string;
+const phoneCallIdField = {
+	phoneCallId: {
+		location: 'path',
+		guard: positiveNumberGuard,
+	},
+} satisfies CrudFieldMap;
 
-	const credentials = await this.getCredentials('tanssApi');
-	if (!credentials) throw new NodeOperationError(this.getNode(), 'No credentials returned!');
-	const apiToken = this.getNodeParameter('apiToken', i, '') as string;
-	const typedCredentials = credentials as { baseURL?: string };
-	const baseURL = typedCredentials.baseURL;
-	if (!baseURL) throw new NodeOperationError(this.getNode(), 'No baseURL in credentials');
+const employeeAssignmentFields = {
+	employeeAssignmentFields: {
+		location: 'body',
+		spread: true,
+		guard: createSubObjectGuard({
+			employeeId: { guard: positiveNumberGuard },
+			username: { guard: nonEmptyStringGuard },
+		}),
+	},
+} satisfies CrudFieldMap;
 
-	if (operation === 'createCall') {
-		const callJson = this.getNodeParameter('callJson', i, '') as string;
+const createCallFields = {
+	createCallFields: {
+		location: 'body',
+		spread: true,
+		defaultValue: {},
+		guard: createSubObjectGuard({
+			date: { guard: nullOrGuard(positiveNumberGuard) },
+			fromPhoneNumber: { guard: nullOrGuard(stringGuard) },
+			toPhoneNumber: { guard: nullOrGuard(stringGuard) },
 
-		let body: IDataObject = {};
+			direction: { guard: nullOrGuard(stringGuard) },
 
-		// Priority: callJson (raw) > createCallFields collection > individual fields
-		if (callJson && callJson.trim() !== '') {
-			try {
-				const parsed = JSON.parse(callJson);
-				if (typeof parsed !== 'object' || parsed === null) {
-					throw new Error('callJson must be an object');
-				}
-				body = parsed as IDataObject;
-			} catch {
-				throw new NodeOperationError(this.getNode(), 'callJson must be valid JSON object.');
-			}
-		} else {
-			const createCallFields = this.getNodeParameter('createCallFields', i, {}) as IDataObject;
-			if (createCallFields && Object.keys(createCallFields).length > 0) {
-				Object.assign(body, createCallFields);
+			callId: { guard: nullOrGuard(stringGuard) },
+			telephoneSystemId: { guard: nullOrGuard(positiveNumberGuard) },
 
-				if (
-					createCallFields.phoneParticipants &&
-					typeof createCallFields.phoneParticipants === 'object' &&
-					'participant' in (createCallFields.phoneParticipants as Record<string, unknown>)
-				) {
-					const parts = (createCallFields.phoneParticipants as Record<string, unknown>)
-						.participant as unknown as Array<{ idString?: string; employeeId?: number }>;
-					const list = parts.map((p) => {
-						const obj: IDataObject = {};
-						if (p.idString) obj.idString = p.idString;
-						if (p.employeeId && p.employeeId > 0) obj.employeeId = p.employeeId;
-						return obj;
-					});
-					body.phoneParticipants = list;
-				}
+			fromCompanyId: { guard: nullOrGuard(positiveNumberGuard) },
+			fromCompanyPercent: { guard: nullOrGuard(positiveNumberGuard) },
+			fromEmployeeId: { guard: nullOrGuard(positiveNumberGuard) },
 
-				if (
-					createCallFields.phoneParticipantsJson &&
-					typeof createCallFields.phoneParticipantsJson === 'string' &&
-					createCallFields.phoneParticipantsJson.trim() !== ''
-				) {
-					try {
-						const parsed = JSON.parse(createCallFields.phoneParticipantsJson as string);
-						if (Array.isArray(parsed)) body.phoneParticipants = parsed;
-					} catch {
-						throw new NodeOperationError(
-							this.getNode(),
-							'createCallFields.phoneParticipantsJson must be valid JSON array.',
-						);
-					}
-				}
-			} else {
-				const optionalString = (name: string) => {
-					const v = this.getNodeParameter(name, i, '') as string;
-					return v === '' ? undefined : v;
-				};
-				const optionalNumber = (name: string) => {
-					const v = this.getNodeParameter(name, i, 0) as number;
-					return v === 0 ? undefined : v;
-				};
-				const optionalBoolean = (name: string) => {
-					return this.getNodeParameter(name, i, false) as boolean;
-				};
+			toCompanyId: { guard: nullOrGuard(positiveNumberGuard) },
+			toCompanyPercent: { guard: nullOrGuard(positiveNumberGuard) },
+			toEmployeeId: { guard: nullOrGuard(positiveNumberGuard) },
 
-				const callId = optionalString('callId');
-				const telephoneSystemId = optionalNumber('telephoneSystemId');
-				const date = optionalNumber('date');
-				const fromPhoneNumber = optionalString('fromPhoneNumber');
-				const fromCompanyId = optionalNumber('fromCompanyId');
-				const fromCompanyPercent = optionalNumber('fromCompanyPercent');
-				const fromEmployeeId = optionalNumber('fromEmployeeId');
-				const toPhoneNumber = optionalString('toPhoneNumber');
-				const toCompanyId = optionalNumber('toCompanyId');
-				const toCompanyPercent = optionalNumber('toCompanyPercent');
-				const toEmployeeId = optionalNumber('toEmployeeId');
-				const direction = this.getNodeParameter('direction', i, '') as string;
-				const connectionEstablished = optionalBoolean('connectionEstablished');
-				const durationTotal = optionalNumber('durationTotal');
-				const durationCall = optionalNumber('durationCall');
-				const group = optionalString('group');
-				const numberIdentifyState = optionalString('numberIdentifyState');
+			connectionEstablished: { guard: nullOrGuard(booleanGuard) },
 
-				if (callId !== undefined) body.callId = callId;
-				if (telephoneSystemId !== undefined) body.telephoneSystemId = telephoneSystemId;
-				if (date !== undefined) body.date = date;
-				if (fromPhoneNumber !== undefined) body.fromPhoneNumber = fromPhoneNumber;
-				if (fromCompanyId !== undefined) body.fromCompanyId = fromCompanyId;
-				if (fromCompanyPercent !== undefined) body.fromCompanyPercent = fromCompanyPercent;
-				if (fromEmployeeId !== undefined) body.fromEmployeeId = fromEmployeeId;
-				if (toPhoneNumber !== undefined) body.toPhoneNumber = toPhoneNumber;
-				if (toCompanyId !== undefined) body.toCompanyId = toCompanyId;
-				if (toCompanyPercent !== undefined) body.toCompanyPercent = toCompanyPercent;
-				if (toEmployeeId !== undefined) body.toEmployeeId = toEmployeeId;
-				if (direction) body.direction = direction;
-				body.connectionEstablished = connectionEstablished;
-				if (durationTotal !== undefined) body.durationTotal = durationTotal;
-				if (durationCall !== undefined) body.durationCall = durationCall;
-				if (group !== undefined) body.group = group;
-				if (numberIdentifyState !== undefined) body.numberIdentifyState = numberIdentifyState;
+			durationTotal: { guard: nullOrGuard(positiveNumberGuard) },
+			durationCall: { guard: nullOrGuard(positiveNumberGuard) },
 
-				const participantsJson = this.getNodeParameter('phoneParticipantsJson', i, '') as string;
-				if (participantsJson && participantsJson.trim() !== '') {
-					try {
-						const parsed = JSON.parse(participantsJson);
-						if (!Array.isArray(parsed)) throw new Error('phoneParticipantsJson must be an array');
-						body.phoneParticipants = parsed;
-					} catch {
-						throw new NodeOperationError(
-							this.getNode(),
-							'phoneParticipantsJson must be valid JSON array.',
-						);
-					}
-				} else {
-					const parts = this.getNodeParameter('phoneParticipants', i, { participant: [] }) as {
-						participant?: Array<{ idString?: string; employeeId?: number }>;
-					};
-					const list = (parts.participant ?? [])
-						.map((p) => {
-							const obj: IDataObject = {};
-							if (p.idString) obj.idString = p.idString;
-							if (p.employeeId && p.employeeId > 0) obj.employeeId = p.employeeId;
-							return obj;
-						})
-						.filter(Boolean);
-					if (list.length) body.phoneParticipants = list;
-				}
-			}
-		}
+			group: { guard: nullOrGuard(stringGuard) },
+			numberIdentifyState: { guard: nullOrGuard(stringGuard) },
 
-		const url = `${baseURL}/backend/api/calls/v1`;
-		const requestOptions: IDataObject = {
-			method: 'POST',
-			url,
-			headers: { apiToken, 'Content-Type': 'application/json' },
-			body,
-			json: true,
-		};
-
-		try {
-			const response = await this.helpers.httpRequest(
-				requestOptions as unknown as import('n8n-workflow').IHttpRequestOptions,
-			);
-			return response;
-		} catch (error: unknown) {
-			const message = error instanceof Error ? error.message : String(error);
-			throw new NodeOperationError(this.getNode(), `Failed to create/import call: ${message}`);
-		}
-	}
-
-	if (operation === 'getCalls') {
-		const filterJson = this.getNodeParameter('filterJson', i, '') as string;
-		let body: IDataObject = {};
-
-		if (filterJson && filterJson.trim() !== '') {
-			try {
-				const parsed = JSON.parse(filterJson);
-				if (typeof parsed !== 'object' || parsed === null) {
-					throw new Error('filterJson must be an object');
-				}
-				body = parsed as IDataObject;
-			} catch {
-				throw new NodeOperationError(this.getNode(), 'filterJson must be valid JSON object.');
-			}
-		} else {
-			const filters = this.getNodeParameter('getCallsFilters', i, {}) as IDataObject;
-
-			const timeFrom = (filters.timeFrom as number) || 0;
-			const timeTo = (filters.timeTo as number) || 0;
-			if (timeFrom || timeTo) {
-				const timeframe: IDataObject = {};
-				if (timeFrom && timeFrom > 0) timeframe.from = timeFrom;
-				if (timeTo && timeTo > 0) timeframe.to = timeTo;
-				body.timeframe = timeframe;
-			}
-
-			if (filters.showTrysAsWell === true) body.showTrysAsWell = true;
-
-			if (
-				filters.numberFilters &&
-				typeof filters.numberFilters === 'string' &&
-				(filters.numberFilters as string).trim() !== ''
-			) {
-				const arr = (filters.numberFilters as string)
-					.split(',')
-					.map((s) => s.trim())
-					.filter(Boolean);
-				if (arr.length) body.numberFilters = arr;
-			}
-
-			if (
-				filters.employeeIdFilter &&
-				typeof filters.employeeIdFilter === 'number' &&
-				filters.employeeIdFilter > 0
-			)
-				body.employeeId = filters.employeeIdFilter;
-			if (
-				filters.companyIdFilter &&
-				typeof filters.companyIdFilter === 'number' &&
-				filters.companyIdFilter > 0
-			)
-				body.companyId = filters.companyIdFilter;
-			if (filters.numberInfos === true) body.numberInfos = true;
-
-			if (
-				filters.directions &&
-				Array.isArray(filters.directions) &&
-				(filters.directions as string[]).length
-			) {
-				body.directions = filters.directions;
-			}
-		}
-
-		const url = `${baseURL}/backend/api/calls/v1`;
-		const requestOptions: IDataObject = {
-			method: 'PUT',
-			url,
-			headers: { apiToken, 'Content-Type': 'application/json' },
-			body,
-			json: true,
-		};
-
-		try {
-			const response = await this.helpers.httpRequest(
-				requestOptions as unknown as import('n8n-workflow').IHttpRequestOptions,
-			);
-			return response;
-		} catch (error: unknown) {
-			const message = error instanceof Error ? error.message : String(error);
-			throw new NodeOperationError(this.getNode(), `Failed to fetch calls list: ${message}`);
-		}
-	}
-
-	if (operation === 'getCallById') {
-		const phoneCallId = this.getNodeParameter('phoneCallId', i, 0) as number;
-		if (!phoneCallId || phoneCallId <= 0) {
-			throw new NodeOperationError(this.getNode(), 'A valid Phone Call ID is required.');
-		}
-
-		const url = `${baseURL}/backend/api/calls/v1/${encodeURIComponent(String(phoneCallId))}`;
-		const requestOptions: IDataObject = {
-			method: 'GET',
-			url,
-			headers: { apiToken, 'Content-Type': 'application/json' },
-			json: true,
-		};
-
-		try {
-			const response = await this.helpers.httpRequest(
-				requestOptions as unknown as import('n8n-workflow').IHttpRequestOptions,
-			);
-			return response;
-		} catch (error: unknown) {
-			const message = error instanceof Error ? error.message : String(error);
-			throw new NodeOperationError(this.getNode(), `Failed to fetch phone call: ${message}`);
-		}
-	}
-
-	if (operation === 'updateCall') {
-		const phoneCallId = this.getNodeParameter('phoneCallId', i, 0) as number;
-		if (!phoneCallId || phoneCallId <= 0) {
-			throw new NodeOperationError(this.getNode(), 'A valid Phone Call ID is required for update.');
-		}
-
-		const callJson = this.getNodeParameter('callJson', i, '') as string;
-
-		let body: IDataObject = {};
-
-		if (callJson && callJson.trim() !== '') {
-			try {
-				const parsed = JSON.parse(callJson);
-				if (typeof parsed !== 'object' || parsed === null) {
-					throw new Error('callJson must be an object');
-				}
-				body = parsed as IDataObject;
-			} catch {
-				throw new NodeOperationError(this.getNode(), 'callJson must be valid JSON object.');
-			}
-		} else {
-			const createCallFields = this.getNodeParameter('createCallFields', i, {}) as IDataObject;
-			if (createCallFields && Object.keys(createCallFields).length > 0) {
-				Object.assign(body, createCallFields);
-
-				if (
-					createCallFields.phoneParticipants &&
-					typeof createCallFields.phoneParticipants === 'object' &&
-					'participant' in (createCallFields.phoneParticipants as Record<string, unknown>)
-				) {
-					const parts = (createCallFields.phoneParticipants as Record<string, unknown>)
-						.participant as unknown as Array<{ idString?: string; employeeId?: number }>;
-					const list = parts.map((p) => {
-						const obj: IDataObject = {};
-						if (p.idString) obj.idString = p.idString;
-						if (p.employeeId && p.employeeId > 0) obj.employeeId = p.employeeId;
-						return obj;
-					});
-					body.phoneParticipants = list;
-				}
-
-				if (
-					createCallFields.phoneParticipantsJson &&
-					typeof createCallFields.phoneParticipantsJson === 'string' &&
-					createCallFields.phoneParticipantsJson.trim() !== ''
-				) {
-					try {
-						const parsed = JSON.parse(createCallFields.phoneParticipantsJson as string);
-						if (Array.isArray(parsed)) body.phoneParticipants = parsed;
-					} catch {
-						throw new NodeOperationError(
-							this.getNode(),
-							'createCallFields.phoneParticipantsJson must be valid JSON array.',
-						);
-					}
-				}
-			} else {
-				const optionalString = (name: string) => {
-					const v = this.getNodeParameter(name, i, '') as string;
-					return v === '' ? undefined : v;
-				};
-				const optionalNumber = (name: string) => {
-					const v = this.getNodeParameter(name, i, 0) as number;
-					return v === 0 ? undefined : v;
-				};
-				const optionalBoolean = (name: string) => {
-					return this.getNodeParameter(name, i, false) as boolean;
-				};
-
-				const callId = optionalString('callId');
-				const telephoneSystemId = optionalNumber('telephoneSystemId');
-				const date = optionalNumber('date');
-				const fromPhoneNumber = optionalString('fromPhoneNumber');
-				const fromCompanyId = optionalNumber('fromCompanyId');
-				const fromCompanyPercent = optionalNumber('fromCompanyPercent');
-				const fromEmployeeId = optionalNumber('fromEmployeeId');
-				const toPhoneNumber = optionalString('toPhoneNumber');
-				const toCompanyId = optionalNumber('toCompanyId');
-				const toCompanyPercent = optionalNumber('toCompanyPercent');
-				const toEmployeeId = optionalNumber('toEmployeeId');
-				const direction = this.getNodeParameter('direction', i, '') as string;
-				const connectionEstablished = optionalBoolean('connectionEstablished');
-				const durationTotal = optionalNumber('durationTotal');
-				const durationCall = optionalNumber('durationCall');
-				const group = optionalString('group');
-				const numberIdentifyState = optionalString('numberIdentifyState');
-
-				if (callId !== undefined) body.callId = callId;
-				if (telephoneSystemId !== undefined) body.telephoneSystemId = telephoneSystemId;
-				if (date !== undefined) body.date = date;
-				if (fromPhoneNumber !== undefined) body.fromPhoneNumber = fromPhoneNumber;
-				if (fromCompanyId !== undefined) body.fromCompanyId = fromCompanyId;
-				if (fromCompanyPercent !== undefined) body.fromCompanyPercent = fromCompanyPercent;
-				if (fromEmployeeId !== undefined) body.fromEmployeeId = fromEmployeeId;
-				if (toPhoneNumber !== undefined) body.toPhoneNumber = toPhoneNumber;
-				if (toCompanyId !== undefined) body.toCompanyId = toCompanyId;
-				if (toCompanyPercent !== undefined) body.toCompanyPercent = toCompanyPercent;
-				if (toEmployeeId !== undefined) body.toEmployeeId = toEmployeeId;
-				if (direction) body.direction = direction;
-				body.connectionEstablished = connectionEstablished;
-				if (durationTotal !== undefined) body.durationTotal = durationTotal;
-				if (durationCall !== undefined) body.durationCall = durationCall;
-				if (group !== undefined) body.group = group;
-				if (numberIdentifyState !== undefined) body.numberIdentifyState = numberIdentifyState;
-
-				const participantsJson = this.getNodeParameter('phoneParticipantsJson', i, '') as string;
-				if (participantsJson && participantsJson.trim() !== '') {
-					try {
-						const parsed = JSON.parse(participantsJson);
-						if (!Array.isArray(parsed)) throw new Error('phoneParticipantsJson must be an array');
-						body.phoneParticipants = parsed;
-					} catch {
-						throw new NodeOperationError(
-							this.getNode(),
-							'phoneParticipantsJson must be valid JSON array.',
-						);
-					}
-				} else {
-					const parts = this.getNodeParameter('phoneParticipants', i, { participant: [] }) as {
-						participant?: Array<{ idString?: string; employeeId?: number }>;
-					};
-					const list = (parts.participant ?? [])
-						.map((p) => {
-							const obj: IDataObject = {};
-							if (p.idString) obj.idString = p.idString;
-							if (p.employeeId && p.employeeId > 0) obj.employeeId = p.employeeId;
-							return obj;
-						})
-						.filter(Boolean);
-					if (list.length) body.phoneParticipants = list;
-				}
-			}
-		}
-
-		const url = `${baseURL}/backend/api/calls/v1/${encodeURIComponent(String(phoneCallId))}`;
-		const requestOptions: IDataObject = {
-			method: 'PUT',
-			url,
-			headers: { apiToken, 'Content-Type': 'application/json' },
-			body,
-			json: true,
-		};
-
-		try {
-			const response = await this.helpers.httpRequest(
-				requestOptions as unknown as import('n8n-workflow').IHttpRequestOptions,
-			);
-			return response;
-		} catch (error: unknown) {
-			const message = error instanceof Error ? error.message : String(error);
-			throw new NodeOperationError(this.getNode(), `Failed to update phone call: ${message}`);
-		}
-	}
-
-	if (operation === 'identifyCall') {
-		const identifyJson = this.getNodeParameter('identifyJson', i, '') as string;
-		let body: IDataObject = {};
-
-		if (identifyJson && identifyJson.trim() !== '') {
-			try {
-				const parsed = JSON.parse(identifyJson);
-				if (typeof parsed !== 'object' || parsed === null)
-					throw new Error('identifyJson must be an object');
-				body = parsed as IDataObject;
-			} catch {
-				throw new NodeOperationError(this.getNode(), 'identifyJson must be valid JSON object.');
-			}
-		} else {
-			const identifyFields = this.getNodeParameter('identifyFields', i, {}) as IDataObject;
-			const from = (identifyFields.fromPhoneNumber as string) || '';
-			const to = (identifyFields.toPhoneNumber as string) || '';
-			if (!from || !to) {
-				throw new NodeOperationError(
-					this.getNode(),
-					'Both From Phone Number and To Phone Number are required to identify a call.',
-				);
-			}
-			body.fromPhoneNumber = from;
-			body.toPhoneNumber = to;
-		}
-
-		const url = `${baseURL}/backend/api/calls/v1/identify`;
-		const requestOptions: IDataObject = {
-			method: 'POST',
-			url,
-			headers: { apiToken, 'Content-Type': 'application/json' },
-			body,
-			json: true,
-		};
-
-		try {
-			const response = await this.helpers.httpRequest(
-				requestOptions as unknown as import('n8n-workflow').IHttpRequestOptions,
-			);
-			return response;
-		} catch (error: unknown) {
-			const message = error instanceof Error ? error.message : String(error);
-			throw new NodeOperationError(this.getNode(), `Failed to identify phone call: ${message}`);
-		}
-	}
-
-	if (operation === 'getEmployeeAssignments') {
-		const url = `${baseURL}/backend/api/calls/v1/employeeAssignment`;
-		const requestOptions: IDataObject = {
-			method: 'GET',
-			url,
-			headers: {
-				apiToken,
-				Authorization: `Bearer ${apiToken}`,
-				Accept: 'application/json',
+			// TODO: Check if this can be removed
+			phoneParticipantsJson: {
+				guard: nullOrGuard(jsonGuard),
 			},
-			json: true,
-		};
+			phoneParticipants: {
+				guard: createSubObjectGuard(
+					{
+						participant: {
+							spread: true,
+							guard: arrayGuard(
+								createSubObjectGuard({
+									idString: { guard: nonEmptyStringGuard },
+									employeeId: { guard: positiveNumberGuard },
+								}),
+							),
+						},
+					},
+					{ allowEmpty: true },
+				),
+			},
+		}),
+	},
+} satisfies CrudFieldMap;
 
-		try {
-			const response = await this.helpers.httpRequest(
-				requestOptions as unknown as import('n8n-workflow').IHttpRequestOptions,
-			);
-			return response;
-		} catch (error: unknown) {
-			const message = error instanceof Error ? error.message : String(error);
-			throw new NodeOperationError(
-				this.getNode(),
-				`Failed to fetch employee assignments: ${message}`,
-			);
-		}
-	}
+const getCallsFilters = {
+	getCallsFilters: {
+		location: 'body',
+		spread: true,
+		defaultValue: {},
+		guard: createSubObjectGuard(
+			{
+				timeframe: {
+					guard: createSubObjectGuard(
+						{
+							range: {
+								spread: true,
+								guard: createSubObjectGuard(
+									{
+										from: {
+											guard: nullOrGuard(numberGuard),
+										},
+										to: {
+											guard: nullOrGuard(numberGuard),
+										},
+									},
+									{ allowEmpty: true },
+								),
+							},
+						},
+						{ allowEmpty: true },
+					),
+				},
+				showTrysAsWell: {
+					guard: nullOrGuard(booleanGuard),
+				},
+				numberFilters: {
+					guard: nullOrGuard(csvGuard),
+				},
+				employeeIdFilter: {
+					locationName: 'employeeId',
 
-	if (operation === 'createEmployeeAssignment') {
-		const raw = this.getNodeParameter('employeeAssignmentJson', i, '') as string;
-		let body: IDataObject = {};
+					guard: nullOrGuard(numberGuard),
+				},
+				companyIdFilter: {
+					locationName: 'companyId',
 
-		if (raw && raw.trim() !== '') {
-			try {
-				const parsed = JSON.parse(raw);
-				if (typeof parsed !== 'object' || parsed === null)
-					throw new Error('employeeAssignmentJson must be an object');
-				body = parsed as IDataObject;
-			} catch {
-				throw new NodeOperationError(
-					this.getNode(),
-					'employeeAssignmentJson must be valid JSON object.',
-				);
-			}
-		} else {
-			const fields = this.getNodeParameter('employeeAssignmentFields', i, {}) as IDataObject;
-			const employeeId = (fields.employeeId as number) || 0;
-			const username = (fields.username as string) || '';
-			if (!employeeId || employeeId <= 0)
-				throw new NodeOperationError(
-					this.getNode(),
-					'Employee ID is required for creating assignment.',
-				);
-			if (!username)
-				throw new NodeOperationError(
-					this.getNode(),
-					'Username (idString) is required for creating assignment.',
-				);
-			body.employeeId = employeeId;
-			body.username = username;
-		}
+					guard: nullOrGuard(numberGuard),
+				},
+				numberInfos: {
+					guard: nullOrGuard(booleanGuard),
+				},
+				directions: {
+					guard: nullOrGuard(arrayGuard(stringGuard)),
+				},
+			},
+			{ allowEmpty: true },
+		),
+	},
+} satisfies CrudFieldMap;
 
-		const url = `${baseURL}/backend/api/calls/v1/employeeAssignment`;
-		const requestOptions: IDataObject = {
-			method: 'POST',
-			url,
-			headers: { apiToken, 'Content-Type': 'application/json' },
-			body,
-			json: true,
-		};
+const notificationFields = {
+	notificationFields: {
+		location: 'body',
+		spread: true,
+		guard: createSubObjectGuard({
+			id: { guard: positiveNumberGuard },
+			callId: { guard: nullOrGuard(stringGuard) },
+			telephoneSystemId: { guard: nullOrGuard(positiveNumberGuard) },
+			date: { guard: nullOrGuard(positiveNumberGuard) },
+			fromPhoneNumber: { guard: nullOrGuard(stringGuard) },
+			// TODO: Check if this can be removed
+			fromPhoneNrInfos: { guard: nullOrGuard(jsonGuard) },
+			toPhoneNumber: { guard: nullOrGuard(stringGuard) },
+			// TODO: Check if this can be removed
+			toPhoneNrInfos: { guard: nullOrGuard(jsonGuard) },
+			direction: { guard: nullOrGuard(stringGuard) },
+			connectionEstablished: { guard: nullOrGuard(booleanGuard) },
+			durationTotal: { guard: nullOrGuard(positiveNumberGuard) },
+			durationCall: { guard: nullOrGuard(positiveNumberGuard) },
+			group: { guard: nullOrGuard(stringGuard) },
+			// TODO: Check if this can be removed
+			phoneParticipantsJson: { guard: nullOrGuard(jsonGuard) },
+			phoneParticipants: {
+				guard: createSubObjectGuard(
+					{
+						participant: {
+							spread: true,
+							guard: arrayGuard(
+								createSubObjectGuard({
+									idString: { guard: nonEmptyStringGuard },
+									employeeId: { guard: positiveNumberGuard },
+								}),
+							),
+						},
+					},
+					{ allowEmpty: true },
+				),
+			},
+		}),
+	},
+} satisfies CrudFieldMap;
 
-		try {
-			const response = await this.helpers.httpRequest(
-				requestOptions as unknown as import('n8n-workflow').IHttpRequestOptions,
-			);
-			return response;
-		} catch (error: unknown) {
-			const message = error instanceof Error ? error.message : String(error);
-			throw new NodeOperationError(
-				this.getNode(),
-				`Failed to create employee assignment: ${message}`,
-			);
-		}
-	}
+export const handleCalls = createCrudHandler({
+	operationField: 'operation',
+	// Role: `PHONE`
+	credentialType: 'system',
 
-	if (operation === 'deleteEmployeeAssignment') {
-		const raw = this.getNodeParameter('employeeAssignmentJson', i, '') as string;
-		let body: IDataObject = {};
+	operations: {
+		getCallById: {
+			fields: phoneCallIdField,
+			httpMethod: 'GET',
+			subPath: 'calls/v1/{phoneCallId}',
+			basePath: 'backend/api',
+		},
 
-		if (raw && raw.trim() !== '') {
-			try {
-				const parsed = JSON.parse(raw);
-				if (typeof parsed !== 'object' || parsed === null)
-					throw new Error('employeeAssignmentJson must be an object');
-				body = parsed as IDataObject;
-			} catch {
-				throw new NodeOperationError(
-					this.getNode(),
-					'employeeAssignmentJson must be valid JSON object.',
-				);
-			}
-		} else {
-			const fields = this.getNodeParameter('employeeAssignmentFields', i, {}) as IDataObject;
-			const employeeId = (fields.employeeId as number) || 0;
-			const username = (fields.username as string) || '';
-			if (!employeeId || employeeId <= 0)
-				throw new NodeOperationError(
-					this.getNode(),
-					'Employee ID is required for deleting assignment.',
-				);
-			if (!username)
-				throw new NodeOperationError(
-					this.getNode(),
-					'Username (idString) is required for deleting assignment.',
-				);
-			body.employeeId = employeeId;
-			body.username = username;
-		}
+		identifyCall: {
+			fields: {
+				identifyFields: {
+					location: 'body',
+					spread: true,
+					guard: createSubObjectGuard({
+						fromPhoneNumber: { guard: nonEmptyStringGuard },
+						toPhoneNumber: { guard: nonEmptyStringGuard },
+					}),
+				},
+			},
+			httpMethod: 'POST',
+			subPath: 'calls/v1/identify',
+			basePath: 'backend/api',
+		},
 
-		const url = `${baseURL}/backend/api/calls/v1/employeeAssignment`;
-		const requestOptions: IDataObject = {
-			method: 'DELETE',
-			url,
-			headers: { apiToken, 'Content-Type': 'application/json' },
-			body,
-			json: true,
-		};
+		getEmployeeAssignments: {
+			fields: {},
+			httpMethod: 'GET',
+			subPath: 'calls/v1/employeeAssignment',
+			basePath: 'backend/api',
+		},
 
-		try {
-			const response = await this.helpers.httpRequest(
-				requestOptions as unknown as import('n8n-workflow').IHttpRequestOptions,
-			);
-			return response;
-		} catch (error: unknown) {
-			const message = error instanceof Error ? error.message : String(error);
-			throw new NodeOperationError(
-				this.getNode(),
-				`Failed to delete employee assignment: ${message}`,
-			);
-		}
-	}
+		createEmployeeAssignment: {
+			fields: employeeAssignmentFields,
+			httpMethod: 'POST',
+			subPath: 'calls/v1/employeeAssignment',
+			basePath: 'backend/api',
+		},
 
-	throw new NodeOperationError(this.getNode(), `Operation "${operation}" not supported by Calls.`);
-}
+		deleteEmployeeAssignment: {
+			fields: employeeAssignmentFields,
+			httpMethod: 'DELETE',
+			subPath: 'calls/v1/employeeAssignment',
+			basePath: 'backend/api',
+		},
+
+		createCall: {
+			fields: createCallFields,
+			httpMethod: 'POST',
+			subPath: 'calls/v1',
+			basePath: 'backend/api',
+		},
+
+		updateCall: {
+			fields: {
+				...phoneCallIdField,
+				...createCallFields,
+			},
+			httpMethod: 'PUT',
+			subPath: 'calls/v1/{phoneCallId}',
+			basePath: 'backend/api',
+		},
+
+		getCalls: {
+			fields: getCallsFilters,
+			httpMethod: 'PUT',
+			subPath: 'calls/v1',
+			basePath: 'backend/api',
+		},
+
+		createNotification: {
+			fields: notificationFields,
+			httpMethod: 'POST',
+			subPath: 'calls/v1/notification',
+			basePath: 'backend/api',
+		},
+	},
+});

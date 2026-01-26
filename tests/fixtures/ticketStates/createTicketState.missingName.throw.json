@@ -1,0 +1,22 @@
+{
+  "name": "createTicketState throws NodeOperationError on missing name",
+  "itemIndex": 0,
+  "parameters": {
+    "operation": "createTicketState",
+    "name": ""
+  },
+  "credentials": {
+    "tanssApi": {
+      "baseURL": "https://example.invalid",
+      "authentication": "loginTotp",
+      "username": "user",
+      "password": "pass"
+    }
+  },
+  "http": [],
+  "expected": {
+    "kind": "throws",
+    "name": "NodeOperationError",
+    "messageIncludes": "name cannot be empty"
+  }
+}

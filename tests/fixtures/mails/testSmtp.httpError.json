@@ -1,0 +1,73 @@
+{
+  "name": "testSmtp returns http-error wrapper",
+  "itemIndex": 0,
+  "parameters": {
+    "operation": "testSmtp",
+    "receiver": "user@example.invalid",
+    "mailObject": {
+      "smtpAddress": "smtp.example.invalid",
+      "smtpHost": "smtp.example.invalid",
+      "smtpUser": "user",
+      "smtpPassword": "password",
+      "smtpPort": 587,
+      "smtpAuth": false
+    }
+  },
+  "credentials": {
+    "tanssApi": {
+      "baseURL": "https://example.invalid",
+      "authentication": "loginTotp",
+      "username": "user",
+      "password": "pass"
+    }
+  },
+  "http": [
+    {
+      "expect": {
+        "method": "POST",
+        "url": "https://example.invalid/backend/api/v1/login",
+        "json": true,
+        "returnFullResponse": true,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "username": "user",
+          "password": "pass"
+        }
+      },
+      "reply": {
+        "statusCode": 200,
+        "body": {
+          "content": {
+            "apiKey": "TOKEN-123"
+          }
+        },
+        "headers": { "content-type": "application/json" }
+      }
+    },
+    {
+      "expect": {
+        "method": "POST",
+        "url": "https://example.invalid/backend/api/v1/mails/test/smtp?receiver=user%40example.invalid"
+      },
+      "throw": {
+        "kind": "axios",
+        "statusCode": 502,
+        "data": {
+          "message": "bad gateway"
+        }
+      }
+    }
+  ],
+  "expected": {
+    "kind": "returns",
+    "matchObject": {
+      "success": false,
+      "statusCode": 502,
+      "body": {
+        "message": "bad gateway"
+      }
+    }
+  }
+}

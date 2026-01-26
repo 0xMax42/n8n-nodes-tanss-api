@@ -1,21 +1,21 @@
 {
-    "name": "n8n-nodes-tanss",
-    "version": "1.0.7",
+    "name": "n8n-nodes-tanss-api",
+    "version": "0.1.0",
     "description": "n8n community node to use the TANSS API",
     "license": "MIT",
-    "homepage": "https://github.com/BuddiesD",
+    "homepage": "https://github.com/0xMax42/n8n-nodes-tanss-api",
     "keywords": [
         "n8n-community-node-package",
-        "n8n-nodes-tanss",
+        "n8n-nodes-tanss-api",
         "Tanss"
     ],
     "author": {
-        "name": "J.W",
-        "email": "dev@buddies-dev.de"
+        "name": "0xMax42",
+        "email": "git@0xmax42.io"
     },
     "repository": {
         "type": "git",
-        "url": "https://github.com/BuddiesD/n8n-nodes-tanss.git"
+        "url": "https://github.com/0xMax42/n8n-nodes-tanss-api.git"
     },
     "scripts": {
         "build": "n8n-node build",
@@ -26,7 +26,13 @@
         "format": "prettier --check .",
         "format:fix": "prettier --write .",
         "release": "n8n-node release",
-        "prepublishOnly": "n8n-node prerelease"
+        "prepublishOnly": "n8n-node prerelease",
+        "test": "jest",
+        "test:watch": "jest --watch",
+        "test:ci": "jest --ci",
+        "test:one": "jest -t",
+        "test:coverage": "jest --coverage",
+        "test:sum": "jest --silent --reporters=./clean-tests-reporter.js"
     },
     "files": [
         "dist"
@@ -42,10 +48,14 @@
     },
     "devDependencies": {
         "@n8n/node-cli": "*",
+        "@types/jest": "^30.0.0",
         "@types/node": "^24.9.1",
         "eslint": "9.32.0",
+        "jest": "^30.2.0",
+        "jest-summary-reporter": "^0.0.2",
         "prettier": "3.6.2",
         "release-it": "^19.0.4",
+        "ts-jest": "^29.4.6",
         "typescript": "5.9.2"
     },
     "peerDependencies": {

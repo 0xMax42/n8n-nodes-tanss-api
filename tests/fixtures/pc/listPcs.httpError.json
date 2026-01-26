@@ -1,0 +1,78 @@
+{
+    "name": "listPcs returns http-error wrapper",
+    "itemIndex": 0,
+    "parameters": {
+        "operation": "listPcs",
+        "listQuery": {
+            "active": "ACTIVE_ONLY",
+            "type": "PCS_ONLY"
+        }
+    },
+    "credentials": {
+        "tanssApi": {
+            "baseURL": "https://example.invalid",
+            "authentication": "loginTotp",
+            "username": "user",
+            "password": "pass"
+        }
+    },
+    "http": [
+        {
+            "expect": {
+                "method": "POST",
+                "url": "https://example.invalid/backend/api/v1/login",
+                "json": true,
+                "returnFullResponse": true,
+                "headers": {
+                    "Content-Type": "application/json"
+                },
+                "body": {
+                    "username": "user",
+                    "password": "pass"
+                }
+            },
+            "reply": {
+                "statusCode": 200,
+                "body": {
+                    "content": {
+                        "apiKey": "TOKEN-123"
+                    }
+                },
+                "headers": { "content-type": "application/json" }
+            }
+        },
+        {
+            "expect": {
+                "method": "PUT",
+                "url": "https://example.invalid/backend/api/v1/pcs",
+                "json": true,
+                "headers": {
+                    "Content-Type": "application/json",
+                    "apiToken": "Bearer TOKEN-123"
+                },
+                "body": {
+                    "active": "ACTIVE_ONLY",
+                    "type": "PCS_ONLY"
+                },
+                "returnFullResponse": true
+            },
+            "throw": {
+                "kind": "axios",
+                "statusCode": 503,
+                "data": {
+                    "message": "service unavailable"
+                }
+            }
+        }
+    ],
+    "expected": {
+        "kind": "returns",
+        "matchObject": {
+            "success": false,
+            "statusCode": 503,
+            "body": {
+                "message": "service unavailable"
+            }
+        }
+    }
+}

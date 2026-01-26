@@ -1,0 +1,45 @@
+{
+    "name": "updateCall returns success wrapper",
+    "itemIndex": 0,
+    "parameters": {
+        "operation": "updateCall",
+        "phoneCallId": 42,
+        "createCallFields": {
+            "direction": "OUTGOING"
+        }
+    },
+    "credentials": {
+        "tanssApi": {
+            "baseURL": "https://example.invalid",
+            "authentication": "apiToken",
+            "apiToken": "TOKEN-123"
+        }
+    },
+    "http": [
+        {
+            "expect": {
+                "method": "PUT",
+                "url": "https://example.invalid/backend/api/calls/v1/42",
+                "json": true,
+                "headers": {
+                    "Content-Type": "application/json",
+                    "apiToken": "Bearer TOKEN-123"
+                },
+                "body": { "direction": "OUTGOING" }
+            },
+            "reply": {
+                "statusCode": 200,
+                "body": { "id": 42, "direction": "OUTGOING" },
+                "headers": { "content-type": "application/json" }
+            }
+        }
+    ],
+    "expected": {
+        "kind": "returns",
+        "matchObject": {
+            "success": true,
+            "statusCode": 200,
+            "body": { "id": 42 }
+        }
+    }
+}

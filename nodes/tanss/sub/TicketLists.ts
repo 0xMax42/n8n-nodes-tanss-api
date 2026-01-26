@@ -1,4 +1,14 @@
-import { IExecuteFunctions, INodeProperties, NodeOperationError } from 'n8n-workflow';
+import { INodeProperties } from 'n8n-workflow';
+import {
+	arrayGuard,
+	booleanGuard,
+	createCrudHandler,
+	createSubObjectGuard,
+	CrudFieldMap,
+	nullOrGuard,
+	positiveNumberGuard,
+	stringGuard,
+} from '../lib';
 
 export const ticketListOperations: INodeProperties[] = [
 	{
@@ -78,22 +88,6 @@ export const ticketListOperations: INodeProperties[] = [
 ];
 
 export const ticketListFields: INodeProperties[] = [
-	{
-		displayName: 'API Token',
-		name: 'apiToken',
-		type: 'string' as const,
-		required: true,
-		typeOptions: {
-			password: true,
-		},
-		default: '',
-		description: 'API token obtained from the TANSS API login',
-		displayOptions: {
-			show: {
-				resource: ['ticketList'],
-			},
-		},
-	},
 	{
 		displayName: 'Company ID',
 		name: 'companyId',
@@ -214,88 +208,139 @@ export const ticketListFields: INodeProperties[] = [
 	},
 ];
 
-export async function handleTicketList(this: IExecuteFunctions, i: number) {
-	const operation = this.getNodeParameter('operation', i) as string;
-	const credentials = await this.getCredentials('tanssApi');
+const companyIdField = {
+	companyId: {
+		location: 'path',
+		guard: positiveNumberGuard,
+	},
+} satisfies CrudFieldMap;
 
-	if (!credentials) {
-		throw new NodeOperationError(this.getNode(), 'No credentials returned!');
-	}
+const customTicketQueryField = {
+	customTicketQuery: {
+		location: 'body',
+		spread: true,
+		guard: createSubObjectGuard({
+			companies: {
+				guard: nullOrGuard(arrayGuard(positiveNumberGuard)),
+			},
+			departments: {
+				guard: nullOrGuard(arrayGuard(positiveNumberGuard)),
+			},
+			ids: {
+				guard: nullOrGuard(arrayGuard(positiveNumberGuard)),
+			},
+			includeDoneTickets: {
+				guard: nullOrGuard(booleanGuard),
+			},
+			isRepair: {
+				guard: nullOrGuard(booleanGuard),
+			},
+			itemsPerPage: {
+				guard: nullOrGuard(positiveNumberGuard),
+			},
+			modifiedWithinTimeframe: {
+				guard: nullOrGuard(
+					createSubObjectGuard({
+						from: { guard: nullOrGuard(positiveNumberGuard) },
+						to: { guard: nullOrGuard(positiveNumberGuard) },
+					}),
+				),
+			},
+			notAssignedToEmployees: {
+				guard: nullOrGuard(arrayGuard(positiveNumberGuard)),
+			},
+			page: {
+				guard: nullOrGuard(positiveNumberGuard),
+			},
+			phaseId: {
+				guard: nullOrGuard(positiveNumberGuard),
+			},
+			projectId: {
+				guard: nullOrGuard(positiveNumberGuard),
+			},
+			remitterId: {
+				guard: nullOrGuard(positiveNumberGuard),
+			},
+			staff: {
+				guard: nullOrGuard(arrayGuard(positiveNumberGuard)),
+			},
+			states: {
+				guard: nullOrGuard(arrayGuard(stringGuard)),
+			},
+			types: {
+				guard: nullOrGuard(arrayGuard(stringGuard)),
+			},
+		}),
+	},
+} satisfies CrudFieldMap;
 
-	const apiToken = this.getNodeParameter('apiToken', i, '') as string;
+export const handleTicketList = createCrudHandler({
+	operationField: 'operation',
+	credentialType: 'user',
 
-	let url = '';
-	const requestOptions: {
-		method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE' | 'HEAD';
-		headers: { apiToken: string; 'Content-Type': string };
-		json: boolean;
-		url?: string;
-		body?: unknown;
-	} = {
-		method: 'GET',
-		headers: {
-			apiToken,
-			'Content-Type': 'application/json',
+	operations: {
+		getOwnTickets: {
+			httpMethod: 'GET',
+			subPath: 'tickets/own',
+			fields: {},
 		},
-		json: true,
-	};
 
-	switch (operation) {
-		case 'getOwnTickets':
-			url = `${credentials.baseURL}/backend/api/v1/tickets/own`;
-			break;
-		case 'getGeneralTickets':
-			url = `${credentials.baseURL}/backend/api/v1/tickets/general`;
-			break;
-		case 'getCompanyTickets': {
-			const companyId = this.getNodeParameter('companyId', i) as number;
-			url = `${credentials.baseURL}/backend/api/v1/tickets/company/${companyId}`;
-			break;
-		}
-		case 'getNotIdentifiedTickets':
-			url = `${credentials.baseURL}/backend/api/v1/tickets/notIdentified`;
-			break;
-		case 'getProjectTickets':
-			url = `${credentials.baseURL}/backend/api/v1/tickets/projects`;
-			break;
-		case 'getTechnicianTickets':
-			url = `${credentials.baseURL}/backend/api/v1/tickets/technician`;
-			break;
-		case 'getRepairTickets':
-			url = `${credentials.baseURL}/backend/api/v1/tickets/repair`;
-			break;
-		case 'getLocalAdminTickets':
-			url = `${credentials.baseURL}/backend/api/v1/tickets/localAdminOverview`;
-			break;
-		case 'getTicketsWithRole':
-			url = `${credentials.baseURL}/backend/api/v1/tickets/withRole`;
-			break;
-		case 'getCustomTicketList': {
-			url = `${credentials.baseURL}/backend/api/v1/tickets`;
-			const customTicketQuery = this.getNodeParameter('customTicketQuery', i, {}) as Record<
-				string,
-				unknown
-			>;
-			requestOptions.method = 'PUT';
-			requestOptions.body = customTicketQuery;
-			break;
-		}
-		default:
-			throw new NodeOperationError(
-				this.getNode(),
-				`The operation "${operation}" is not recognized.`,
-			);
-	}
+		getGeneralTickets: {
+			httpMethod: 'GET',
+			subPath: 'tickets/general',
+			fields: {},
+		},
 
-	requestOptions.url = url;
+		getCompanyTickets: {
+			httpMethod: 'GET',
+			subPath: 'tickets/company/{companyId}',
+			fields: {
+				...companyIdField,
+			},
+		},
 
-	try {
-		const responseData = await this.helpers.httpRequest(
-			requestOptions as unknown as import('n8n-workflow').IHttpRequestOptions,
-		);
-		return responseData;
-	} catch (error: unknown) {
-		const errorMessage = error instanceof Error ? error.message : String(error);
-		throw new NodeOperationError(this.getNode(), `Failed to execute ${operation}: ${errorMessage}`);
-	}
-}
+		getNotIdentifiedTickets: {
+			httpMethod: 'GET',
+			subPath: 'tickets/notIdentified',
+			fields: {},
+		},
+
+		getProjectTickets: {
+			httpMethod: 'GET',
+			subPath: 'tickets/projects',
+			fields: {},
+		},
+
+		getTechnicianTickets: {
+			httpMethod: 'GET',
+			subPath: 'tickets/technician',
+			fields: {},
+		},
+
+		getRepairTickets: {
+			httpMethod: 'GET',
+			subPath: 'tickets/repair',
+			fields: {},
+		},
+
+		getLocalAdminTickets: {
+			httpMethod: 'GET',
+			subPath: 'tickets/localAdminOverview',
+			fields: {},
+		},
+
+		getTicketsWithRole: {
+			httpMethod: 'GET',
+			subPath: 'tickets/withRole',
+			fields: {},
+		},
+
+		getCustomTicketList: {
+			httpMethod: 'PUT',
+			subPath: 'tickets',
+			fields: {
+				...customTicketQueryField,
+			},
+		},
+	},
+});

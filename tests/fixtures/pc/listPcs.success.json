@@ -1,0 +1,96 @@
+{
+    "name": "listPcs returns success wrapper",
+    "itemIndex": 0,
+    "parameters": {
+        "operation": "listPcs",
+        "listQuery": {
+            "active": "ACTIVE_ONLY",
+            "type": "PCS_ONLY",
+            "companyId": 5
+        }
+    },
+    "credentials": {
+        "tanssApi": {
+            "baseURL": "https://example.invalid",
+            "authentication": "loginTotp",
+            "username": "user",
+            "password": "pass"
+        }
+    },
+    "http": [
+        {
+            "expect": {
+                "method": "POST",
+                "url": "https://example.invalid/backend/api/v1/login",
+                "json": true,
+                "returnFullResponse": true,
+                "headers": {
+                    "Content-Type": "application/json"
+                },
+                "body": {
+                    "username": "user",
+                    "password": "pass"
+                }
+            },
+            "reply": {
+                "statusCode": 200,
+                "body": {
+                    "content": {
+                        "apiKey": "TOKEN-123"
+                    }
+                },
+                "headers": { "content-type": "application/json" }
+            }
+        },
+        {
+            "expect": {
+                "method": "PUT",
+                "url": "https://example.invalid/backend/api/v1/pcs",
+                "json": true,
+                "headers": {
+                    "Content-Type": "application/json",
+                    "apiToken": "Bearer TOKEN-123"
+                },
+                "body": {
+                    "active": "ACTIVE_ONLY",
+                    "type": "PCS_ONLY",
+                    "companyId": 5
+                },
+                "returnFullResponse": true
+            },
+            "reply": {
+                "statusCode": 200,
+                "body": [
+                    {
+                        "id": 1,
+                        "name": "PC-1"
+                    },
+                    {
+                        "id": 2,
+                        "name": "PC-2"
+                    }
+                ],
+                "headers": {
+                    "content-type": "application/json"
+                }
+            }
+        }
+    ],
+    "expected": {
+        "kind": "returns",
+        "matchObject": {
+            "success": true,
+            "statusCode": 200,
+            "body": [
+                {
+                    "id": 1,
+                    "name": "PC-1"
+                },
+                {
+                    "id": 2,
+                    "name": "PC-2"
+                }
+            ]
+        }
+    }
+}

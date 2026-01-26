@@ -1,0 +1,22 @@
+{
+    "name": "createEmployee throws NodeOperationError on missing name",
+    "itemIndex": 0,
+    "parameters": {
+        "operation": "createEmployee",
+        "employeeObject": { "name": "" }
+    },
+    "credentials": {
+        "tanssApi": {
+            "baseURL": "https://example.invalid",
+            "authentication": "loginTotp",
+            "username": "user",
+            "password": "pass"
+        }
+    },
+    "http": [],
+    "expected": {
+        "kind": "throws",
+        "name": "NodeOperationError",
+        "messageIncludes": "employeeObject.id must be a number"
+    }
+}

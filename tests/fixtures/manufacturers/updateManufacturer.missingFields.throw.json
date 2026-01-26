@@ -1,0 +1,23 @@
+{
+  "name": "updateManufacturer throws NodeOperationError on missing updateManufacturerFields",
+  "itemIndex": 0,
+  "parameters": {
+    "operation": "updateManufacturer",
+    "manufacturerId": 3,
+    "updateManufacturerFields": {}
+  },
+  "credentials": {
+    "tanssApi": {
+      "baseURL": "https://example.invalid",
+      "authentication": "loginTotp",
+      "username": "user",
+      "password": "pass"
+    }
+  },
+  "http": [],
+  "expected": {
+    "kind": "throws",
+    "name": "NodeOperationError",
+    "messageIncludes": "updateManufacturerFields cannot be empty"
+  }
+}

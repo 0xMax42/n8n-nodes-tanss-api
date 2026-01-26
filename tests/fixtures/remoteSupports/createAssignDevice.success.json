@@ -1,0 +1,38 @@
+{
+    "name": "createAssignDevice returns success wrapper",
+    "itemIndex": 0,
+    "parameters": {
+        "operation": "createAssignDevice",
+        "assignDeviceObject": { "deviceId": "d1", "companyId": 10 }
+    },
+    "credentials": {
+        "tanssApi": {
+            "baseURL": "https://example.invalid",
+            "authentication": "apiToken",
+            "apiToken": "TOKEN-123"
+        }
+    },
+    "http": [
+        {
+            "expect": {
+                "method": "POST",
+                "url": "https://example.invalid/backend/api/remoteSupports/v1/assignDevice",
+                "json": true,
+                "headers": {
+                    "Content-Type": "application/json",
+                    "apiToken": "Bearer TOKEN-123"
+                },
+                "body": { "deviceId": "d1", "companyId": 10 }
+            },
+            "reply": {
+                "statusCode": 201,
+                "body": { "deviceId": "d1" },
+                "headers": { "content-type": "application/json" }
+            }
+        }
+    ],
+    "expected": {
+        "kind": "returns",
+        "matchObject": { "success": true, "statusCode": 201 }
+    }
+}

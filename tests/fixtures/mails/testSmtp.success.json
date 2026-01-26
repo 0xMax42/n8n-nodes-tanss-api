@@ -1,0 +1,90 @@
+{
+  "name": "testSmtp returns success wrapper",
+  "itemIndex": 0,
+  "parameters": {
+    "operation": "testSmtp",
+    "receiver": "user@example.invalid",
+    "mailObject": {
+      "smtpAddress": "smtp.example.invalid",
+      "smtpHost": "smtp.example.invalid",
+      "smtpUser": "user",
+      "smtpPassword": "secret",
+      "smtpAuth": true,
+      "smtpEncryptionType": "TLS",
+      "smtpSenderName": "TANSS"
+    }
+  },
+  "credentials": {
+    "tanssApi": {
+      "baseURL": "https://example.invalid",
+      "authentication": "loginTotp",
+      "username": "user",
+      "password": "pass"
+    }
+  },
+  "http": [
+    {
+      "expect": {
+        "method": "POST",
+        "url": "https://example.invalid/backend/api/v1/login",
+        "json": true,
+        "returnFullResponse": true,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "username": "user",
+          "password": "pass"
+        }
+      },
+      "reply": {
+        "statusCode": 200,
+        "body": {
+          "content": {
+            "apiKey": "TOKEN-123"
+          }
+        },
+        "headers": { "content-type": "application/json" }
+      }
+    },
+    {
+      "expect": {
+        "method": "POST",
+        "url": "https://example.invalid/backend/api/v1/mails/test/smtp?receiver=user%40example.invalid",
+        "json": true,
+        "headers": {
+          "Content-Type": "application/json",
+          "apiToken": "Bearer TOKEN-123"
+        },
+        "body": {
+          "smtpAddress": "smtp.example.invalid",
+          "smtpHost": "smtp.example.invalid",
+          "smtpUser": "user",
+          "smtpPassword": "secret",
+          "smtpAuth": true,
+          "smtpEncryptionType": "TLS",
+          "smtpSenderName": "TANSS"
+        }
+      },
+      "reply": {
+        "statusCode": 200,
+        "body": {
+          "ok": true
+        },
+        "headers": {
+          "content-type": "application/json"
+        }
+      }
+    }
+  ],
+  "expected": {
+    "kind": "returns",
+    "matchObject": {
+      "success": true,
+      "statusCode": 200,
+      "body": {
+        "ok": true
+      }
+    }
+  }
+}

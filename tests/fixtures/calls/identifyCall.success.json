@@ -1,0 +1,44 @@
+{
+    "name": "identifyCall returns success wrapper",
+    "itemIndex": 0,
+    "parameters": {
+        "operation": "identifyCall",
+        "identifyFields": {
+            "fromPhoneNumber": "+49111",
+            "toPhoneNumber": "+49222"
+        }
+    },
+    "credentials": {
+        "tanssApi": {
+            "baseURL": "https://example.invalid",
+            "authentication": "apiToken",
+            "apiToken": "TOKEN-123"
+        }
+    },
+    "http": [
+        {
+            "expect": {
+                "method": "POST",
+                "url": "https://example.invalid/backend/api/calls/v1/identify",
+                "json": true,
+                "headers": {
+                    "Content-Type": "application/json",
+                    "apiToken": "Bearer TOKEN-123"
+                },
+                "body": {
+                    "fromPhoneNumber": "+49111",
+                    "toPhoneNumber": "+49222"
+                }
+            },
+            "reply": {
+                "statusCode": 200,
+                "body": { "fromEmployeeId": 12, "toEmployeeId": 34 },
+                "headers": { "content-type": "application/json" }
+            }
+        }
+    ],
+    "expected": {
+        "kind": "returns",
+        "matchObject": { "success": true, "statusCode": 200 }
+    }
+}

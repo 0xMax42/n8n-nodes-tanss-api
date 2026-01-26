@@ -1,0 +1,25 @@
+{
+  "name": "testSmtp throws NodeOperationError on missing receiver",
+  "itemIndex": 0,
+  "parameters": {
+    "operation": "testSmtp",
+    "receiver": "",
+    "mailObject": {
+      "smtpHost": "smtp.example.invalid"
+    }
+  },
+  "credentials": {
+    "tanssApi": {
+      "baseURL": "https://example.invalid",
+      "authentication": "loginTotp",
+      "username": "user",
+      "password": "pass"
+    }
+  },
+  "http": [],
+  "expected": {
+    "kind": "throws",
+    "name": "NodeOperationError",
+    "messageIncludes": "mailObject.smtpAddress must be a string"
+  }
+}

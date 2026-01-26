@@ -1,0 +1,31 @@
+{
+    "name": "getRemoteSupportById returns success wrapper",
+    "itemIndex": 0,
+    "parameters": { "operation": "getRemoteSupportById", "remoteSupportId": 5 },
+    "credentials": {
+        "tanssApi": {
+            "baseURL": "https://example.invalid",
+            "authentication": "apiToken",
+            "apiToken": "TOKEN-123"
+        }
+    },
+    "http": [
+        {
+            "expect": {
+                "method": "GET",
+                "url": "https://example.invalid/backend/api/remoteSupports/v1/5",
+                "returnFullResponse": true,
+                "headers": { "apiToken": "Bearer TOKEN-123" }
+            },
+            "reply": {
+                "statusCode": 200,
+                "body": { "id": 5 },
+                "headers": { "content-type": "application/json" }
+            }
+        }
+    ],
+    "expected": {
+        "kind": "returns",
+        "matchObject": { "success": true, "statusCode": 200 }
+    }
+}

@@ -1,0 +1,58 @@
+{
+    "name": "deleteCpu returns success wrapper",
+    "itemIndex": 0,
+    "parameters": { "operation": "deleteCpu", "cpuId": 7 },
+    "credentials": {
+        "tanssApi": {
+            "baseURL": "https://example.invalid",
+            "authentication": "loginTotp",
+            "username": "user",
+            "password": "pass"
+        }
+    },
+    "http": [
+        {
+            "expect": {
+                "method": "POST",
+                "url": "https://example.invalid/backend/api/v1/login",
+                "json": true,
+                "returnFullResponse": true,
+                "headers": {
+                    "Content-Type": "application/json"
+                },
+                "body": {
+                    "username": "user",
+                    "password": "pass"
+                }
+            },
+            "reply": {
+                "statusCode": 200,
+                "body": {
+                    "content": {
+                        "apiKey": "TOKEN-123"
+                    }
+                },
+                "headers": { "content-type": "application/json" }
+            }
+        },
+        {
+            "expect": {
+                "method": "DELETE",
+                "url": "https://example.invalid/backend/api/v1/cpus/7",
+                "returnFullResponse": true,
+                "headers": {
+                    "apiToken": "Bearer TOKEN-123"
+                }
+            },
+            "reply": {
+                "statusCode": 204,
+                "body": "",
+                "headers": { "content-type": "application/json" }
+            }
+        }
+    ],
+    "expected": {
+        "kind": "returns",
+        "matchObject": { "success": true, "statusCode": 204 }
+    }
+}

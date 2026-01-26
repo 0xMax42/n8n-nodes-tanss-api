@@ -1,0 +1,61 @@
+{
+    "name": "getCalls returns success wrapper",
+    "itemIndex": 0,
+    "parameters": {
+        "operation": "getCalls",
+        "getCallsFilters": {
+            "timeframe": {
+                "range": {
+                    "from": 1700000000,
+                    "to": 1700003600
+                }
+            },
+            "numberFilters": "+49111,+49222",
+            "employeeIdFilter": 42,
+            "companyIdFilter": 77,
+            "numberInfos": true,
+            "directions": ["INCOMING", "OUTGOING"]
+        }
+    },
+    "credentials": {
+        "tanssApi": {
+            "baseURL": "https://example.invalid",
+            "authentication": "apiToken",
+            "apiToken": "TOKEN-123"
+        }
+    },
+    "http": [
+        {
+            "expect": {
+                "method": "PUT",
+                "url": "https://example.invalid/backend/api/calls/v1",
+                "json": true,
+                "headers": {
+                    "Content-Type": "application/json",
+                    "apiToken": "Bearer TOKEN-123"
+                },
+                "body": {
+                    "timeframe": { "from": 1700000000, "to": 1700003600 },
+                    "numberFilters": ["+49111", "+49222"],
+                    "employeeId": 42,
+                    "companyId": 77,
+                    "numberInfos": true,
+                    "directions": ["INCOMING", "OUTGOING"]
+                }
+            },
+            "reply": {
+                "statusCode": 200,
+                "body": [{ "id": 1 }, { "id": 2 }],
+                "headers": { "content-type": "application/json" }
+            }
+        }
+    ],
+    "expected": {
+        "kind": "returns",
+        "matchObject": {
+            "success": true,
+            "statusCode": 200,
+            "body": [{ "id": 1 }, { "id": 2 }]
+        }
+    }
+}

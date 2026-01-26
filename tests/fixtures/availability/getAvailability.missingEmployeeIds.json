@@ -1,0 +1,24 @@
+{
+  "name": "getAvailability throws NodeOperationError on missing employeeIds",
+  "itemIndex": 0,
+  "parameters": {
+    "operation": "getAvailability",
+    "employeeIds": ""
+  },
+  "credentials": {
+    "tanssApi": {
+      "baseURL": "https://example.invalid",
+      "authentication": "loginTotp",
+      "username": "user",
+      "password": "pass"
+    }
+  },
+  "http": [],
+  "expected": {
+    "kind": "throws",
+    "matchError": {
+      "name": "NodeOperationError",
+      "messageIncludes": "employeeIds cannot be empty"
+    }
+  }
+}

@@ -1,0 +1,35 @@
+{
+    "name": "getEmployeeAssignments returns success wrapper",
+    "itemIndex": 0,
+    "parameters": {
+        "operation": "getEmployeeAssignments"
+    },
+    "credentials": {
+        "tanssApi": {
+            "baseURL": "https://example.invalid",
+            "authentication": "apiToken",
+            "apiToken": "TOKEN-123"
+        }
+    },
+    "http": [
+        {
+            "expect": {
+                "method": "GET",
+                "url": "https://example.invalid/backend/api/calls/v1/employeeAssignment",
+                "returnFullResponse": true,
+                "headers": {
+                    "apiToken": "Bearer TOKEN-123"
+                }
+            },
+            "reply": {
+                "statusCode": 200,
+                "body": [{ "employeeId": 1, "username": "max" }],
+                "headers": { "content-type": "application/json" }
+            }
+        }
+    ],
+    "expected": {
+        "kind": "returns",
+        "matchObject": { "success": true, "statusCode": 200 }
+    }
+}

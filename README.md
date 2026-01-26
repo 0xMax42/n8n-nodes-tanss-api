@@ -1,16 +1,41 @@
-A new **TANSS Node** was released on **October 27, 2025** [here](https://github.com/BuddiesD/n8n-nodes-tanss).  
-Please note that **existing credentials are not compatible** due to the introduction of **2FA (Two-Factor Authentication)**.
-
-You can install both versions, but **2FA functionality will only be visible after uninstalling** the old package:  
-[n8n-nodes-tanss-api](https://www.npmjs.com/package/n8n-nodes-tanss-api)
-
-New: https://www.npmjs.com/package/n8n-nodes-tanss
+# n8n-nodes-tanss-api
 
 
-**Status / Progress**  
+This is an [n8n](https://n8n.io/) community node.
+
+## Installation
+
+Follow the [installation guide](https://docs.n8n.io/integrations/community-nodes/installation/) in the n8n community nodes documentation.
+
+## Credentials
+
+You only need to provide:
+
+- `username`
+- `password`
+- optionally: `TOTP Secret Key` (for two-factor authentication)
+
+or alternatively you can provide an already generated `TANSS API Token` (depending on the end points intended for use).
+
+## Compatibility
+
+Compatible with n8n@1.60.0 or later
+Tested with TANSS API. Version: 10.10.0
+
+## Resources
+
+* [n8n community nodes documentation](https://docs.n8n.io/integrations/#community-nodes)
+* [Tanss API documentation](https://api-doc.tanss.de/)
+
+## Development
+
+This project can be developed using a regular local Node.js setup.
+
+Optionally, a dev container configuration is included to provide a ready-to-use development environment with the required Node.js version and basic editor tooling.
+
+### Implementation Progress
+
 Progress: **94 / 256 (1 not in API Docs)** (36%)
-
-## To-Do / Progress
 
 <details>
 <summary><strong>Complete overview</strong></summary>
@@ -435,61 +460,3 @@ Progress: **94 / 256 (1 not in API Docs)** (36%)
 </details>
 
 </details>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# n8n-nodes-tanss
-
-
-This is an n8n community node. It lets you use the TANSS API in your n8n workflows.
-
-[n8n](https://n8n.io/) is a [fair-code licensed](https://docs.n8n.io/sustainable-use-license/) workflow automation platform.
-
-[Installation](#installation)
-[Credentials](#credentials)
-[Compatibility](#compatibility)
-[Resources](#resources)
-
-## Installation
-
-Follow the [installation guide](https://docs.n8n.io/integrations/community-nodes/installation/) in the n8n community nodes documentation.
-
-## Credentials
-
-You only need to provide:
-
-- `username`
-- `password`
-- optionally: `TOTP Secret Key` (for two-factor authentication)
-
-or alternatively you can provide an already generated `TANSS API Token`.
-
-## Compatibility
-
-Compatible with n8n@1.60.0 or later
-Tested with TANSS API. Version: 10.10.0
-
-## Resources
-
-* [n8n community nodes documentation](https://docs.n8n.io/integrations/#community-nodes)
-* [Tanss API documentation](https://api-doc.tanss.de/)
-
-## Development
-
-This project can be developed using a regular local Node.js setup.
-
-Optionally, a dev container configuration is included to provide a ready-to-use development environment with the required Node.js version and basic editor tooling.

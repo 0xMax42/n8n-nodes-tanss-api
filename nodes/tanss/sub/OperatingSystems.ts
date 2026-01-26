@@ -1,4 +1,5 @@
-import { IExecuteFunctions, INodeProperties, NodeOperationError } from 'n8n-workflow';
+import { INodeProperties } from 'n8n-workflow';
+import { createCrudHandler, nonEmptyRecordGuard, nullOrGuard, positiveNumberGuard } from '../lib';
 
 export const operatingSystemsOperations: INodeProperties[] = [
 	{
@@ -44,16 +45,6 @@ export const operatingSystemsOperations: INodeProperties[] = [
 ];
 
 export const operatingSystemsFields: INodeProperties[] = [
-	{
-		displayName: 'API Token',
-		name: 'apiToken',
-		type: 'string' as const,
-		required: true,
-		typeOptions: { password: true },
-		default: '',
-		description: 'API token obtained from the TANSS API login',
-		displayOptions: { show: { resource: ['operatingSystems'] } },
-	},
 	{
 		displayName: 'OS ID',
 		name: 'osId',
@@ -116,91 +107,65 @@ export const operatingSystemsFields: INodeProperties[] = [
 	},
 ];
 
-export async function handleOperatingSystems(this: IExecuteFunctions, i: number) {
-	const operation = this.getNodeParameter('operation', i) as string;
-	const credentials = await this.getCredentials('tanssApi');
-	if (!credentials) throw new NodeOperationError(this.getNode(), 'No credentials returned!');
+export const handleOperatingSystems = createCrudHandler({
+	operationField: 'operation',
+	credentialType: 'user',
 
-	const apiToken = this.getNodeParameter('apiToken', i, '') as string;
-	const osId = this.getNodeParameter('osId', i, 0) as number;
+	operations: {
+		getAllOs: {
+			httpMethod: 'GET',
+			subPath: 'os',
+			fields: {},
+		},
 
-	let url = '';
-	const requestOptions: {
-		method: 'GET' | 'POST' | 'PUT' | 'DELETE';
-		headers: { apiToken: string; 'Content-Type': string };
-		json: boolean;
-		body?: Record<string, unknown>;
-		url: string;
-		returnFullResponse?: boolean;
-	} = {
-		method: 'GET',
-		headers: { apiToken, 'Content-Type': 'application/json' },
-		json: true,
-		url,
-	};
+		getOsById: {
+			httpMethod: 'GET',
+			subPath: 'os/{osId}',
+			fields: {
+				osId: {
+					location: 'path',
+					guard: positiveNumberGuard,
+				},
+			},
+		},
 
-	switch (operation) {
-		case 'createOs': {
-			url = `${credentials.baseURL}/backend/api/v1/os`;
-			requestOptions.method = 'POST';
-			const createOsFields = this.getNodeParameter('createOsFields', i, {}) as Record<
-				string,
-				unknown
-			>;
-			if (Object.keys(createOsFields).length === 0)
-				throw new NodeOperationError(this.getNode(), 'No fields provided for OS creation.');
-			requestOptions.body = createOsFields;
-			break;
-		}
-		case 'deleteOs': {
-			url = `${credentials.baseURL}/backend/api/v1/os/${osId}`;
-			requestOptions.method = 'DELETE';
-			break;
-		}
-		case 'getAllOs': {
-			url = `${credentials.baseURL}/backend/api/v1/os`;
-			requestOptions.method = 'GET';
-			break;
-		}
-		case 'getOsById': {
-			url = `${credentials.baseURL}/backend/api/v1/os/${osId}`;
-			requestOptions.method = 'GET';
-			break;
-		}
-		case 'updateOs': {
-			url = `${credentials.baseURL}/backend/api/v1/os/${osId}`;
-			requestOptions.method = 'PUT';
-			const updateOsFields = this.getNodeParameter('updateOsFields', i, {}) as Record<
-				string,
-				unknown
-			>;
-			if (Object.keys(updateOsFields).length === 0)
-				throw new NodeOperationError(this.getNode(), 'No fields provided for OS update.');
-			requestOptions.body = updateOsFields;
-			break;
-		}
-		default:
-			throw new NodeOperationError(
-				this.getNode(),
-				`The operation "${operation}" is not recognized for Operating Systems.`,
-			);
-	}
+		deleteOs: {
+			httpMethod: 'DELETE',
+			subPath: 'os/{osId}',
+			fields: {
+				osId: {
+					location: 'path',
+					guard: positiveNumberGuard,
+				},
+			},
+		},
 
-	requestOptions.url = url;
+		updateOs: {
+			httpMethod: 'PUT',
+			subPath: 'os/{osId}',
+			fields: {
+				osId: {
+					location: 'path',
+					guard: positiveNumberGuard,
+				},
+				updateOsFields: {
+					location: 'body',
+					spread: true,
+					guard: nullOrGuard(nonEmptyRecordGuard),
+				},
+			},
+		},
 
-	try {
-		type FullResponse = { statusCode: number; body?: unknown };
-		const options = {
-			...requestOptions,
-			returnFullResponse: true,
-		} as unknown as import('n8n-workflow').IHttpRequestOptions;
-		const fullResponse = (await this.helpers.httpRequest(options)) as unknown as FullResponse;
-		if (requestOptions.method === 'DELETE') {
-			return { success: fullResponse.statusCode === 204, statusCode: fullResponse.statusCode };
-		}
-		return fullResponse.body ?? (fullResponse as unknown);
-	} catch (error: unknown) {
-		const errorMessage = error instanceof Error ? error.message : String(error);
-		throw new NodeOperationError(this.getNode(), `Failed to execute ${operation}: ${errorMessage}`);
-	}
-}
+		createOs: {
+			httpMethod: 'POST',
+			subPath: 'os',
+			fields: {
+				createOsFields: {
+					location: 'body',
+					spread: true,
+					guard: nonEmptyRecordGuard,
+				},
+			},
+		},
+	},
+});

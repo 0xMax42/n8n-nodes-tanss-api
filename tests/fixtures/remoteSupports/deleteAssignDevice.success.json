@@ -1,0 +1,38 @@
+{
+    "name": "deleteAssignDevice returns success wrapper",
+    "itemIndex": 0,
+    "parameters": {
+        "operation": "deleteAssignDevice",
+        "assignDeviceObject": { "deviceId": "d1" }
+    },
+    "credentials": {
+        "tanssApi": {
+            "baseURL": "https://example.invalid",
+            "authentication": "apiToken",
+            "apiToken": "TOKEN-123"
+        }
+    },
+    "http": [
+        {
+            "expect": {
+                "method": "DELETE",
+                "url": "https://example.invalid/backend/api/remoteSupports/v1/assignDevice",
+                "json": true,
+                "headers": {
+                    "Content-Type": "application/json",
+                    "apiToken": "Bearer TOKEN-123"
+                },
+                "body": { "deviceId": "d1" }
+            },
+            "reply": {
+                "statusCode": 204,
+                "body": "",
+                "headers": { "content-type": "application/json" }
+            }
+        }
+    ],
+    "expected": {
+        "kind": "returns",
+        "matchObject": { "success": true, "statusCode": 204 }
+    }
+}

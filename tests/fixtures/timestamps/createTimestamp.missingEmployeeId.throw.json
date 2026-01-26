@@ -1,0 +1,25 @@
+{
+    "name": "createTimestamp throws NodeOperationError on missing employeeId",
+    "itemIndex": 0,
+    "parameters": {
+        "operation": "createTimestamp",
+        "employeeId": 0,
+        "date": 1700000000,
+        "state": "ON",
+        "type": "WORK"
+    },
+    "credentials": {
+        "tanssApi": {
+            "baseURL": "https://example.invalid",
+            "authentication": "loginTotp",
+            "username": "user",
+            "password": "pass"
+        }
+    },
+    "http": [],
+    "expected": {
+        "kind": "throws",
+        "name": "NodeOperationError",
+        "messageIncludes": "employeeId must be a positive number"
+    }
+}

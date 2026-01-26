@@ -1,0 +1,41 @@
+{
+    "name": "deleteEmployeeAssignment returns success wrapper",
+    "itemIndex": 0,
+    "parameters": {
+        "operation": "deleteEmployeeAssignment",
+        "employeeAssignmentFields": {
+            "employeeId": 12,
+            "username": "max"
+        }
+    },
+    "credentials": {
+        "tanssApi": {
+            "baseURL": "https://example.invalid",
+            "authentication": "apiToken",
+            "apiToken": "TOKEN-123"
+        }
+    },
+    "http": [
+        {
+            "expect": {
+                "method": "DELETE",
+                "url": "https://example.invalid/backend/api/calls/v1/employeeAssignment",
+                "json": true,
+                "headers": {
+                    "Content-Type": "application/json",
+                    "apiToken": "Bearer TOKEN-123"
+                },
+                "body": { "employeeId": 12, "username": "max" }
+            },
+            "reply": {
+                "statusCode": 204,
+                "body": "",
+                "headers": { "content-type": "application/json" }
+            }
+        }
+    ],
+    "expected": {
+        "kind": "returns",
+        "matchObject": { "success": true, "statusCode": 204 }
+    }
+}

@@ -1,4 +1,5 @@
-import { IExecuteFunctions, INodeProperties, NodeOperationError } from 'n8n-workflow';
+import { INodeProperties } from 'n8n-workflow';
+import { createCrudHandler, nonEmptyRecordGuard, numberGuard } from '../lib';
 
 export const hddTypesOperations: INodeProperties[] = [
 	{
@@ -45,16 +46,6 @@ export const hddTypesOperations: INodeProperties[] = [
 
 export const hddTypesFields: INodeProperties[] = [
 	{
-		displayName: 'API Token',
-		name: 'apiToken',
-		type: 'string' as const,
-		required: true,
-		typeOptions: { password: true },
-		default: '',
-		description: 'API token obtained from the TANSS API login',
-		displayOptions: { show: { resource: ['hddTypes'] } },
-	},
-	{
 		displayName: 'HDD Type ID',
 		name: 'hddTypeId',
 		type: 'number' as const,
@@ -93,91 +84,68 @@ export const hddTypesFields: INodeProperties[] = [
 	},
 ];
 
-export async function handleHddTypes(this: IExecuteFunctions, i: number) {
-	const operation = this.getNodeParameter('operation', i) as string;
-	const credentials = await this.getCredentials('tanssApi');
-	if (!credentials) throw new NodeOperationError(this.getNode(), 'No credentials returned!');
+export const handleHddTypes = createCrudHandler({
+	operationField: 'operation',
+	credentialType: 'user',
 
-	const apiToken = this.getNodeParameter('apiToken', i, '') as string;
-	const hddTypeId = this.getNodeParameter('hddTypeId', i, 0) as number;
+	operations: {
+		createHddType: {
+			fields: {
+				createHddTypeFields: {
+					location: 'body',
+					defaultValue: {},
+					guard: nonEmptyRecordGuard,
+				},
+			},
+			httpMethod: 'POST',
+			subPath: 'hddTypes',
+		},
 
-	let url = '';
-	const requestOptions: {
-		method: 'GET' | 'POST' | 'PUT' | 'DELETE';
-		headers: { apiToken: string; 'Content-Type': string };
-		json: boolean;
-		body?: Record<string, unknown>;
-		url: string;
-		returnFullResponse?: boolean;
-	} = {
-		method: 'GET',
-		headers: { apiToken, 'Content-Type': 'application/json' },
-		json: true,
-		url,
-	};
+		deleteHddType: {
+			fields: {
+				hddTypeId: {
+					location: 'path',
+					defaultValue: 0,
+					guard: numberGuard,
+				},
+			},
+			httpMethod: 'DELETE',
+			subPath: 'hddTypes/{hddTypeId}',
+		},
 
-	switch (operation) {
-		case 'createHddType': {
-			url = `${credentials.baseURL}/backend/api/v1/hddTypes`;
-			requestOptions.method = 'POST';
-			const createHddTypeFields = this.getNodeParameter('createHddTypeFields', i, {}) as Record<
-				string,
-				unknown
-			>;
-			if (Object.keys(createHddTypeFields).length === 0)
-				throw new NodeOperationError(this.getNode(), 'No fields provided for HDD type creation.');
-			requestOptions.body = createHddTypeFields;
-			break;
-		}
-		case 'deleteHddType': {
-			url = `${credentials.baseURL}/backend/api/v1/hddTypes/${hddTypeId}`;
-			requestOptions.method = 'DELETE';
-			break;
-		}
-		case 'getAllHddTypes': {
-			url = `${credentials.baseURL}/backend/api/v1/hddTypes`;
-			requestOptions.method = 'GET';
-			break;
-		}
-		case 'getHddTypeById': {
-			url = `${credentials.baseURL}/backend/api/v1/hddTypes/${hddTypeId}`;
-			requestOptions.method = 'GET';
-			break;
-		}
-		case 'updateHddType': {
-			url = `${credentials.baseURL}/backend/api/v1/hddTypes/${hddTypeId}`;
-			requestOptions.method = 'PUT';
-			const updateHddTypeFields = this.getNodeParameter('updateHddTypeFields', i, {}) as Record<
-				string,
-				unknown
-			>;
-			if (Object.keys(updateHddTypeFields).length === 0)
-				throw new NodeOperationError(this.getNode(), 'No fields provided for HDD type update.');
-			requestOptions.body = updateHddTypeFields;
-			break;
-		}
-		default:
-			throw new NodeOperationError(
-				this.getNode(),
-				`The operation "${operation}" is not recognized for HDD Types.`,
-			);
-	}
+		getAllHddTypes: {
+			fields: {},
+			httpMethod: 'GET',
+			subPath: 'hddTypes',
+		},
 
-	requestOptions.url = url;
+		getHddTypeById: {
+			fields: {
+				hddTypeId: {
+					location: 'path',
+					defaultValue: 0,
+					guard: numberGuard,
+				},
+			},
+			httpMethod: 'GET',
+			subPath: 'hddTypes/{hddTypeId}',
+		},
 
-	try {
-		type FullResponse = { statusCode: number; body?: unknown };
-		const options = {
-			...requestOptions,
-			returnFullResponse: true,
-		} as unknown as import('n8n-workflow').IHttpRequestOptions;
-		const fullResponse = (await this.helpers.httpRequest(options)) as unknown as FullResponse;
-		if (requestOptions.method === 'DELETE') {
-			return { success: fullResponse.statusCode === 204, statusCode: fullResponse.statusCode };
-		}
-		return fullResponse.body ?? (fullResponse as unknown);
-	} catch (error: unknown) {
-		const errorMessage = error instanceof Error ? error.message : String(error);
-		throw new NodeOperationError(this.getNode(), `Failed to execute ${operation}: ${errorMessage}`);
-	}
-}
+		updateHddType: {
+			fields: {
+				hddTypeId: {
+					location: 'path',
+					defaultValue: 0,
+					guard: numberGuard,
+				},
+				updateHddTypeFields: {
+					location: 'body',
+					defaultValue: {},
+					guard: nonEmptyRecordGuard,
+				},
+			},
+			httpMethod: 'PUT',
+			subPath: 'hddTypes/{hddTypeId}',
+		},
+	},
+});

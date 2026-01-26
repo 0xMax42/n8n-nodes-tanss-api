@@ -1,0 +1,19 @@
+{
+    "name": "updateOs throws NodeOperationError on missing updateOsFields",
+    "itemIndex": 0,
+    "parameters": { "operation": "updateOs", "osId": 3, "updateOsFields": {} },
+    "credentials": {
+        "tanssApi": {
+            "baseURL": "https://example.invalid",
+            "authentication": "loginTotp",
+            "username": "user",
+            "password": "pass"
+        }
+    },
+    "http": [],
+    "expected": {
+        "kind": "throws",
+        "name": "NodeOperationError",
+        "messageIncludes": "updateOsFields cannot be empty"
+    }
+}
