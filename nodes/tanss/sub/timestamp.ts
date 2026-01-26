@@ -1,10 +1,18 @@
+import { INodeProperties } from 'n8n-workflow';
 import {
-	IExecuteFunctions,
-	INodeProperties,
-	NodeOperationError,
-	IDataObject,
-	IHttpRequestOptions,
-} from 'n8n-workflow';
+	ApiQuirks,
+	arrayGuard,
+	booleanGuard,
+	createCrudHandler,
+	createSubObjectGuard,
+	discardGuard,
+	jsonAndGuard,
+	jsonGuard,
+	nonEmptyStringGuard,
+	nullOrGuard,
+	numberGuard,
+	positiveNumberGuard,
+} from '../lib';
 
 export const timestampOperations: INodeProperties[] = [
 	{
@@ -114,17 +122,6 @@ export const timestampOperations: INodeProperties[] = [
 ];
 
 export const timestampFields: INodeProperties[] = [
-	{
-		displayName: 'API Token',
-		name: 'apiToken',
-		type: 'string' as const,
-		required: true,
-		typeOptions: { password: true },
-		default: '',
-		description: 'API token obtained from the TANSS API login',
-		displayOptions: { show: { resource: ['timestamps'] } },
-	},
-
 	// getTimestamps / info / statistics params
 	{
 		displayName: 'From (Timestamp)',
@@ -352,547 +349,299 @@ export const timestampFields: INodeProperties[] = [
 	},
 ];
 
-export async function handleTimestamps(this: IExecuteFunctions, i: number) {
-	const operation = this.getNodeParameter('operation', i) as string;
-	const allowed = [
-		'getTimestamps',
-		'getTimestampInfo',
-		'getTimestampStatistics',
-		'createTimestamp',
-		'updateTimestamp',
-		'saveDayTimestamps',
-		'createDayClosing',
-		'deleteDayClosing',
-		'getDayClosingTillDate',
-		'createDayClosingsTillDate',
-		'setInitialBalance',
-		'getPauseConfigs',
-		'createPauseConfig',
-		'updatePauseConfig',
-		'deletePauseConfig',
-	] as const;
-	if (!allowed.includes(operation as (typeof allowed)[number])) {
-		throw new NodeOperationError(
-			this.getNode(),
-			`Operation "${operation}" not supported by Timestamps.`,
-		);
-	}
-
-	const credentials = await this.getCredentials('tanssApi');
-	if (!credentials) throw new NodeOperationError(this.getNode(), 'No credentials returned!');
-
-	const apiToken = this.getNodeParameter('apiToken', i, '') as string;
-	const typedCredentials = credentials as { baseURL?: string };
-	const baseURL = typedCredentials.baseURL;
-	if (!baseURL) throw new NodeOperationError(this.getNode(), 'No baseURL in credentials');
-
-	// GET list
-	if (operation === 'getTimestamps') {
-		const from = this.getNodeParameter('from', i, 0) as number;
-		const till = this.getNodeParameter('till', i, 0) as number;
-
-		const params: string[] = [];
-		if (from && from > 0) params.push(`from=${encodeURIComponent(String(from))}`);
-		if (till && till > 0) params.push(`till=${encodeURIComponent(String(till))}`);
-
-		const query = params.length ? `?${params.join('&')}` : '';
-		const url = `${baseURL}/backend/api/v1/timestamps${query}`;
-
-		const requestOptions: IDataObject = {
-			method: 'GET',
-			url,
-			headers: { apiToken, 'Content-Type': 'application/json' },
-			json: true,
-		};
-
-		try {
-			const response = await this.helpers.httpRequest(
-				requestOptions as unknown as IHttpRequestOptions,
-			);
-			return response;
-		} catch (error: unknown) {
-			const message = error instanceof Error ? error.message : String(error);
-			throw new NodeOperationError(this.getNode(), `Failed to fetch timestamps: ${message}`);
-		}
-	}
-
-	// GET info
-	if (operation === 'getTimestampInfo') {
-		const from = this.getNodeParameter('from', i, 0) as number;
-		const till = this.getNodeParameter('till', i, 0) as number;
-
-		const params: string[] = [];
-		if (from && from > 0) params.push(`from=${encodeURIComponent(String(from))}`);
-		if (till && till > 0) params.push(`till=${encodeURIComponent(String(till))}`);
-
-		const query = params.length ? `?${params.join('&')}` : '';
-		const url = `${baseURL}/backend/api/v1/timestamps/info${query}`;
-
-		const requestOptions: IDataObject = {
-			method: 'GET',
-			url,
-			headers: { apiToken, 'Content-Type': 'application/json' },
-			json: true,
-		};
-
-		try {
-			const response = await this.helpers.httpRequest(
-				requestOptions as unknown as IHttpRequestOptions,
-			);
-			return response;
-		} catch (error: unknown) {
-			const message = error instanceof Error ? error.message : String(error);
-			throw new NodeOperationError(this.getNode(), `Failed to fetch timestamp info: ${message}`);
-		}
-	}
-
-	// GET statistics
-	if (operation === 'getTimestampStatistics') {
-		const from = this.getNodeParameter('from', i, 0) as number;
-		const till = this.getNodeParameter('till', i, 0) as number;
-		const employeeIds = this.getNodeParameter('employeeIds', i, '') as string;
-
-		const params: string[] = [];
-		if (from && from > 0) params.push(`from=${encodeURIComponent(String(from))}`);
-		if (till && till > 0) params.push(`till=${encodeURIComponent(String(till))}`);
-		if (employeeIds && employeeIds.trim() !== '')
-			params.push(`employeeIds=${encodeURIComponent(employeeIds)}`);
-
-		const query = params.length ? `?${params.join('&')}` : '';
-		const url = `${baseURL}/backend/api/v1/timestamps/statistics${query}`;
-
-		const requestOptions: IDataObject = {
-			method: 'GET',
-			url,
-			headers: { apiToken, 'Content-Type': 'application/json' },
-			json: true,
-		};
-
-		try {
-			const response = await this.helpers.httpRequest(
-				requestOptions as unknown as IHttpRequestOptions,
-			);
-			return response;
-		} catch (error: unknown) {
-			const message = error instanceof Error ? error.message : String(error);
-			throw new NodeOperationError(
-				this.getNode(),
-				`Failed to fetch timestamp statistics: ${message}`,
-			);
-		}
-	}
-
-	// CREATE
-	if (operation === 'createTimestamp') {
-		const autoPause = this.getNodeParameter('autoPause', i, false) as boolean;
-		const employeeId = this.getNodeParameter('employeeId', i, 0) as number;
-		const date = this.getNodeParameter('date', i, 0) as number;
-		const state = this.getNodeParameter('state', i, '') as string;
-		const type = this.getNodeParameter('type', i, '') as string;
-
-		if (!employeeId || employeeId <= 0)
-			throw new NodeOperationError(this.getNode(), 'Valid employeeId is required.');
-		if (!date || date <= 0)
-			throw new NodeOperationError(this.getNode(), 'Valid date (timestamp) is required.');
-		if (!state) throw new NodeOperationError(this.getNode(), 'State is required.');
-		if (!type) throw new NodeOperationError(this.getNode(), 'Type is required.');
-
-		const body: IDataObject = { employeeId, date, state, type };
-
-		const url = `${baseURL}/backend/api/v1/timestamps${autoPause ? '?autoPause=true' : ''}`;
-		const requestOptions: IDataObject = {
-			method: 'POST',
-			url,
-			headers: { apiToken, 'Content-Type': 'application/json' },
-			body,
-			json: true,
-		};
-
-		try {
-			const response = await this.helpers.httpRequest(
-				requestOptions as unknown as IHttpRequestOptions,
-			);
-			return response;
-		} catch (error: unknown) {
-			const message = error instanceof Error ? error.message : String(error);
-			throw new NodeOperationError(this.getNode(), `Failed to create timestamp: ${message}`);
-		}
-	}
-
-	// UPDATE single
-	if (operation === 'updateTimestamp') {
-		const timestampId = this.getNodeParameter('timestampId', i, 0) as number;
-		const employeeId = this.getNodeParameter('employeeId', i, 0) as number;
-		const date = this.getNodeParameter('date', i, 0) as number;
-		const state = this.getNodeParameter('state', i, '') as string;
-		const type = this.getNodeParameter('type', i, '') as string;
-
-		if (!timestampId || timestampId <= 0)
-			throw new NodeOperationError(this.getNode(), 'Valid timestampId is required.');
-		if (!employeeId || employeeId <= 0)
-			throw new NodeOperationError(this.getNode(), 'Valid employeeId is required.');
-		if (!date || date <= 0)
-			throw new NodeOperationError(this.getNode(), 'Valid date (timestamp) is required.');
-		if (!state) throw new NodeOperationError(this.getNode(), 'State is required.');
-		if (!type) throw new NodeOperationError(this.getNode(), 'Type is required.');
-
-		const body: IDataObject = { employeeId, date, state, type };
-
-		const url = `${baseURL}/backend/api/v1/timestamps/${timestampId}`;
-		const requestOptions: IDataObject = {
-			method: 'PUT',
-			url,
-			headers: { apiToken, 'Content-Type': 'application/json' },
-			body,
-			json: true,
-		};
-
-		try {
-			const response = await this.helpers.httpRequest(
-				requestOptions as unknown as IHttpRequestOptions,
-			);
-			return response;
-		} catch (error: unknown) {
-			const message = error instanceof Error ? error.message : String(error);
-			throw new NodeOperationError(this.getNode(), `Failed to update timestamp: ${message}`);
-		}
-	}
-
-	// SAVE DAY (bulk)
-	if (operation === 'saveDayTimestamps') {
-		const employeeIdDay = this.getNodeParameter('employeeIdDay', i, 0) as number;
-		const day = this.getNodeParameter('day', i, '') as string;
-		const timestampsJson = this.getNodeParameter('timestampsJson', i, '[]') as string;
-
-		if (!employeeIdDay || employeeIdDay <= 0)
-			throw new NodeOperationError(this.getNode(), 'Valid employeeId is required.');
-		if (!day) throw new NodeOperationError(this.getNode(), 'Day (YYYY-mm-dd) is required.');
-
-		let timestampsArray: unknown;
-		try {
-			timestampsArray = JSON.parse(timestampsJson);
-		} catch {
-			throw new NodeOperationError(this.getNode(), 'timestampsJson must be valid JSON.');
-		}
-		if (!Array.isArray(timestampsArray))
-			throw new NodeOperationError(this.getNode(), 'timestampsJson must be a JSON array.');
-
-		const url = `${baseURL}/backend/api/v1/timestamps/${employeeIdDay}/day/${encodeURIComponent(day)}`;
-		const requestOptions: IDataObject = {
-			method: 'PUT',
-			url,
-			headers: { apiToken, 'Content-Type': 'application/json' },
-			body: timestampsArray as IDataObject[],
-			json: true,
-		};
-
-		try {
-			const response = await this.helpers.httpRequest(
-				requestOptions as unknown as IHttpRequestOptions,
-			);
-			return response;
-		} catch (error: unknown) {
-			const message = error instanceof Error ? error.message : String(error);
-			throw new NodeOperationError(this.getNode(), `Failed to save day timestamps: ${message}`);
-		}
-	}
-
-	// CREATE Day Closing(s)
-	if (operation === 'createDayClosing') {
-		const dayClosingsJson = this.getNodeParameter('dayClosingsJson', i, '[]') as string;
-		let payload: unknown;
-		try {
-			payload = JSON.parse(dayClosingsJson);
-		} catch {
-			throw new NodeOperationError(this.getNode(), 'dayClosingsJson must be valid JSON.');
-		}
-		if (!Array.isArray(payload))
-			throw new NodeOperationError(this.getNode(), 'dayClosingsJson must be an array.');
-
-		for (const entry of payload) {
-			if (typeof entry !== 'object' || entry === null)
-				throw new NodeOperationError(this.getNode(), 'Each day closing must be an object.');
-			const obj = entry as { employeeId?: number; date?: string };
-			if (!obj.employeeId || typeof obj.employeeId !== 'number' || obj.employeeId <= 0)
-				throw new NodeOperationError(
-					this.getNode(),
-					'Each day closing requires a valid employeeId.',
-				);
-			if (!obj.date || typeof obj.date !== 'string')
-				throw new NodeOperationError(
-					this.getNode(),
-					'Each day closing requires a valid date string (YYYY-mm-dd).',
-				);
-		}
-
-		const url = `${baseURL}/backend/api/v1/timestamps/dayClosing`;
-		const requestOptions: IDataObject = {
-			method: 'POST',
-			url,
-			headers: { apiToken, 'Content-Type': 'application/json' },
-			body: payload as IDataObject[],
-			json: true,
-		};
-
-		try {
-			const response = await this.helpers.httpRequest(
-				requestOptions as unknown as IHttpRequestOptions,
-			);
-			return response;
-		} catch (error: unknown) {
-			const message = error instanceof Error ? error.message : String(error);
-			throw new NodeOperationError(this.getNode(), `Failed to create day closing(s): ${message}`);
-		}
-	}
-
-	// DELETE Day Closing(s)
-	if (operation === 'deleteDayClosing') {
-		const dayClosingsJson = this.getNodeParameter('dayClosingsJson', i, '[]') as string;
-		let payload: unknown;
-		try {
-			payload = JSON.parse(dayClosingsJson);
-		} catch {
-			throw new NodeOperationError(this.getNode(), 'dayClosingsJson must be valid JSON.');
-		}
-		if (!Array.isArray(payload))
-			throw new NodeOperationError(this.getNode(), 'dayClosingsJson must be an array.');
-
-		for (const entry of payload) {
-			if (typeof entry !== 'object' || entry === null)
-				throw new NodeOperationError(this.getNode(), 'Each day closing must be an object.');
-			const obj = entry as { employeeId?: number; date?: string };
-			if (!obj.employeeId || typeof obj.employeeId !== 'number' || obj.employeeId <= 0)
-				throw new NodeOperationError(
-					this.getNode(),
-					'Each day closing requires a valid employeeId.',
-				);
-			if (!obj.date || typeof obj.date !== 'string')
-				throw new NodeOperationError(
-					this.getNode(),
-					'Each day closing requires a valid date string (YYYY-mm-dd).',
-				);
-		}
-
-		const url = `${baseURL}/backend/api/v1/timestamps/dayClosing`;
-		const requestOptions: IDataObject = {
-			method: 'DELETE',
-			url,
-			headers: { apiToken, 'Content-Type': 'application/json' },
-			body: payload as IDataObject[],
-			json: true,
-		};
-
-		try {
-			const response = await this.helpers.httpRequest(
-				requestOptions as unknown as IHttpRequestOptions,
-			);
-			return response;
-		} catch (error: unknown) {
-			const message = error instanceof Error ? error.message : String(error);
-			throw new NodeOperationError(this.getNode(), `Failed to delete day closing(s): ${message}`);
-		}
-	}
-
-	// GET dayClosing tillDate
-	if (operation === 'getDayClosingTillDate') {
-		const url = `${baseURL}/backend/api/v1/timestamps/dayClosing/tillDate`;
-		const requestOptions: IDataObject = {
-			method: 'GET',
-			url,
-			headers: { apiToken, 'Content-Type': 'application/json' },
-			json: true,
-		};
-
-		try {
-			const response = await this.helpers.httpRequest(
-				requestOptions as unknown as IHttpRequestOptions,
-			);
-			return response;
-		} catch (error: unknown) {
-			const message = error instanceof Error ? error.message : String(error);
-			throw new NodeOperationError(
-				this.getNode(),
-				`Failed to fetch day closing till date: ${message}`,
-			);
-		}
-	}
-
-	// CREATE Day Closings Till Date
-	if (operation === 'createDayClosingsTillDate') {
-		const tillDate = this.getNodeParameter('tillDate', i, '') as string;
-		const employeeIdsJson = this.getNodeParameter('employeeIdsJson', i, '[]') as string;
-
-		if (!tillDate) throw new NodeOperationError(this.getNode(), 'tillDate is required.');
-		let employeeIds: unknown;
-		try {
-			employeeIds = JSON.parse(employeeIdsJson);
-		} catch {
-			throw new NodeOperationError(this.getNode(), 'employeeIdsJson must be valid JSON array.');
-		}
-		if (!Array.isArray(employeeIds))
-			throw new NodeOperationError(this.getNode(), 'employeeIdsJson must be an array of integers.');
-
-		const url = `${baseURL}/backend/api/v1/timestamps/dayClosing/tillDate`;
-		const requestOptions: IDataObject = {
-			method: 'POST',
-			url,
-			headers: { apiToken, 'Content-Type': 'application/json' },
-			body: { tillDate, employeeIds: employeeIds as number[] },
-			json: true,
-		};
-
-		try {
-			const response = await this.helpers.httpRequest(
-				requestOptions as unknown as import('n8n-workflow').IHttpRequestOptions,
-			);
-			return response;
-		} catch (error: unknown) {
-			const message = error instanceof Error ? error.message : String(error);
-			throw new NodeOperationError(
-				this.getNode(),
-				`Failed to create day closings till date: ${message}`,
-			);
-		}
-	}
-
-	// SET initial balance
-	if (operation === 'setInitialBalance') {
-		const employeeIdInitial = this.getNodeParameter('employeeIdInitial', i, 0) as number;
-		const initialBalance = this.getNodeParameter('initialBalance', i, 0) as number;
-
-		if (!employeeIdInitial || employeeIdInitial <= 0)
-			throw new NodeOperationError(this.getNode(), 'Valid employeeId is required.');
-		if (typeof initialBalance !== 'number')
-			throw new NodeOperationError(this.getNode(), 'initialBalance must be a number.');
-
-		const url = `${baseURL}/backend/api/v1/timestamps/employee/${employeeIdInitial}/initialBalance`;
-		const requestOptions: IDataObject = {
-			method: 'POST',
-			url,
-			headers: { apiToken, 'Content-Type': 'application/json' },
-			body: { balance: initialBalance },
-			json: true,
-		};
-
-		try {
-			const response = await this.helpers.httpRequest(
-				requestOptions as unknown as import('n8n-workflow').IHttpRequestOptions,
-			);
-			return response;
-		} catch (error: unknown) {
-			const message = error instanceof Error ? error.message : String(error);
-			throw new NodeOperationError(this.getNode(), `Failed to set initial balance: ${message}`);
-		}
-	}
-
-	// GET pause configs
-	if (operation === 'getPauseConfigs') {
-		const url = `${baseURL}/backend/api/v1/timestamps/pauseConfigs`;
-		const requestOptions: IDataObject = {
-			method: 'GET',
-			url,
-			headers: { apiToken, 'Content-Type': 'application/json' },
-			json: true,
-		};
-
-		try {
-			const response = await this.helpers.httpRequest(
-				requestOptions as unknown as import('n8n-workflow').IHttpRequestOptions,
-			);
-			return response;
-		} catch (error: unknown) {
-			const message = error instanceof Error ? error.message : String(error);
-			throw new NodeOperationError(this.getNode(), `Failed to fetch pause configs: ${message}`);
-		}
-	}
-
-	// CREATE pause config
-	if (operation === 'createPauseConfig') {
-		const fromMinutes = this.getNodeParameter('fromMinutes', i, 0) as number;
-		const minimumPause = this.getNodeParameter('minimumPause', i, 0) as number;
-
-		if (typeof fromMinutes !== 'number')
-			throw new NodeOperationError(this.getNode(), 'fromMinutes must be a number.');
-		if (typeof minimumPause !== 'number')
-			throw new NodeOperationError(this.getNode(), 'minimumPause must be a number.');
-
-		const url = `${baseURL}/backend/api/v1/timestamps/pauseConfigs`;
-		const requestOptions: IDataObject = {
-			method: 'POST',
-			url,
-			headers: { apiToken, 'Content-Type': 'application/json' },
-			body: { fromMinutes, minimumPause },
-			json: true,
-		};
-
-		try {
-			const response = await this.helpers.httpRequest(
-				requestOptions as unknown as import('n8n-workflow').IHttpRequestOptions,
-			);
-			return response;
-		} catch (error: unknown) {
-			const message = error instanceof Error ? error.message : String(error);
-			throw new NodeOperationError(this.getNode(), `Failed to create pause config: ${message}`);
-		}
-	}
-
-	// UPDATE pause config
-	if (operation === 'updatePauseConfig') {
-		const pauseConfigId = this.getNodeParameter('pauseConfigId', i, 0) as number;
-		const fromMinutes = this.getNodeParameter('fromMinutes', i, 0) as number;
-		const minimumPause = this.getNodeParameter('minimumPause', i, 0) as number;
-
-		if (!pauseConfigId || pauseConfigId <= 0)
-			throw new NodeOperationError(this.getNode(), 'Valid pauseConfigId is required.');
-		if (typeof fromMinutes !== 'number')
-			throw new NodeOperationError(this.getNode(), 'fromMinutes must be a number.');
-		if (typeof minimumPause !== 'number')
-			throw new NodeOperationError(this.getNode(), 'minimumPause must be a number.');
-
-		const url = `${baseURL}/backend/api/v1/timestamps/pauseConfigs/${pauseConfigId}`;
-		const requestOptions: IDataObject = {
-			method: 'PUT',
-			url,
-			headers: { apiToken, 'Content-Type': 'application/json' },
-			body: { fromMinutes, minimumPause },
-			json: true,
-		};
-
-		try {
-			const response = await this.helpers.httpRequest(
-				requestOptions as unknown as import('n8n-workflow').IHttpRequestOptions,
-			);
-			return response;
-		} catch (error: unknown) {
-			const message = error instanceof Error ? error.message : String(error);
-			throw new NodeOperationError(this.getNode(), `Failed to update pause config: ${message}`);
-		}
-	}
-
-	// DELETE pause config
-	if (operation === 'deletePauseConfig') {
-		const pauseConfigId = this.getNodeParameter('pauseConfigId', i, 0) as number;
-		if (!pauseConfigId || pauseConfigId <= 0)
-			throw new NodeOperationError(this.getNode(), 'Valid pauseConfigId is required.');
-
-		const url = `${baseURL}/backend/api/v1/timestamps/pauseConfigs/${pauseConfigId}`;
-		const requestOptions: IDataObject = {
-			method: 'DELETE',
-			url,
-			headers: { apiToken, 'Content-Type': 'application/json' },
-			json: true,
-		};
-
-		try {
-			const response = await this.helpers.httpRequest(
-				requestOptions as unknown as import('n8n-workflow').IHttpRequestOptions,
-			);
-			return response;
-		} catch (error: unknown) {
-			const message = error instanceof Error ? error.message : String(error);
-			throw new NodeOperationError(this.getNode(), `Failed to delete pause config: ${message}`);
-		}
-	}
-
-	throw new NodeOperationError(this.getNode(), 'Unhandled operation');
-}
+export const handleTimestamps = createCrudHandler({
+	operationField: 'operation',
+	credentialType: 'user',
+
+	operations: {
+		getPauseConfigs: {
+			fields: {},
+			httpMethod: 'GET',
+			subPath: 'timestamps/pauseConfigs',
+		},
+
+		deletePauseConfig: {
+			fields: {
+				pauseConfigId: {
+					location: 'path',
+					guard: positiveNumberGuard,
+				},
+			},
+			httpMethod: 'DELETE',
+			subPath: 'timestamps/pauseConfigs/{pauseConfigId}',
+		},
+
+		createPauseConfig: {
+			fields: {
+				pauseConfigId: {
+					location: 'body',
+					locationName: 'id',
+					guard: ApiQuirks.requiresIdOnCreate ? positiveNumberGuard : discardGuard,
+				},
+				fromMinutes: {
+					location: 'body',
+					guard: positiveNumberGuard,
+				},
+				minimumPause: {
+					location: 'body',
+					guard: positiveNumberGuard,
+				},
+			},
+			httpMethod: 'POST',
+			subPath: 'timestamps/pauseConfigs',
+		},
+
+		updatePauseConfig: {
+			fields: {
+				pauseConfigId: {
+					location: 'path',
+					guard: positiveNumberGuard,
+				},
+				fromMinutes: {
+					location: 'body',
+					guard: nullOrGuard(positiveNumberGuard),
+				},
+				minimumPause: {
+					location: 'body',
+					guard: nullOrGuard(positiveNumberGuard),
+				},
+			},
+			httpMethod: 'PUT',
+			subPath: 'timestamps/pauseConfigs/{pauseConfigId}',
+		},
+
+		setInitialBalance: {
+			fields: {
+				employeeIdInitial: {
+					location: 'path',
+					locationName: 'employeeId',
+					guard: positiveNumberGuard,
+				},
+				initialBalance: {
+					location: 'body',
+					locationName: 'balance',
+					guard: numberGuard,
+				},
+			},
+			httpMethod: 'POST',
+			subPath: 'timestamps/employee/{employeeId}/initialBalance',
+		},
+
+		createDayClosingsTillDate: {
+			fields: {
+				tillDate: {
+					location: 'body',
+					guard: nonEmptyStringGuard,
+				},
+				employeeIdsJson: {
+					location: 'body',
+					locationName: 'employeeIds',
+					guard: jsonGuard,
+				},
+			},
+			httpMethod: 'POST',
+			subPath: 'timestamps/dayClosing/tillDate',
+		},
+
+		getDayClosingTillDate: {
+			fields: {},
+			httpMethod: 'GET',
+			subPath: 'timestamps/dayClosing/tillDate',
+		},
+
+		deleteDayClosing: {
+			fields: {
+				dayClosingsJson: {
+					location: 'body',
+					locationName: 'dayClosings',
+					spread: true,
+					guard: jsonAndGuard(
+						arrayGuard(
+							createSubObjectGuard(
+								{
+									employeeId: {
+										guard: positiveNumberGuard,
+									},
+									date: {
+										guard: nonEmptyStringGuard,
+									},
+								},
+								{ allowEmpty: false },
+							),
+						),
+					),
+				},
+			},
+			httpMethod: 'DELETE',
+			subPath: 'timestamps/dayClosing',
+		},
+
+		createDayClosing: {
+			fields: {
+				dayClosingsJson: {
+					location: 'body',
+					locationName: 'dayClosings',
+					spread: true,
+					guard: jsonAndGuard(
+						arrayGuard(
+							createSubObjectGuard(
+								{
+									employeeId: {
+										guard: positiveNumberGuard,
+									},
+									date: {
+										guard: nonEmptyStringGuard,
+									},
+								},
+								{ allowEmpty: false },
+							),
+						),
+					),
+				},
+			},
+			httpMethod: 'POST',
+			subPath: 'timestamps/dayClosing',
+		},
+
+		saveDayTimestamps: {
+			fields: {
+				employeeIdDay: {
+					location: 'path',
+					locationName: 'employeeId',
+					guard: positiveNumberGuard,
+				},
+				day: {
+					location: 'path',
+					guard: nonEmptyStringGuard,
+				},
+				timestampsJson: {
+					location: 'body',
+					locationName: 'timestamps',
+					spread: true,
+					guard: jsonAndGuard(
+						arrayGuard(
+							createSubObjectGuard(
+								{
+									id: { guard: nullOrGuard(positiveNumberGuard) },
+									employeeId: {
+										guard: ApiQuirks.requiresIdInPathAndBody ? positiveNumberGuard : discardGuard,
+									},
+									date: { guard: positiveNumberGuard },
+									state: { guard: nonEmptyStringGuard },
+									type: { guard: nonEmptyStringGuard },
+								},
+								{ allowEmpty: true },
+							),
+						),
+					),
+				},
+			},
+			httpMethod: 'PUT',
+			subPath: 'timestamps/{employeeId}/day/{day}',
+		},
+
+		updateTimestamp: {
+			fields: {
+				timestampId: {
+					location: 'path',
+					guard: positiveNumberGuard,
+				},
+				employeeId: {
+					location: 'body',
+					guard: nullOrGuard(positiveNumberGuard),
+				},
+				date: {
+					location: 'body',
+					guard: nullOrGuard(positiveNumberGuard),
+				},
+				state: {
+					location: 'body',
+					guard: nullOrGuard(nonEmptyStringGuard),
+				},
+				type: {
+					location: 'body',
+					guard: nullOrGuard(nonEmptyStringGuard),
+				},
+			},
+			httpMethod: 'PUT',
+			subPath: 'timestamps/{timestampId}',
+		},
+
+		createTimestamp: {
+			fields: {
+				autoPause: {
+					location: 'query',
+					defaultValue: false,
+					guard: booleanGuard,
+				},
+				employeeId: {
+					location: 'body',
+					guard: positiveNumberGuard,
+				},
+				date: {
+					location: 'body',
+					guard: positiveNumberGuard,
+				},
+				state: {
+					location: 'body',
+					guard: nonEmptyStringGuard,
+				},
+				type: {
+					location: 'body',
+					guard: nonEmptyStringGuard,
+				},
+			},
+			httpMethod: 'POST',
+			subPath: 'timestamps',
+		},
+
+		getTimestampStatistics: {
+			fields: {
+				from: {
+					location: 'query',
+					guard: positiveNumberGuard,
+				},
+				till: {
+					location: 'query',
+					guard: positiveNumberGuard,
+				},
+				employeeIds: {
+					location: 'query',
+					guard: nonEmptyStringGuard,
+				},
+			},
+			httpMethod: 'GET',
+			subPath: 'timestamps/statistics',
+		},
+
+		getTimestamps: {
+			fields: {
+				from: {
+					location: 'query',
+					guard: positiveNumberGuard,
+				},
+				till: {
+					location: 'query',
+					guard: positiveNumberGuard,
+				},
+			},
+			httpMethod: 'GET',
+			subPath: 'timestamps',
+		},
+
+		getTimestampInfo: {
+			fields: {
+				from: {
+					location: 'query',
+					guard: positiveNumberGuard,
+				},
+				till: {
+					location: 'query',
+					guard: positiveNumberGuard,
+				},
+			},
+			httpMethod: 'GET',
+			subPath: 'timestamps/info',
+		},
+	},
+});
