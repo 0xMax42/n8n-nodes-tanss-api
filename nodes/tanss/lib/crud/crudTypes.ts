@@ -1,5 +1,7 @@
 import { IExecuteFunctions } from 'n8n-workflow';
 import { NodeParameterGuard } from '../guards';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { JsonBodyStrategy, RequestBodyStrategy } from './RequestBodyStrategys';
 
 /**
  * HTTP methods used by the node.
@@ -71,6 +73,11 @@ export interface CrudOperation<T extends CrudFieldMap = CrudFieldMap> {
 	 * @see {@link CrudFieldLocation} for path parameter usage.
 	 */
 	subPath: string;
+	/**
+	 * An optional strategy to build the request body for the operation.
+	 * Defaults to {@link JsonBodyStrategy} if not provided.
+	 */
+	requestBodyStrategy?: RequestBodyStrategy;
 }
 
 /**
@@ -100,3 +107,10 @@ export interface CrudOperationsConfig {
 }
 
 export type NodeHandler = (this: IExecuteFunctions, i: number) => Promise<unknown>;
+
+export type CreateRecordFromFields = (
+	this: IExecuteFunctions,
+	fields: CrudFieldMap,
+	i: number,
+	type: CrudFieldLocation,
+) => Record<string, unknown> | unknown[] | undefined;

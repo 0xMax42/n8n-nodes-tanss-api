@@ -1,7 +1,6 @@
 import { IExecuteFunctions, IHttpRequestOptions, NodeOperationError } from 'n8n-workflow';
 import {
-	CrudFieldLocation,
-	CrudFieldMap,
+	CreateRecordFromFields,
 	CrudOperation,
 	CrudOperationsConfig,
 	NodeHandler,
@@ -10,6 +9,7 @@ import { generateAPIEndpointURL, getNodeParameter } from '../utils';
 import { addAuthorizationHeader, obtainToken } from '../token/token';
 import { httpRequest } from '../httpRequest/httpRequest';
 import { nonEmptyStringGuard } from '../guards';
+import { JsonBodyStrategy } from './RequestBodyStrategys';
 
 /**
  * Creates a CRUD handler function for n8n nodes based on the provided configuration.
@@ -42,7 +42,12 @@ export function createCrudHandler(config: CrudOperationsConfig): NodeHandler {
 		const localConfig = getLocalConfigByOperation.call(this, config, operation);
 		const method = localConfig.httpMethod;
 		let subPath = localConfig.subPath;
-		const body = createRecordFromFields.call(this, localConfig.fields, i, 'body');
+		const requestStrategyData = await localConfig.requestBodyStrategy?.build(
+			this,
+			i,
+			localConfig,
+			createRecordFromFields,
+		);
 		const queryParams = createRecordFromFields.call(this, localConfig.fields, i, 'query');
 		const pathParams = createRecordFromFields.call(this, localConfig.fields, i, 'path');
 
@@ -80,18 +85,12 @@ export function createCrudHandler(config: CrudOperationsConfig): NodeHandler {
 			config.credentialType,
 		);
 
-		const headers: Record<string, string> = {};
-
-		if (body) {
-			headers['Content-Type'] = 'application/json';
-		}
-
 		const requestOptions: IHttpRequestOptions = {
 			method: method,
-			headers: headers,
-			json: true,
+			headers: requestStrategyData?.headers,
+			json: requestStrategyData?.json,
 			url: url,
-			body: body,
+			body: requestStrategyData?.body,
 			returnFullResponse: true,
 		};
 		addAuthorizationHeader(requestOptions, apiToken);
@@ -136,6 +135,9 @@ function getLocalConfigByOperation(
 ): CrudOperation {
 	for (const [key, op] of Object.entries(config.operations)) {
 		if (key === operation) {
+			if (!op.requestBodyStrategy) {
+				op.requestBodyStrategy = JsonBodyStrategy;
+			}
 			return op;
 		}
 	}
@@ -150,12 +152,7 @@ function getLocalConfigByOperation(
  * @param type The location type to filter fields by ('query', 'path', or 'body')
  * @returns A record containing the parameter values for the specified location, or undefined if none
  */
-function createRecordFromFields(
-	this: IExecuteFunctions,
-	fields: CrudFieldMap,
-	i: number,
-	type: CrudFieldLocation,
-): Record<string, unknown> | unknown[] | undefined {
+export const createRecordFromFields: CreateRecordFromFields = function (this, fields, i, type) {
 	const record: Record<string, unknown> = {};
 	for (const [key, field] of Object.entries(fields)) {
 		if (field.location !== type) continue;
@@ -180,4 +177,4 @@ function createRecordFromFields(
 		record[recordKey] = value;
 	}
 	return Object.keys(record).length > 0 ? record : undefined;
-}
+};
