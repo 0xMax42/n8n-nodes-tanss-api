@@ -7,6 +7,8 @@ import {
 import {
 	availabilityFields,
 	availabilityOperations,
+	callbackFields,
+	callbackOperations,
 	callsFields,
 	callsOperations,
 	callsUserFields,
@@ -16,6 +18,7 @@ import {
 	employeesFields,
 	employeesOperations,
 	handleAvailability,
+	handleCallback,
 	handleCalls,
 	handleCallsUser,
 	handleCpu,
@@ -90,6 +93,7 @@ export class Tanss implements INodeType {
 					{ name: 'Availability', value: 'availability' },
 					{ name: 'Call', value: 'calls' },
 					{ name: 'Call User', value: 'callsuser' },
+					{ name: 'Callback', value: 'callback' },
 					{ name: 'CPU', value: 'cpus' },
 					{ name: 'Employee', value: 'employees' },
 					{ name: 'HDD Type', value: 'hddTypes' },
@@ -143,6 +147,8 @@ export class Tanss implements INodeType {
 			...remoteSupportsFields,
 			...ipsOperations,
 			...ipsFields,
+			...callbackOperations,
+			...callbackFields,
 		],
 	};
 
@@ -172,6 +178,7 @@ export class Tanss implements INodeType {
 			else if (resource === 'operatingSystems')
 				responseData = await handleOperatingSystems.call(this, i);
 			else if (resource === 'ips') responseData = await handleIps.call(this, i);
+			else if (resource === 'callback') responseData = await handleCallback.call(this, i);
 			else
 				throw new NodeOperationError(this.getNode(), `Unknown resource: ${resource}`, {
 					itemIndex: i,

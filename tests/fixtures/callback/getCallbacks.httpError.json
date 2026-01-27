@@ -1,0 +1,78 @@
+{
+    "name": "getCallbacks returns http-error wrapper",
+    "itemIndex": 0,
+    "parameters": {
+        "operation": "getCallbacks",
+        "getCallbacksFromFiltersFields": {
+            "employeeIds": 1,
+            "companyIds": 100000,
+            "loadLinkedEntites": true,
+            "withLog": true,
+            "timeframe": {
+                "range": {
+                    "from": 1609459200,
+                    "to": 1612137600
+                }
+            }
+        }
+    },
+    "credentials": {
+        "tanssApi": {
+            "baseURL": "https://example.invalid",
+            "authentication": "loginTotp",
+            "username": "user",
+            "password": "pass"
+        }
+    },
+    "http": [
+        {
+            "expect": {
+                "method": "POST",
+                "url": "https://example.invalid/backend/api/v1/login",
+                "json": true,
+                "returnFullResponse": true,
+                "headers": {
+                    "Content-Type": "application/json"
+                },
+                "body": {
+                    "username": "user",
+                    "password": "pass"
+                }
+            },
+            "reply": {
+                "statusCode": 200,
+                "body": {
+                    "content": {
+                        "apiKey": "TOKEN-123"
+                    }
+                },
+                "headers": {
+                    "content-type": "application/json"
+                }
+            }
+        },
+        {
+            "expect": {
+                "method": "PUT",
+                "url": "https://example.invalid/backend/api/v1/callbacks"
+            },
+            "throw": {
+                "kind": "axios",
+                "statusCode": 500,
+                "data": {
+                    "message": "internal error"
+                }
+            }
+        }
+    ],
+    "expected": {
+        "kind": "returns",
+        "matchObject": {
+            "success": false,
+            "statusCode": 500,
+            "body": {
+                "message": "internal error"
+            }
+        }
+    }
+}

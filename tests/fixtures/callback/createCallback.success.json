@@ -1,0 +1,126 @@
+{
+    "name": "createCallback returns success wrapper",
+    "itemIndex": 0,
+    "parameters": {
+        "operation": "createCallback",
+        "createUpdateCallbackFields": {
+            "fromEmployeeId": 2,
+            "toEmployeeId": 1234,
+            "date": 1576234800,
+            "companyId": 100000,
+            "companyName": "HUCK IT GmbH",
+            "employeeId": 42,
+            "employeeName": "Hans Mustermann",
+            "phoneNumber": "06154/6006-0",
+            "info": "Kunde wünscht dringend Rückruf auf dem Handy!",
+            "state": "UNSEEN",
+            "priority": 3,
+            "callbackAfterTime": 1576234800,
+            "callbackUntilTime": 1576238400,
+            "linkTypeId": 11,
+            "linkId": 12345
+        }
+    },
+    "credentials": {
+        "tanssApi": {
+            "baseURL": "https://example.invalid",
+            "authentication": "loginTotp",
+            "username": "user",
+            "password": "pass"
+        }
+    },
+    "http": [
+        {
+            "expect": {
+                "method": "POST",
+                "url": "https://example.invalid/backend/api/v1/login",
+                "json": true,
+                "returnFullResponse": true,
+                "headers": {
+                    "Content-Type": "application/json"
+                },
+                "body": {
+                    "username": "user",
+                    "password": "pass"
+                }
+            },
+            "reply": {
+                "statusCode": 200,
+                "body": {
+                    "content": {
+                        "apiKey": "TOKEN-123"
+                    }
+                },
+                "headers": {
+                    "content-type": "application/json"
+                }
+            }
+        },
+        {
+            "expect": {
+                "method": "POST",
+                "url": "https://example.invalid/backend/api/v1/callbacks",
+                "json": true,
+                "returnFullResponse": true,
+                "headers": {
+                    "Content-Type": "application/json",
+                    "apiToken": "Bearer TOKEN-123"
+                },
+                "body": {
+                    "fromEmployeeId": 2,
+                    "toEmployeeId": 1234,
+                    "date": 1576234800,
+                    "companyId": 100000,
+                    "companyName": "HUCK IT GmbH",
+                    "employeeId": 42,
+                    "employeeName": "Hans Mustermann",
+                    "phoneNumber": "06154/6006-0",
+                    "info": "Kunde wünscht dringend Rückruf auf dem Handy!",
+                    "state": "UNSEEN",
+                    "priority": 3,
+                    "callbackAfterTime": 1576234800,
+                    "callbackUntilTime": 1576238400,
+                    "linkTypeId": 11,
+                    "linkId": 12345
+                }
+            },
+            "reply": {
+                "statusCode": 201,
+                "body": {
+                    "meta": {
+                        "linkedEntities": {},
+                        "properties": {},
+                        "listProperties": {}
+                    },
+                    "content": {
+                        "fromEmployeeId": 2,
+                        "toEmployeeId": 1234,
+                        "date": 1576234800,
+                        "companyId": 100000,
+                        "companyName": "HUCK IT GmbH",
+                        "employeeId": 42,
+                        "employeeName": "Hans Mustermann",
+                        "phoneNumber": "06154/6006-0",
+                        "info": "Kunde wünscht dringend Rückruf auf dem Handy!",
+                        "state": "UNSEEN",
+                        "priority": 3,
+                        "callbackAfterTime": 1576234800,
+                        "callbackUntilTime": 1576238400,
+                        "linkTypeId": 11,
+                        "linkId": 12345
+                    }
+                },
+                "headers": {
+                    "content-type": "application/json"
+                }
+            }
+        }
+    ],
+    "expected": {
+        "kind": "returns",
+        "matchObject": {
+            "success": true,
+            "statusCode": 201
+        }
+    }
+}
