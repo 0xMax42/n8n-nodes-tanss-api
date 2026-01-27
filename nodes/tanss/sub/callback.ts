@@ -5,6 +5,7 @@ import {
 	createCrudHandler,
 	createSubObjectGuard,
 	nullOrGuard,
+	numberGuard,
 	positiveNumberGuard,
 	stringGuard,
 } from '../lib';
@@ -230,17 +231,19 @@ export const callbackFields: INodeProperties[] = [
 					'If the callback has to be processed before a given date, specify this "latest" date here (timestamp)',
 			},
 			{
+				// TODO: #31
 				displayName: 'Company IDs',
 				name: 'companyIds',
-				type: 'string',
-				default: '',
+				type: 'number',
+				default: null,
 				description: 'Filters only callbacks for these (customer) companies (IDs given here)',
 			},
 			{
+				// TODO: #31
 				displayName: 'Employee IDs',
 				name: 'employeeIds',
-				type: 'string',
-				default: '',
+				type: 'number',
+				default: null,
 				description: 'Filters only callbacks for these (customer) employees (IDs given here)',
 			},
 			{
@@ -274,6 +277,32 @@ export const callbackFields: INodeProperties[] = [
 				],
 				default: ['UNSEEN'],
 				description: 'Describes a current "state" of a callback',
+			},
+			{
+				displayName: 'Timeframe',
+				name: 'timeframe',
+				type: 'fixedCollection',
+				default: {},
+				options: [
+					{
+						name: 'range',
+						displayName: 'Range',
+						values: [
+							{
+								displayName: 'From (Timestamp)',
+								name: 'from',
+								type: 'number',
+								default: null,
+							},
+							{
+								displayName: 'To (Timestamp)',
+								name: 'to',
+								type: 'number',
+								default: null,
+							},
+						],
+					},
+				],
 			},
 			{
 				displayName: 'To All Employees With Access To',
@@ -330,6 +359,27 @@ export const handleCallback = createCrudHandler({
 					location: 'body',
 					spread: true,
 					guard: createSubObjectGuard({
+						timeframe: {
+							guard: createSubObjectGuard(
+								{
+									range: {
+										spread: true,
+										guard: createSubObjectGuard(
+											{
+												from: {
+													guard: nullOrGuard(numberGuard),
+												},
+												to: {
+													guard: nullOrGuard(numberGuard),
+												},
+											},
+											{ allowEmpty: true },
+										),
+									},
+								},
+								{ allowEmpty: true },
+							),
+						},
 						callbackAfterTime: {
 							guard: nullOrGuard(positiveNumberGuard),
 						},
@@ -337,10 +387,12 @@ export const handleCallback = createCrudHandler({
 							guard: nullOrGuard(positiveNumberGuard),
 						},
 						companyIds: {
-							guard: nullOrGuard(stringGuard),
+							// TODO: #31
+							guard: nullOrGuard(positiveNumberGuard),
 						},
 						employeeIds: {
-							guard: nullOrGuard(stringGuard),
+							// TODO: #31
+							guard: nullOrGuard(positiveNumberGuard),
 						},
 						fromEmployeeId: {
 							guard: nullOrGuard(positiveNumberGuard),
