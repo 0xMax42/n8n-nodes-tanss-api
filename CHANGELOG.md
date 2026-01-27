@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## [unreleased]
+## [0.1.0-pre.1](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/compare/v0.1.0-pre.0..v0.1.0-pre.1) (pre-release) - 2026-01-27
 
 ### 🚀 Features
 
@@ -20,6 +20,10 @@ All notable changes to this project will be documented in this file.
     - **chore**:*(tanss)* Export ips sub handler from index barrel - ([8f7ef46](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/8f7ef4672d47d57be15c09e8ece16ca4da6fba50))
     - *(tanss)* Add ips sub handler for CRUD operations - ([4cc2d19](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/4cc2d195ae842285b5086b613ba0781ed6835346))
     - **test**:*(ips)* Add handler fixtures and tests for ips operations - ([379820b](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/379820baac46eb6378c8bdc2cd683c45e084fc03))
+
+### 🚜 Refactor
+
+- *(callback)* Simplify getCallbacks timeframe filters structure - ([4711585](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/4711585751a91b452b6909ba22a22a48d086d575))
 
 ### ⚙️ Miscellaneous Tasks
 
