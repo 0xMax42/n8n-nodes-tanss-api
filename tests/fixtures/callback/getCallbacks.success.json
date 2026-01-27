@@ -4,10 +4,16 @@
     "parameters": {
         "operation": "getCallbacks",
         "getCallbacksFromFiltersFields": {
-            "employeeIds": "1,2",
-            "companyIds": "100000",
+            "employeeIds": 1,
+            "companyIds": 100000,
             "loadLinkedEntites": true,
-            "withLog": true
+            "withLog": true,
+            "timeframe": {
+                "range": {
+                    "from": 1609459200,
+                    "to": 1612137600
+                }
+            }
         }
     },
     "credentials": {
@@ -54,6 +60,16 @@
                 "headers": {
                     "Content-Type": "application/json",
                     "apiToken": "Bearer TOKEN-123"
+                },
+                "body": {
+                    "employeeIds": 1,
+                    "companyIds": 100000,
+                    "loadLinkedEntites": true,
+                    "withLog": true,
+                    "timeframe": {
+                        "from": 1609459200,
+                        "to": 1612137600
+                    }
                 }
             },
             "reply": {

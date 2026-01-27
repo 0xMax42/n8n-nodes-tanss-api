@@ -4,7 +4,16 @@
     "parameters": {
         "operation": "getCallbacks",
         "getCallbacksFromFiltersFields": {
-            "employeeIds": "1,2"
+            "employeeIds": 1,
+            "companyIds": 100000,
+            "loadLinkedEntites": true,
+            "withLog": true,
+            "timeframe": {
+                "range": {
+                    "from": 1609459200,
+                    "to": 1612137600
+                }
+            }
         }
     },
     "credentials": {
