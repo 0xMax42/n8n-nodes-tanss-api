@@ -6,6 +6,14 @@ All notable changes to this project will be documented in this file.
 
 ### 🚀 Features
 
+- 🔀 *(callback)* **Add callback resource handler with filters and tests** - ([eaf188a](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/eaf188a90b76a5c576c51f20e053ac5be560f256))
+    - *(callback)* Add timeframe and numeric filters to getCallbacks - ([573085b](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/573085b51ea8171ff0f93824972a976658e38a72))
+    - **test**:*(callback)* Extend getCallbacks fixtures with timeframe filters - ([711a996](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/711a996297a632c12527bcd2f11349af4ff5a5b2))
+    - *(tanss)* Route callback resource to its handler in execute loop - ([36d45e7](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/36d45e7c914f45f99b10475e1648138b8d546a6e))
+    - **docs**:*(readme)* Mark callback endpoints as implemented in progress list - ([b84ed4f](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/b84ed4fad35855c5ab096dca15517ce0b79ac6c6))
+    - *(tanss)* Wire callback resource into tanss node configuration - ([c857c0c](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/c857c0c70108d1f2ca1a0056dbccb97dbff48053))
+    - *(tanss)* Add callback sub handler and export from tanss index - ([8bce90a](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/8bce90a72fb3bfb78e4302f5a29b330497d1e4b5))
+    - **test**:*(callback)* Add handler fixtures and tests for callback operations - ([e56d188](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/e56d1883495a0770b1467da8989078bcddfe7335))
 - 🔀 *(tanss)* **Add ip endpoint implementation** - ([2744ddf](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/2744ddf7d6222401151407b45b473b48110c6155))
     - **docs**:*(readme)* Mark ip endpoints as implemented in progress overview - ([d84ab75](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/d84ab7506b1ca247a2e988be2543dc77d6951fc4))
     - *(tanss)* Wire ips resource into tanss node configuration - ([fd92887](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/fd928873c5e88bd31d3313f22a0e9497770cc9ca))
