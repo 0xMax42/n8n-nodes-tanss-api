@@ -281,26 +281,20 @@ export const callbackFields: INodeProperties[] = [
 			{
 				displayName: 'Timeframe',
 				name: 'timeframe',
-				type: 'fixedCollection',
+				type: 'collection',
 				default: {},
 				options: [
 					{
-						name: 'range',
-						displayName: 'Range',
-						values: [
-							{
-								displayName: 'From (Timestamp)',
-								name: 'from',
-								type: 'number',
-								default: null,
-							},
-							{
-								displayName: 'To (Timestamp)',
-								name: 'to',
-								type: 'number',
-								default: null,
-							},
-						],
+						displayName: 'From (Timestamp)',
+						name: 'from',
+						type: 'number',
+						default: null,
+					},
+					{
+						displayName: 'To (Timestamp)',
+						name: 'to',
+						type: 'number',
+						default: null,
 					},
 				],
 			},
@@ -362,19 +356,11 @@ export const handleCallback = createCrudHandler({
 						timeframe: {
 							guard: createSubObjectGuard(
 								{
-									range: {
-										spread: true,
-										guard: createSubObjectGuard(
-											{
-												from: {
-													guard: nullOrGuard(numberGuard),
-												},
-												to: {
-													guard: nullOrGuard(numberGuard),
-												},
-											},
-											{ allowEmpty: true },
-										),
+									from: {
+										guard: nullOrGuard(numberGuard),
+									},
+									to: {
+										guard: nullOrGuard(numberGuard),
 									},
 								},
 								{ allowEmpty: true },

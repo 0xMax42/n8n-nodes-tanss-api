@@ -9,10 +9,8 @@
             "loadLinkedEntites": true,
             "withLog": true,
             "timeframe": {
-                "range": {
-                    "from": 1609459200,
-                    "to": 1612137600
-                }
+                "from": 1609459200,
+                "to": 1612137600
             }
         }
     },
