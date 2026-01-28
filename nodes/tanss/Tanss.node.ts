@@ -98,6 +98,7 @@ export class Tanss implements INodeType {
 					{ name: 'Call', value: 'calls' },
 					{ name: 'Call User', value: 'callsuser' },
 					{ name: 'Callback', value: 'callback' },
+					{ name: 'Checklist', value: 'checklist' },
 					{ name: 'CPU', value: 'cpus' },
 					{ name: 'Employee', value: 'employees' },
 					{ name: 'HDD Type', value: 'hddTypes' },
