@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## [0.1.0-pre.1](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/compare/v0.1.0-pre.0..v0.1.0-pre.1) (pre-release) - 2026-01-28
+## [0.2.0-pre.0](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/compare/v0.1.0-pre.0..v0.2.0-pre.0) (pre-release) - 2026-01-28
 
 ### 🚀 Features
 
@@ -33,6 +33,11 @@ All notable changes to this project will be documented in this file.
 
 ### ⚙️ Miscellaneous Tasks
 
+- *(package)* Bump package version to 0.2.0-pre.0 - ([228b0bb](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/228b0bbc70f60a6f96712a27f19b6a138236b3e5))
+- *(workflows)* Publish prereleases with pre npm dist tag - ([f3e8a80](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/f3e8a80ad48163b247afc8c1668ba31d5b5e0d06))
+- *(package)* Remove unused release npm scripts - ([0db643a](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/0db643af8b7cc2254fe45f50f8eaaae81656a668))
+- *(package)* Scope package name under user namespace - ([74edb13](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/74edb13d0265c9056e1712a2188248546d5d67db))
+- *(workflows)* Build package before publishing to npm - ([9c53316](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/9c53316200cebf567ef9634bd80427dcf04534c4))
 - *(workflows)* Run npm release script in publish job - ([262eecd](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/262eecd174a4d2cfbb8ea6c88a132eacf36ee4c0))
 - *(workflows)* Split release sync and npm publish jobs - ([8dc0f37](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/8dc0f37c0cd2a49d90f95be0400cede8347e1975))
 - *(github)* Add workflow to sync releases to github - ([e7b37ea](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/e7b37eaca9489d1f0591a94da58c27402c2451ac))
