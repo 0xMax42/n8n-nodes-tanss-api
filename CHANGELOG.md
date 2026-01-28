@@ -13,6 +13,7 @@ All notable changes to this project will be documented in this file.
 
 ### 📦 Dependencies
 
+- *(deps)* Update dependency eslint to v9.39.2 - ([b468d4b](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/b468d4bd55837a284f78e0aa2b7af2ebe1b9c00a))
 - *(deps)* Update dependency @types/node to v24.10.9 - ([846b2f4](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/846b2f459d58606596431e34dea8261a56c72b23))
 - 🔀 *(deps)* **Update dependency @n8n/node-cli to v0.18.0** - ([6da47d8](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/6da47d8708ca855a24b84f6aee103b5b4eba3cf5))
     - **fix**:*(eslint)* Fix @n8n/community-nodes/icon-validation - ([4c6f247](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/4c6f247c6fa910955c9c5e8c8f685a2205843514))
