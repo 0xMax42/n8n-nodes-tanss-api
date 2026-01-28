@@ -78,6 +78,7 @@ export class Tanss implements INodeType {
 		},
 		inputs: ['main'],
 		outputs: ['main'],
+		usableAsTool: true,
 
 		credentials: [
 			{
