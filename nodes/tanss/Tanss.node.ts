@@ -59,6 +59,9 @@ import {
 	ticketStatesOperations,
 	timestampFields,
 	timestampOperations,
+	checklistFields,
+	checklistOperations,
+	handleChecklist,
 } from './sub';
 
 export class Tanss implements INodeType {
@@ -149,6 +152,8 @@ export class Tanss implements INodeType {
 			...ipsFields,
 			...callbackOperations,
 			...callbackFields,
+			...checklistOperations,
+			...checklistFields,
 		],
 	};
 
@@ -179,6 +184,7 @@ export class Tanss implements INodeType {
 				responseData = await handleOperatingSystems.call(this, i);
 			else if (resource === 'ips') responseData = await handleIps.call(this, i);
 			else if (resource === 'callback') responseData = await handleCallback.call(this, i);
+			else if (resource === 'checklist') responseData = await handleChecklist.call(this, i);
 			else
 				throw new NodeOperationError(this.getNode(), `Unknown resource: ${resource}`, {
 					itemIndex: i,
