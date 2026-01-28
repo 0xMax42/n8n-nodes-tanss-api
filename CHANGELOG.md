@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [unreleased]
+
+### ⚙️ Miscellaneous Tasks
+
+- *(gitignore)* Ignore local configuration directory - ([2fe5508](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/2fe5508c2246b8a48bb60f79a9351fc8e4e79ab8))
+
 ## [0.2.0](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/compare/v0.2.0-pre.1..v0.2.0) - 2026-01-28
 
 ### 🚀 Features
