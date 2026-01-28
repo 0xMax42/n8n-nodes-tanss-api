@@ -6,7 +6,13 @@ All notable changes to this project will be documented in this file.
 
 ### ⚙️ Miscellaneous Tasks
 
+- *(prettier)* Ignore renovate config file - ([56499df](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/56499df433e65956926ac9c9de93465759279390))
+- *(renovate)* Disable automerge and github actions updates - ([1023412](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/10234128be55a9c18372ad0e1982300c24f46e10))
 - *(package)* Update repository url to npm compatible format - ([45dac5f](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/45dac5f80cf9b942839652a4d2c2bee7ab849ab2))
+
+### 📦 Dependencies
+
+- *(deps)* Add renovate.json5 - ([85d1f67](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/85d1f6736b58cdcfe325e3840016624ffbf5575f))
 
 ## [0.2.0-pre.0](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/compare/v0.1.0-pre.0..v0.2.0-pre.0) (pre-release) - 2026-01-28
 
