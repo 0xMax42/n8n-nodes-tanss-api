@@ -29,8 +29,7 @@ export function isAuthenticateType(value: unknown): value is AuthenticateType {
  * The structure of the credentials used for authentication.
  */
 export interface ICredentials
-	extends Partial<IApiTokenCredentials>,
-		Partial<ILoginTotpCredentials> {
+	extends Partial<IApiTokenCredentials>, Partial<ILoginTotpCredentials> {
 	baseURL: string;
 	authentication: AuthenticateType;
 }
