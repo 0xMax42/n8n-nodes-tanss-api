@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [unreleased]
+
+### ⚙️ Miscellaneous Tasks
+
+- *(package)* Update repository url to npm compatible format - ([45dac5f](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/45dac5f80cf9b942839652a4d2c2bee7ab849ab2))
+
 ## [0.2.0-pre.0](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/compare/v0.1.0-pre.0..v0.2.0-pre.0) (pre-release) - 2026-01-28
 
 ### 🚀 Features
