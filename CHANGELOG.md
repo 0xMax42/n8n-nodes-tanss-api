@@ -13,6 +13,9 @@ All notable changes to this project will be documented in this file.
 
 ### 📦 Dependencies
 
+- 🔀 *(deps)* **Update dependency prettier to v3.8.1** - ([8a14f38](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/8a14f3838b0dc7a75814cb341f36bdaadeca2371))
+    - **fix**:*(style)* Fix new prettier code style issue on upgrade to v3.8.1 - ([04fde99](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/04fde9922819b6f2ea8df2b8d68b45d9d2ec2da6))
+    - *(deps)* Update dependency prettier to v3.8.1 - ([55fabfb](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/55fabfb5067d469efcd3e41498fd7b9c12cfaf7a))
 - *(deps)* Update dependency eslint to v9.39.2 - ([b468d4b](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/b468d4bd55837a284f78e0aa2b7af2ebe1b9c00a))
 - *(deps)* Update dependency @types/node to v24.10.9 - ([846b2f4](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/846b2f459d58606596431e34dea8261a56c72b23))
 - 🔀 *(deps)* **Update dependency @n8n/node-cli to v0.18.0** - ([6da47d8](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/6da47d8708ca855a24b84f6aee103b5b4eba3cf5))
