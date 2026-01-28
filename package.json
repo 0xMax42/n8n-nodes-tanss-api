@@ -1,5 +1,5 @@
 {
-    "name": "n8n-nodes-tanss-api",
+    "name": "@0xmax42/n8n-nodes-tanss-api",
     "version": "0.1.0-pre.1",
     "description": "n8n community node to use the TANSS API",
     "license": "MIT",
