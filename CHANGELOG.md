@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## [unreleased]
+## [0.2.0](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/compare/v0.2.0-pre.1..v0.2.0) - 2026-01-28
 
 ### 🚀 Features
 
@@ -11,15 +11,80 @@ All notable changes to this project will be documented in this file.
     - *(tanss)* Wire components resource into TANSS node - ([3f0c26e](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/3f0c26edb570efbf603812449408092e20b0a33b))
     - *(tanss)* Add components resource support to TANSS node - ([e6edc98](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/e6edc98bd95dd6b6213b5c3a59d3287799bc3828))
     - **test**:*(components)* Add handler fixtures and tests for components CRUD - ([ce587b0](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/ce587b0abfd9dcc980da1de0a943686af9a70d38))
+- 🔀 *(tanss)* **Add periphery resource support with tests** - ([fc33e75](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/fc33e75c553afe957824d9a2e33563e9aac85b4d))
+    - **docs**:*(readme)* Mark periphery endpoints as implemented in checklist - (from [v0.2.0-pre.1](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/releases/tag/v0.2.0-pre.1)) - ([4e31a84](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/4e31a84e3221e4bf999e7da6bcab7b8f71cd17d6))
+    - *(tanss)* Wire periphery resource into TANSS node - (from [v0.2.0-pre.1](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/releases/tag/v0.2.0-pre.1)) - ([8239add](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/8239add85c37bac9a5d2137e29470620491be03f))
+    - **test**:*(periphery)* Add handler fixtures and tests for periphery CRUD - (from [v0.2.0-pre.1](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/releases/tag/v0.2.0-pre.1)) - ([831a0f6](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/831a0f6d8d4519e6af991643a2c232a7b26140fd))
+    - *(tanss)* Add periphery resource handling to TANSS node - (from [v0.2.0-pre.1](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/releases/tag/v0.2.0-pre.1)) - ([2cf6098](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/2cf6098793d68f625458f065aff951159f6e968c))
+- 🔀 *(tanss)* **Add checklist ticket operations and handler tests** - ([59e4d23](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/59e4d23dfeac3255bc7529c9a66e61964f579c63))
+    - **docs**:*(readme)* Mark checklist endpoints as implemented in progress list - (from [v0.2.0-pre.0](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/releases/tag/v0.2.0-pre.0)) - ([497a8a9](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/497a8a9f899635253b3e8b36ab46f2b3293c1c18))
+    - *(tanss)* Wire checklist resource into tanss node configuration - (from [v0.2.0-pre.0](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/releases/tag/v0.2.0-pre.0)) - ([0e9f743](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/0e9f743c9fee3568e5e0635314f537abe2eefcef))
+    - *(tanss)* Export checklist handler from sub index - (from [v0.2.0-pre.0](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/releases/tag/v0.2.0-pre.0)) - ([5c01dfe](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/5c01dfe01a1791280f5e886c095e5c1c1c3d73cc))
+    - *(checklist)* Add checklist handler for ticket operations - (from [v0.2.0-pre.0](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/releases/tag/v0.2.0-pre.0)) - ([ca43f46](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/ca43f46f7ab961340efb7aa9eb629feb25579608))
+    - **test**:*(checklist)* Add handler fixtures for checklist operations - (from [v0.2.0-pre.0](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/releases/tag/v0.2.0-pre.0)) - ([d7f38f3](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/d7f38f3c04559a8f98410447d16302d0eee33115))
+- 🔀 *(callback)* **Add callback resource handler with filters and tests** - ([eaf188a](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/eaf188a90b76a5c576c51f20e053ac5be560f256))
+    - *(callback)* Add timeframe and numeric filters to getCallbacks - (from [v0.2.0-pre.0](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/releases/tag/v0.2.0-pre.0)) - ([573085b](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/573085b51ea8171ff0f93824972a976658e38a72))
+    - **test**:*(callback)* Extend getCallbacks fixtures with timeframe filters - (from [v0.2.0-pre.0](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/releases/tag/v0.2.0-pre.0)) - ([711a996](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/711a996297a632c12527bcd2f11349af4ff5a5b2))
+    - *(tanss)* Route callback resource to its handler in execute loop - (from [v0.2.0-pre.0](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/releases/tag/v0.2.0-pre.0)) - ([36d45e7](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/36d45e7c914f45f99b10475e1648138b8d546a6e))
+    - **docs**:*(readme)* Mark callback endpoints as implemented in progress list - (from [v0.2.0-pre.0](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/releases/tag/v0.2.0-pre.0)) - ([b84ed4f](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/b84ed4fad35855c5ab096dca15517ce0b79ac6c6))
+    - *(tanss)* Wire callback resource into tanss node configuration - (from [v0.2.0-pre.0](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/releases/tag/v0.2.0-pre.0)) - ([c857c0c](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/c857c0c70108d1f2ca1a0056dbccb97dbff48053))
+    - *(tanss)* Add callback sub handler and export from tanss index - (from [v0.2.0-pre.0](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/releases/tag/v0.2.0-pre.0)) - ([8bce90a](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/8bce90a72fb3bfb78e4302f5a29b330497d1e4b5))
+    - **test**:*(callback)* Add handler fixtures and tests for callback operations - (from [v0.2.0-pre.0](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/releases/tag/v0.2.0-pre.0)) - ([e56d188](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/e56d1883495a0770b1467da8989078bcddfe7335))
+- 🔀 *(tanss)* **Add ip endpoint implementation** - ([2744ddf](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/2744ddf7d6222401151407b45b473b48110c6155))
+    - **docs**:*(readme)* Mark ip endpoints as implemented in progress overview - (from [v0.2.0-pre.0](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/releases/tag/v0.2.0-pre.0)) - ([d84ab75](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/d84ab7506b1ca247a2e988be2543dc77d6951fc4))
+    - *(tanss)* Wire ips resource into tanss node configuration - (from [v0.2.0-pre.0](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/releases/tag/v0.2.0-pre.0)) - ([fd92887](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/fd928873c5e88bd31d3313f22a0e9497770cc9ca))
+    - **chore**:*(tanss)* Export ips sub handler from index barrel - (from [v0.2.0-pre.0](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/releases/tag/v0.2.0-pre.0)) - ([8f7ef46](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/8f7ef4672d47d57be15c09e8ece16ca4da6fba50))
+    - *(tanss)* Add ips sub handler for CRUD operations - (from [v0.2.0-pre.0](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/releases/tag/v0.2.0-pre.0)) - ([4cc2d19](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/4cc2d195ae842285b5086b613ba0781ed6835346))
+    - **test**:*(ips)* Add handler fixtures and tests for ips operations - (from [v0.2.0-pre.0](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/releases/tag/v0.2.0-pre.0)) - ([379820b](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/379820baac46eb6378c8bdc2cd683c45e084fc03))
+
+### 🐛 Bug Fixes
+
+- *(tanss)* Add checklist resource handling to TANSS node - (from [v0.2.0-pre.1](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/releases/tag/v0.2.0-pre.1)) - ([d2f8b28](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/d2f8b28cc61f881f662541fda009671fd89f6bd4))
+
+### 🚜 Refactor
+
+- *(callback)* Simplify getCallbacks timeframe filters structure - (from [v0.2.0-pre.0](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/releases/tag/v0.2.0-pre.0)) - ([4711585](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/4711585751a91b452b6909ba22a22a48d086d575))
 
 ### 📚 Documentation
 
 - *(readme)* Reorganize implementation roadmap and progress sections - ([4b8f20f](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/4b8f20f12a6c87ad40f012fb409f54d7dd717ed6))
 - *(readme)* Mark callback checklist and ip endpoints as done - ([593a7d6](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/593a7d6484a2c9333de1780f7566eb676e706e83))
+- *(readme)* Update implementation progress statistics - (from [v0.2.0-pre.1](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/releases/tag/v0.2.0-pre.1)) - ([b926706](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/b9267066da7fb30928a052f8f83b03b5d17411d5))
 
 ### 🧪 Testing
 
 - *(callsuser)* Clean up handler test imports and comments - ([b5ad998](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/b5ad998568911055c2bdb2c2d4fa8cef2f3254e2))
+- *(handlerFixtures)* Improve subset diff reporting in http mocks - (from [v0.2.0-pre.1](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/releases/tag/v0.2.0-pre.1)) - ([22341f1](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/22341f13d519e62c22bf2640d0a8d7a58afec53a))
+
+### ⚙️ Miscellaneous Tasks
+
+- *(package)* Remove unused release-it dev dependency - (from [v0.2.0-pre.1](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/releases/tag/v0.2.0-pre.1)) - ([e999574](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/e9995745185e3df14902f5aba38a17a1711a24cb))
+- *(prettier)* Ignore renovate config file - (from [v0.2.0-pre.1](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/releases/tag/v0.2.0-pre.1)) - ([56499df](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/56499df433e65956926ac9c9de93465759279390))
+- *(renovate)* Disable automerge and github actions updates - (from [v0.2.0-pre.1](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/releases/tag/v0.2.0-pre.1)) - ([1023412](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/10234128be55a9c18372ad0e1982300c24f46e10))
+- *(package)* Update repository url to npm compatible format - (from [v0.2.0-pre.1](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/releases/tag/v0.2.0-pre.1)) - ([45dac5f](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/45dac5f80cf9b942839652a4d2c2bee7ab849ab2))
+- *(package)* Bump package version to 0.2.0-pre.0 - (from [v0.2.0-pre.0](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/releases/tag/v0.2.0-pre.0)) - ([228b0bb](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/228b0bbc70f60a6f96712a27f19b6a138236b3e5))
+- *(workflows)* Publish prereleases with pre npm dist tag - (from [v0.2.0-pre.0](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/releases/tag/v0.2.0-pre.0)) - ([f3e8a80](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/f3e8a80ad48163b247afc8c1668ba31d5b5e0d06))
+- *(package)* Remove unused release npm scripts - (from [v0.2.0-pre.0](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/releases/tag/v0.2.0-pre.0)) - ([0db643a](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/0db643af8b7cc2254fe45f50f8eaaae81656a668))
+- *(package)* Scope package name under user namespace - (from [v0.2.0-pre.0](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/releases/tag/v0.2.0-pre.0)) - ([74edb13](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/74edb13d0265c9056e1712a2188248546d5d67db))
+- *(workflows)* Build package before publishing to npm - (from [v0.2.0-pre.0](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/releases/tag/v0.2.0-pre.0)) - ([9c53316](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/9c53316200cebf567ef9634bd80427dcf04534c4))
+- *(workflows)* Run npm release script in publish job - (from [v0.2.0-pre.0](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/releases/tag/v0.2.0-pre.0)) - ([262eecd](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/262eecd174a4d2cfbb8ea6c88a132eacf36ee4c0))
+- *(workflows)* Split release sync and npm publish jobs - (from [v0.2.0-pre.0](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/releases/tag/v0.2.0-pre.0)) - ([8dc0f37](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/8dc0f37c0cd2a49d90f95be0400cede8347e1975))
+- *(github)* Add workflow to sync releases to github - (from [v0.2.0-pre.0](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/releases/tag/v0.2.0-pre.0)) - ([e7b37ea](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/e7b37eaca9489d1f0591a94da58c27402c2451ac))
+
+### 📦 Dependencies
+
+- 🔀 *(deps)* **Update dependency prettier to v3.8.1** - ([8a14f38](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/8a14f3838b0dc7a75814cb341f36bdaadeca2371))
+    - **fix**:*(style)* Fix new prettier code style issue on upgrade to v3.8.1 - (from [v0.2.0-pre.1](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/releases/tag/v0.2.0-pre.1)) - ([04fde99](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/04fde9922819b6f2ea8df2b8d68b45d9d2ec2da6))
+    - *(deps)* Update dependency prettier to v3.8.1 - (from [v0.2.0-pre.1](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/releases/tag/v0.2.0-pre.1)) - ([55fabfb](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/55fabfb5067d469efcd3e41498fd7b9c12cfaf7a))
+- *(deps)* Update dependency eslint to v9.39.2 - (from [v0.2.0-pre.1](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/releases/tag/v0.2.0-pre.1)) - ([b468d4b](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/b468d4bd55837a284f78e0aa2b7af2ebe1b9c00a))
+- *(deps)* Update dependency @types/node to v24.10.9 - (from [v0.2.0-pre.1](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/releases/tag/v0.2.0-pre.1)) - ([846b2f4](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/846b2f459d58606596431e34dea8261a56c72b23))
+- 🔀 *(deps)* **Update dependency @n8n/node-cli to v0.18.0** - ([6da47d8](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/6da47d8708ca855a24b84f6aee103b5b4eba3cf5))
+    - **fix**:*(eslint)* Fix @n8n/community-nodes/icon-validation - (from [v0.2.0-pre.1](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/releases/tag/v0.2.0-pre.1)) - ([4c6f247](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/4c6f247c6fa910955c9c5e8c8f685a2205843514))
+    - **fix**:*(eslint)* Fix @n8n/community-nodes/node-usable-as-tool rule - (from [v0.2.0-pre.1](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/releases/tag/v0.2.0-pre.1)) - ([54f575f](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/54f575fdc53a1524931ecb4507f33db89e20d65e))
+    - **fix**:*(eslint)* Disable n8n cloud check - (from [v0.2.0-pre.1](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/releases/tag/v0.2.0-pre.1)) - ([e8101c3](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/e8101c30c81567a54d5b54ad885607198be9e76a))
+    - *(deps)* Update dependency @n8n/node-cli to v0.18.0 - (from [v0.2.0-pre.1](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/releases/tag/v0.2.0-pre.1)) - ([3af2b96](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/3af2b966ba9097d0dcf8d12139e7486426ee88d2))
+- *(deps)* Update dependency typescript to v5.9.3 - (from [v0.2.0-pre.1](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/releases/tag/v0.2.0-pre.1)) - ([fe62e39](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/fe62e39d983d0dcd5775c677ef87123f949c2e61))
+- *(deps)* Add renovate.json5 - (from [v0.2.0-pre.1](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/releases/tag/v0.2.0-pre.1)) - ([85d1f67](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/85d1f6736b58cdcfe325e3840016624ffbf5575f))
 
 ## [0.2.0-pre.1](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/compare/v0.2.0-pre.0..v0.2.0-pre.1) (pre-release) - 2026-01-28
 
