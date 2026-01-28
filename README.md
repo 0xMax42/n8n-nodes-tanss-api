@@ -35,7 +35,7 @@ Optionally, a dev container configuration is included to provide a ready-to-use 
 
 ### Implementation Progress
 
-Progress: **93 / 256 (1 not in API Docs; login not necessary)** (36%)
+Progress: **121 / 254** (48 %)
 
 - [x] **tickets [6/6]**
   - [x] [POST] Creates a ticket in the database
