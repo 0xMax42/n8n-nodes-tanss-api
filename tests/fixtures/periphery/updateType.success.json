@@ -1,0 +1,100 @@
+{
+    "name": "updateType returns success wrapper (all fields)",
+    "itemIndex": 0,
+    "parameters": {
+        "operation": "updateType",
+        "peripheryTypeId": 1,
+        "peripheryTypeFields": {
+            "name": "Drucker",
+            "image": "drucker.png"
+        }
+    },
+    "credentials": {
+        "tanssApi": {
+            "baseURL": "https://example.invalid",
+            "authentication": "loginTotp",
+            "username": "user",
+            "password": "pass"
+        }
+    },
+    "http": [
+        {
+            "expect": {
+                "method": "POST",
+                "url": "https://example.invalid/backend/api/v1/login",
+                "json": true,
+                "returnFullResponse": true,
+                "headers": {
+                    "Content-Type": "application/json"
+                },
+                "body": {
+                    "username": "user",
+                    "password": "pass"
+                }
+            },
+            "reply": {
+                "statusCode": 200,
+                "body": {
+                    "content": {
+                        "apiKey": "TOKEN-123"
+                    }
+                },
+                "headers": {
+                    "content-type": "application/json"
+                }
+            }
+        },
+        {
+            "expect": {
+                "method": "PUT",
+                "url": "https://example.invalid/backend/api/v1/peripheries/types/1",
+                "json": true,
+                "headers": {
+                    "Content-Type": "application/json",
+                    "apiToken": "Bearer TOKEN-123"
+                },
+                "body": {
+                    "name": "Drucker",
+                    "image": "drucker.png"
+                }
+            },
+            "reply": {
+                "statusCode": 201,
+                "body": {
+                    "meta": {
+                        "linkedEntities": { },
+                        "properties": { },
+                        "listProperties": { }
+                    },
+                    "content": {
+                        "id": 1,
+                        "name": "Drucker",
+                        "image": "drucker.png"
+                    }
+                },
+                "headers": {
+                    "content-type": "application/json"
+                }
+            }
+        }
+    ],
+    "expected": {
+        "kind": "returns",
+        "matchObject": {
+            "success": true,
+            "statusCode": 201,
+            "body": {
+                "meta": {
+                    "linkedEntities": { },
+                    "properties": { },
+                    "listProperties": { }
+                },
+                "content": {
+                    "id": 1,
+                    "name": "Drucker",
+                    "image": "drucker.png"
+                }
+            }
+        }
+    }
+}

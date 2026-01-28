@@ -1,0 +1,313 @@
+{
+    "name": "post returns success wrapper (all fields)",
+    "itemIndex": 0,
+    "parameters": {
+        "operation": "post",
+        "peripheryFields": {
+            "companyId": 5,
+            "date": 1622498400,
+            "peripheryTypeId": 3,
+            "manufacturerId": 77,
+            "type": "ECOTANK ET-4750",
+            "location": "Druckerraum",
+            "remark": "Tintenflaschen stehen im Regal",
+            "internalRemark": "",
+            "serialNumber": "GDTWR1293724",
+            "inventoryNumber": "INV003-2021-06-21",
+            "version": "v1",
+            "active": true,
+            "employeeId": 123,
+            "pcId": 456,
+            "billingNumber": "",
+            "articleNumber": "12241389",
+            "storageId": 9,
+            "purchasePrice": 404,
+            "sellingPrice": 499,
+            "ownageType": "OWN",
+            "name": "EPS_PRINT_001",
+            "description": "",
+            "manufacturerNumber": "",
+            "additionalFields": [
+                {
+                    "additionalFieldId": 1,
+                    "title": "Seitenzähler",
+                    "value": "1000 Seiten"
+                }
+            ],
+            "ipAddresses": [
+                {
+                    "id": 501,
+                    "ip": "192.168.1.10",
+                    "mac": "AA:BB:CC:DD:EE:FF",
+                    "remark": "LAN",
+                    "dhcp": false,
+                    "assignmentType": "PERIPHERY",
+                    "assignmentId": 9001,
+                    "services": [
+                        {
+                            "serviceId": 1
+                        }
+                    ]
+                }
+            ],
+            "guaranteeInfo": {
+                "linkTypeId": 2,
+                "linkId": 9001,
+                "purchaseDate": 1622498400,
+                "guaranteeMonth": 12,
+                "guaranteeExpire": 1654034400,
+                "warrantyMonth": 24,
+                "warrantyExpire": 1685570400,
+                "remark": ""
+            }
+        }
+    },
+    "credentials": {
+        "tanssApi": {
+            "baseURL": "https://example.invalid",
+            "authentication": "loginTotp",
+            "username": "user",
+            "password": "pass"
+        }
+    },
+    "http": [
+        {
+            "expect": {
+                "method": "POST",
+                "url": "https://example.invalid/backend/api/v1/login",
+                "json": true,
+                "returnFullResponse": true,
+                "headers": {
+                    "Content-Type": "application/json"
+                },
+                "body": {
+                    "username": "user",
+                    "password": "pass"
+                }
+            },
+            "reply": {
+                "statusCode": 200,
+                "body": {
+                    "content": {
+                        "apiKey": "TOKEN-123"
+                    }
+                },
+                "headers": {
+                    "content-type": "application/json"
+                }
+            }
+        },
+        {
+            "expect": {
+                "method": "POST",
+                "url": "https://example.invalid/backend/api/v1/peripheries",
+                "json": true,
+                "headers": {
+                    "Content-Type": "application/json",
+                    "apiToken": "Bearer TOKEN-123"
+                },
+                "body": {
+                    "companyId": 5,
+                    "date": 1622498400,
+                    "peripheryTypeId": 3,
+                    "manufacturerId": 77,
+                    "type": "ECOTANK ET-4750",
+                    "location": "Druckerraum",
+                    "remark": "Tintenflaschen stehen im Regal",
+                    "internalRemark": "",
+                    "serialNumber": "GDTWR1293724",
+                    "inventoryNumber": "INV003-2021-06-21",
+                    "version": "v1",
+                    "active": true,
+                    "employeeId": 123,
+                    "pcId": 456,
+                    "billingNumber": "",
+                    "articleNumber": "12241389",
+                    "storageId": 9,
+                    "purchasePrice": 404,
+                    "sellingPrice": 499,
+                    "ownageType": "OWN",
+                    "name": "EPS_PRINT_001",
+                    "description": "",
+                    "manufacturerNumber": "",
+                    "fields": [
+                        {
+                            "title": "Seitenzähler",
+                            "value": "1000 Seiten"
+                        }
+                    ],
+                    "ips": [
+                        {
+                            "ip": "192.168.1.10",
+                            "mac": "AA:BB:CC:DD:EE:FF",
+                            "remark": "LAN",
+                            "dhcp": false,
+                            "assignmentType": "PERIPHERY",
+                            "assignmentId": 9001,
+                            "services": [
+                                {
+                                    "serviceId": 1
+                                }
+                            ]
+                        }
+                    ],
+                    "guarantee": {
+                        "linkTypeId": 2,
+                        "linkId": 9001,
+                        "purchaseDate": 1622498400,
+                        "guaranteeMonth": 12,
+                        "guaranteeExpire": 1654034400,
+                        "warrantyMonth": 24,
+                        "warrantyExpire": 1685570400,
+                        "remark": ""
+                    }
+                }
+            },
+            "reply": {
+                "statusCode": 201,
+                "body": {
+                    "meta": {
+                        "linkedEntities": { },
+                        "properties": { },
+                        "listProperties": { }
+                    },
+                    "content": {
+                        "id": 9001,
+                        "companyId": 5,
+                        "date": 1622498400,
+                        "peripheryTypeId": 3,
+                        "manufacturerId": 77,
+                        "type": "ECOTANK ET-4750",
+                        "location": "Druckerraum",
+                        "remark": "Tintenflaschen stehen im Regal",
+                        "internalRemark": "",
+                        "serialNumber": "GDTWR1293724",
+                        "inventoryNumber": "INV003-2021-06-21",
+                        "version": "v1",
+                        "active": true,
+                        "employeeId": 123,
+                        "pcId": 456,
+                        "billingNumber": "",
+                        "articleNumber": "12241389",
+                        "storageId": 9,
+                        "purchasePrice": 404,
+                        "sellingPrice": 499,
+                        "ownageType": "OWN",
+                        "name": "EPS_PRINT_001",
+                        "description": "",
+                        "manufacturerNumber": "",
+                        "fields": [
+                            {
+                                "additionalFieldId": 1,
+                                "title": "Seitenzähler",
+                                "value": "1000 Seiten"
+                            }
+                        ],
+                        "ips": [
+                            {
+                                "id": 501,
+                                "ip": "192.168.1.10",
+                                "mac": "AA:BB:CC:DD:EE:FF",
+                                "remark": "LAN",
+                                "dhcp": false,
+                                "assignmentType": "PERIPHERY",
+                                "assignmentId": 9001,
+                                "services": [
+                                    {
+                                        "serviceId": 1
+                                    }
+                                ]
+                            }
+                        ],
+                        "guarantee": {
+                            "linkTypeId": 2,
+                            "linkId": 9001,
+                            "purchaseDate": 1622498400,
+                            "guaranteeMonth": 12,
+                            "guaranteeExpire": 1654034400,
+                            "warrantyMonth": 24,
+                            "warrantyExpire": 1685570400,
+                            "remark": ""
+                        }
+                    }
+                },
+                "headers": {
+                    "content-type": "application/json"
+                }
+            }
+        }
+    ],
+    "expected": {
+        "kind": "returns",
+        "matchObject": {
+            "success": true,
+            "statusCode": 201,
+            "body": {
+                "meta": {
+                    "linkedEntities": { },
+                    "properties": { },
+                    "listProperties": { }
+                },
+                "content": {
+                    "id": 9001,
+                    "companyId": 5,
+                    "date": 1622498400,
+                    "peripheryTypeId": 3,
+                    "manufacturerId": 77,
+                    "type": "ECOTANK ET-4750",
+                    "location": "Druckerraum",
+                    "remark": "Tintenflaschen stehen im Regal",
+                    "internalRemark": "",
+                    "serialNumber": "GDTWR1293724",
+                    "inventoryNumber": "INV003-2021-06-21",
+                    "version": "v1",
+                    "active": true,
+                    "employeeId": 123,
+                    "pcId": 456,
+                    "billingNumber": "",
+                    "articleNumber": "12241389",
+                    "storageId": 9,
+                    "purchasePrice": 404,
+                    "sellingPrice": 499,
+                    "ownageType": "OWN",
+                    "name": "EPS_PRINT_001",
+                    "description": "",
+                    "manufacturerNumber": "",
+                    "fields": [
+                        {
+                            "additionalFieldId": 1,
+                            "title": "Seitenzähler",
+                            "value": "1000 Seiten"
+                        }
+                    ],
+                    "ips": [
+                        {
+                            "id": 501,
+                            "ip": "192.168.1.10",
+                            "mac": "AA:BB:CC:DD:EE:FF",
+                            "remark": "LAN",
+                            "dhcp": false,
+                            "assignmentType": "PERIPHERY",
+                            "assignmentId": 9001,
+                            "services": [
+                                {
+                                    "serviceId": 1
+                                }
+                            ]
+                        }
+                    ],
+                    "guarantee": {
+                        "linkTypeId": 2,
+                        "linkId": 9001,
+                        "purchaseDate": 1622498400,
+                        "guaranteeMonth": 12,
+                        "guaranteeExpire": 1654034400,
+                        "warrantyMonth": 24,
+                        "warrantyExpire": 1685570400,
+                        "remark": ""
+                    }
+                }
+            }
+        }
+    }
+}
