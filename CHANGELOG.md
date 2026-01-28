@@ -12,6 +12,11 @@ All notable changes to this project will be documented in this file.
 
 ### 📦 Dependencies
 
+- 🔀 *(deps)* **Update dependency @n8n/node-cli to v0.18.0** - ([6da47d8](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/6da47d8708ca855a24b84f6aee103b5b4eba3cf5))
+    - **fix**:*(eslint)* Fix @n8n/community-nodes/icon-validation - ([4c6f247](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/4c6f247c6fa910955c9c5e8c8f685a2205843514))
+    - **fix**:*(eslint)* Fix @n8n/community-nodes/node-usable-as-tool rule - ([54f575f](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/54f575fdc53a1524931ecb4507f33db89e20d65e))
+    - **fix**:*(eslint)* Disable n8n cloud check - ([e8101c3](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/e8101c30c81567a54d5b54ad885607198be9e76a))
+    - *(deps)* Update dependency @n8n/node-cli to v0.18.0 - ([3af2b96](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/3af2b966ba9097d0dcf8d12139e7486426ee88d2))
 - *(deps)* Update dependency typescript to v5.9.3 - ([fe62e39](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/fe62e39d983d0dcd5775c677ef87123f949c2e61))
 - *(deps)* Add renovate.json5 - ([85d1f67](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/85d1f6736b58cdcfe325e3840016624ffbf5575f))
 
