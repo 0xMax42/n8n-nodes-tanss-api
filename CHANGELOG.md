@@ -12,11 +12,6 @@ All notable changes to this project will be documented in this file.
     - *(tanss)* Export checklist handler from sub index - ([5c01dfe](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/5c01dfe01a1791280f5e886c095e5c1c1c3d73cc))
     - *(checklist)* Add checklist handler for ticket operations - ([ca43f46](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/ca43f46f7ab961340efb7aa9eb629feb25579608))
     - **test**:*(checklist)* Add handler fixtures for checklist operations - ([d7f38f3](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/d7f38f3c04559a8f98410447d16302d0eee33115))
-
-## [0.1.0-pre.1](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/compare/v0.1.0-pre.0..v0.1.0-pre.1) (pre-release) - 2026-01-27
-
-### 🚀 Features
-
 - 🔀 *(callback)* **Add callback resource handler with filters and tests** - ([eaf188a](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/eaf188a90b76a5c576c51f20e053ac5be560f256))
     - *(callback)* Add timeframe and numeric filters to getCallbacks - ([573085b](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/573085b51ea8171ff0f93824972a976658e38a72))
     - **test**:*(callback)* Extend getCallbacks fixtures with timeframe filters - ([711a996](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/711a996297a632c12527bcd2f11349af4ff5a5b2))
@@ -38,6 +33,7 @@ All notable changes to this project will be documented in this file.
 
 ### ⚙️ Miscellaneous Tasks
 
+- *(workflows)* Split release sync and npm publish jobs - ([8dc0f37](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/8dc0f37c0cd2a49d90f95be0400cede8347e1975))
 - *(github)* Add workflow to sync releases to github - ([e7b37ea](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/e7b37eaca9489d1f0591a94da58c27402c2451ac))
 
 ## [0.1.0-pre.0] (pre-release) - 2026-01-26
