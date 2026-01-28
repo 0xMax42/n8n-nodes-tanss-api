@@ -8,6 +8,7 @@
   ],
   "semanticCommitScope": "deps",
   "automergeStrategy": "rebase",
+  "automerge": false,
   "packageRules": [
     {
       "description": [
@@ -103,6 +104,13 @@
       ],
       "dependencyDashboardApproval": true,
       "enabled": true
+    },
+    {
+      "description": "Disable all updates for GitHub actions and GitHub runners",
+      "matchManagers": [
+        "github-actions"
+      ],
+      "enabled": false
     }
   ]
 }
