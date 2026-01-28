@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* tests/handlerFixtures/fixtureRunner.ts */
+import { inspect } from 'node:util';
 import { HandlerFixture, HttpMock, NodeStub } from './fixtureTypes';
 
 /**
@@ -17,31 +18,135 @@ function isPlainObject(value: unknown): value is Record<string, unknown> {
 /**
  * Deep partial matcher: ensures every key/value from `expected` exists in `actual`.
  */
-function matchSubset(expected: unknown, actual: unknown, path = '$'): void {
-	// Primitive / null / undefined
-	if (!isPlainObject(expected) && !Array.isArray(expected)) {
-		expect(actual).toEqual(expected);
-		return;
-	}
+type SubsetDiff =
+	| {
+			kind: 'type';
+			path: string;
+			expectedType: string;
+			actualType: string;
+	  }
+	| {
+			kind: 'missing-key';
+			path: string;
+			key: string;
+	  }
+	| {
+			kind: 'array-length';
+			path: string;
+			expectedMinLength: number;
+			actualLength: number;
+	  }
+	| {
+			kind: 'value';
+			path: string;
+			expected: unknown;
+			actual: unknown;
+	  };
 
+function typeLabel(value: unknown): string {
+	if (value === null) return 'null';
+	if (Array.isArray(value)) return 'array';
+	return typeof value;
+}
+
+function formatValue(value: unknown): string {
+	return inspect(value, {
+		depth: 10,
+		breakLength: 120,
+		compact: false,
+		sorted: true,
+	});
+}
+
+function collectSubsetDiffs(
+	expected: unknown,
+	actual: unknown,
+	path: string,
+	diffs: SubsetDiff[],
+): void {
 	// Array
 	if (Array.isArray(expected)) {
-		expect(Array.isArray(actual)).toBe(true);
-		const act = actual as unknown[];
-		expect(act.length).toBeGreaterThanOrEqual(expected.length);
+		if (!Array.isArray(actual)) {
+			diffs.push({
+				kind: 'type',
+				path,
+				expectedType: 'array',
+				actualType: typeLabel(actual),
+			});
+			return;
+		}
+
+		if (actual.length < expected.length) {
+			diffs.push({
+				kind: 'array-length',
+				path,
+				expectedMinLength: expected.length,
+				actualLength: actual.length,
+			});
+			// Still compare what we can
+		}
+
 		for (let i = 0; i < expected.length; i++) {
-			matchSubset(expected[i], act[i], `${path}[${i}]`);
+			collectSubsetDiffs(expected[i], (actual as unknown[])[i], `${path}[${i}]`, diffs);
 		}
 		return;
 	}
 
 	// Plain object
-	expect(isPlainObject(actual)).toBe(true);
-	const act = actual as Record<string, unknown>;
-	for (const [k, v] of Object.entries(expected as Record<string, unknown>)) {
-		expect(Object.prototype.hasOwnProperty.call(act, k)).toBe(true);
-		matchSubset(v, act[k], `${path}.${k}`);
+	if (isPlainObject(expected)) {
+		if (!isPlainObject(actual)) {
+			diffs.push({
+				kind: 'type',
+				path,
+				expectedType: 'object',
+				actualType: typeLabel(actual),
+			});
+			return;
+		}
+
+		const act = actual as Record<string, unknown>;
+		for (const [k, v] of Object.entries(expected as Record<string, unknown>)) {
+			if (!Object.prototype.hasOwnProperty.call(act, k)) {
+				diffs.push({ kind: 'missing-key', path, key: k });
+				continue;
+			}
+			collectSubsetDiffs(v, act[k], `${path}.${k}`, diffs);
+		}
+		return;
 	}
+
+	// Primitive / null / undefined
+	if (!Object.is(expected, actual)) {
+		diffs.push({ kind: 'value', path, expected, actual });
+	}
+}
+
+function assertSubsetOrThrow(expected: unknown, actual: unknown): void {
+	const diffs: SubsetDiff[] = [];
+	collectSubsetDiffs(expected, actual, '$', diffs);
+
+	if (diffs.length === 0) return;
+
+	const max = 25;
+	const rendered = diffs.slice(0, max).map((d) => {
+		switch (d.kind) {
+			case 'type':
+				return `- ${d.path}: expected type ${d.expectedType}, got ${d.actualType}`;
+			case 'missing-key':
+				return `- ${d.path}: missing key ${JSON.stringify(d.key)}`;
+			case 'array-length':
+				return `- ${d.path}: expected array length >= ${d.expectedMinLength}, got ${d.actualLength}`;
+			case 'value':
+				return (
+					`- ${d.path}: value mismatch\n` +
+					`    expected: ${formatValue(d.expected)}\n` +
+					`    actual:   ${formatValue(d.actual)}`
+				);
+		}
+	});
+
+	const more = diffs.length > max ? `\n...and ${diffs.length - max} more differences.` : '';
+	throw new Error(`Subset mismatch (${diffs.length} differences):\n${rendered.join('\n')}${more}`);
 }
 
 /**
@@ -78,10 +183,11 @@ function buildHttpRequestMock(queue: HttpMock[]) {
 		if ('returnFullResponse' in expected) delete expected.returnFullResponse;
 		try {
 			const actual = { ...(options as Record<string, unknown>) } as Record<string, unknown>;
-			matchSubset(expected, actual);
+			assertSubsetOrThrow(expected, actual);
 		} catch (e) {
 			throw new Error(
 				`helpers.httpRequest() did not match fixture expectation.\n` +
+					`Differences:\n${(e as Error).message}\n` +
 					`Expected subset: ${JSON.stringify(expected, null, 2)}\n` +
 					`Actual options:   ${JSON.stringify(options, null, 2)}\n` +
 					`Original error: ${(e as Error).message}`,
