@@ -1,0 +1,174 @@
+{
+    "name": "updateComponent returns success wrapper (all fields)",
+    "itemIndex": 0,
+    "parameters": {
+        "operation": "updateComponent",
+        "componentId": 7001,
+        "componentFields": {
+            "active": true,
+            "articleNumber": "3406-25L",
+            "billingNumber": "BILL-2021-001",
+            "companyId": 1,
+            "componentTypeId": 1,
+            "date": 1622498400,
+            "description": "4TB NAS HDD",
+            "hddTypeId": 1,
+            "inventoryNumber": "INV002-2021-04-27",
+            "manufacturerId": 21,
+            "megabytes": 4000000,
+            "onBoard": false,
+            "pcId": 1234,
+            "peripheryId": 1,
+            "purchasePrice": 90,
+            "remark": "Installed in server (updated)",
+            "sellingPrice": 120,
+            "serialNumber": "HDFGT10374627",
+            "storageId": 2,
+            "type": "IronWolf NAS HDD ST4000VN008"
+        }
+    },
+    "credentials": {
+        "tanssApi": {
+            "baseURL": "https://example.invalid",
+            "authentication": "loginTotp",
+            "username": "user",
+            "password": "pass"
+        }
+    },
+    "http": [
+        {
+            "expect": {
+                "method": "POST",
+                "url": "https://example.invalid/backend/api/v1/login",
+                "json": true,
+                "returnFullResponse": true,
+                "headers": {
+                    "Content-Type": "application/json"
+                },
+                "body": {
+                    "username": "user",
+                    "password": "pass"
+                }
+            },
+            "reply": {
+                "statusCode": 200,
+                "body": {
+                    "content": {
+                        "apiKey": "TOKEN-123"
+                    }
+                },
+                "headers": {
+                    "content-type": "application/json"
+                }
+            }
+        },
+        {
+            "expect": {
+                "method": "PUT",
+                "url": "https://example.invalid/backend/api/v1/components/7001",
+                "json": true,
+                "headers": {
+                    "Content-Type": "application/json",
+                    "apiToken": "Bearer TOKEN-123"
+                },
+                "body": {
+                    "active": true,
+                    "articleNumber": "3406-25L",
+                    "billingNumber": "BILL-2021-001",
+                    "companyId": 1,
+                    "componentTypeId": 1,
+                    "date": 1622498400,
+                    "description": "4TB NAS HDD",
+                    "hddTypeId": 1,
+                    "inventoryNumber": "INV002-2021-04-27",
+                    "manufacturerId": 21,
+                    "megabytes": 4000000,
+                    "onBoard": false,
+                    "pcId": 1234,
+                    "peripheryId": 1,
+                    "purchasePrice": 90,
+                    "remark": "Installed in server (updated)",
+                    "sellingPrice": 120,
+                    "serialNumber": "HDFGT10374627",
+                    "storageId": 2,
+                    "type": "IronWolf NAS HDD ST4000VN008"
+                }
+            },
+            "reply": {
+                "statusCode": 201,
+                "body": {
+                    "meta": {
+                        "linkedEntities": { },
+                        "properties": { },
+                        "listProperties": { }
+                    },
+                    "content": {
+                        "id": 7001,
+                        "inventoryNumber": "INV002-2021-04-27",
+                        "componentTypeId": 1,
+                        "pcId": 1234,
+                        "peripheryId": 1,
+                        "manufacturerId": 21,
+                        "type": "IronWolf NAS HDD ST4000VN008",
+                        "serialNumber": "HDFGT10374627",
+                        "megabytes": 4000000,
+                        "hddTypeId": 1,
+                        "scsiId": "",
+                        "onBoard": false,
+                        "companyId": 1,
+                        "remark": "Installed in server (updated)",
+                        "active": true,
+                        "date": 1622498400,
+                        "billingNumber": "BILL-2021-001",
+                        "articleNumber": "3406-25L",
+                        "storageId": 2,
+                        "purchasePrice": 90,
+                        "sellingPrice": 120,
+                        "description": "4TB NAS HDD"
+                    }
+                },
+                "headers": {
+                    "content-type": "application/json"
+                }
+            }
+        }
+    ],
+    "expected": {
+        "kind": "returns",
+        "matchObject": {
+            "success": true,
+            "statusCode": 201,
+            "body": {
+                "meta": {
+                    "linkedEntities": { },
+                    "properties": { },
+                    "listProperties": { }
+                },
+                "content": {
+                    "id": 7001,
+                    "inventoryNumber": "INV002-2021-04-27",
+                    "componentTypeId": 1,
+                    "pcId": 1234,
+                    "peripheryId": 1,
+                    "manufacturerId": 21,
+                    "type": "IronWolf NAS HDD ST4000VN008",
+                    "serialNumber": "HDFGT10374627",
+                    "megabytes": 4000000,
+                    "hddTypeId": 1,
+                    "scsiId": "",
+                    "onBoard": false,
+                    "companyId": 1,
+                    "remark": "Installed in server (updated)",
+                    "active": true,
+                    "date": 1622498400,
+                    "billingNumber": "BILL-2021-001",
+                    "articleNumber": "3406-25L",
+                    "storageId": 2,
+                    "purchasePrice": 90,
+                    "sellingPrice": 120,
+                    "description": "4TB NAS HDD"
+                }
+            }
+        }
+    }
+}

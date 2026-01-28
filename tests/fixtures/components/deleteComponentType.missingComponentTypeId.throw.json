@@ -1,0 +1,21 @@
+{
+    "name": "deleteComponentType throws NodeOperationError on missing componentTypeId",
+    "itemIndex": 0,
+    "parameters": {
+        "operation": "deleteComponentType",
+        "componentTypeId": 0
+    },
+    "credentials": {
+        "tanssApi": {
+            "baseURL": "https://example.invalid",
+            "authentication": "apiToken",
+            "apiToken": "TOKEN-123"
+        }
+    },
+    "http": [ ],
+    "expected": {
+        "kind": "throws",
+        "name": "NodeOperationError",
+        "messageIncludes": "componentTypeId must be a positive number"
+    }
+}
