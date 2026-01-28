@@ -1,0 +1,28 @@
+{
+    "name": "checkItem throws NodeOperationError on missing itemId",
+    "itemIndex": 0,
+    "parameters": {
+        "operation": "checkItem",
+        "itemId": 0,
+        "checklistId": 456,
+        "mainChecklistId": 0,
+        "linkTypeId": 11,
+        "linkId": 12345,
+        "value": 1,
+        "multiSelectId": 0,
+        "vars": {}
+    },
+    "credentials": {
+        "tanssApi": {
+            "baseURL": "https://example.invalid",
+            "authentication": "apiToken",
+            "apiToken": "TOKEN-123"
+        }
+    },
+    "http": [],
+    "expected": {
+        "kind": "throws",
+        "name": "NodeOperationError",
+        "messageIncludes": "itemId must be a positive number"
+    }
+}
