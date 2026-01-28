@@ -236,18 +236,18 @@ Progress: **121 / 254** (48 %)
   - [x] [POST] Creates a pc
   - [x] [PUT] Gets a list of pcs
 
-- [ ] **periphery [0/11]**
-  - [ ] [GET] Gets a periphery by id
-  - [ ] [PUT] Updates a periphery
-  - [ ] [DEL] Deletes a periphery
-  - [ ] [POST] Creates a periphery
-  - [ ] [PUT] Gets a list of peripheries
-  - [ ] [GET] Get periphery types
-  - [ ] [POST] Create periphery type
-  - [ ] [PUT] Update periphery type
-  - [ ] [DEL] Delete periphery type
-  - [ ] [POST] Assign periphery
-  - [ ] [DEL] Delete periphery assignment
+- [x] **periphery [0/11]**
+  - [x] [GET] Gets a periphery by id
+  - [x] [PUT] Updates a periphery
+  - [x] [DEL] Deletes a periphery
+  - [x] [POST] Creates a periphery
+  - [x] [PUT] Gets a list of peripheries
+  - [x] [GET] Get periphery types
+  - [x] [POST] Create periphery type
+  - [x] [PUT] Update periphery type
+  - [x] [DEL] Delete periphery type
+  - [x] [POST] Assign periphery
+  - [x] [DEL] Delete periphery assignment
 
 - [ ] **components [0/9]**
   - [ ] [GET] Gets a component by id

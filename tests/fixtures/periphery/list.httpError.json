@@ -1,0 +1,72 @@
+{
+    "name": "list returns http-error wrapper",
+    "itemIndex": 0,
+    "parameters": {
+        "operation": "list",
+        "peripheryListFilters": {
+            "companyId": 5,
+            "branches": "COMPANY_ONLY",
+            "active": "ACTIVE_ONLY",
+            "peripheryTypeId": 3
+        }
+    },
+    "credentials": {
+        "tanssApi": {
+            "baseURL": "https://example.invalid",
+            "authentication": "loginTotp",
+            "username": "user",
+            "password": "pass"
+        }
+    },
+    "http": [
+        {
+            "expect": {
+                "method": "POST",
+                "url": "https://example.invalid/backend/api/v1/login",
+                "json": true,
+                "returnFullResponse": true,
+                "headers": {
+                    "Content-Type": "application/json"
+                },
+                "body": {
+                    "username": "user",
+                    "password": "pass"
+                }
+            },
+            "reply": {
+                "statusCode": 200,
+                "body": {
+                    "content": {
+                        "apiKey": "TOKEN-123"
+                    }
+                },
+                "headers": {
+                    "content-type": "application/json"
+                }
+            }
+        },
+        {
+            "expect": {
+                "method": "PUT",
+                "url": "https://example.invalid/backend/api/v1/peripheries"
+            },
+            "throw": {
+                "kind": "axios",
+                "statusCode": 403,
+                "data": {
+                    "message": "forbidden"
+                }
+            }
+        }
+    ],
+    "expected": {
+        "kind": "returns",
+        "matchObject": {
+            "success": false,
+            "statusCode": 403,
+            "body": {
+                "message": "forbidden"
+            }
+        }
+    }
+}

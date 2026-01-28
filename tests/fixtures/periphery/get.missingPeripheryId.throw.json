@@ -1,0 +1,21 @@
+{
+    "name": "get throws NodeOperationError on missing peripheryId",
+    "itemIndex": 0,
+    "parameters": {
+        "operation": "get",
+        "peripheryId": 0
+    },
+    "credentials": {
+        "tanssApi": {
+            "baseURL": "https://example.invalid",
+            "authentication": "apiToken",
+            "apiToken": "TOKEN-123"
+        }
+    },
+    "http": [ ],
+    "expected": {
+        "kind": "throws",
+        "name": "NodeOperationError",
+        "messageIncludes": "peripheryId must be a positive number"
+    }
+}

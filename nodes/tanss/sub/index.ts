@@ -24,4 +24,5 @@ export { checklistOperations, checklistFields, handleChecklist } from './checkli
 export { hddTypesOperations, hddTypesFields, handleHddTypes } from './hddTypes';
 export { ipsOperations, ipsFields, handleIps } from './ips';
 export { manufacturersOperations, manufacturersFields, handleManufacturers } from './manufacturers';
+export { peripheryOperations, peripheryFields, handlePeriphery } from './periphery';
 export { timestampOperations, timestampFields, handleTimestamps } from './timestamp';

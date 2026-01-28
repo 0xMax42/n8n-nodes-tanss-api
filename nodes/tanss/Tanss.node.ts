@@ -62,6 +62,9 @@ import {
 	checklistFields,
 	checklistOperations,
 	handleChecklist,
+	peripheryFields,
+	peripheryOperations,
+	handlePeriphery,
 } from './sub';
 
 export class Tanss implements INodeType {
@@ -107,6 +110,7 @@ export class Tanss implements INodeType {
 					{ name: 'Manufacturer', value: 'manufacturers' },
 					{ name: 'Operating System', value: 'operatingSystems' },
 					{ name: 'PC', value: 'pc' },
+					{ name: 'Periphery', value: 'periphery' },
 					{ name: 'Remote Support', value: 'remoteSupports' },
 					{ name: 'Ticket', value: 'ticket' },
 					{ name: 'Ticket Content', value: 'ticketContent' },
@@ -156,6 +160,8 @@ export class Tanss implements INodeType {
 			...callbackFields,
 			...checklistOperations,
 			...checklistFields,
+			...peripheryOperations,
+			...peripheryFields,
 		],
 	};
 
@@ -187,6 +193,7 @@ export class Tanss implements INodeType {
 			else if (resource === 'ips') responseData = await handleIps.call(this, i);
 			else if (resource === 'callback') responseData = await handleCallback.call(this, i);
 			else if (resource === 'checklist') responseData = await handleChecklist.call(this, i);
+			else if (resource === 'periphery') responseData = await handlePeriphery.call(this, i);
 			else
 				throw new NodeOperationError(this.getNode(), `Unknown resource: ${resource}`, {
 					itemIndex: i,
