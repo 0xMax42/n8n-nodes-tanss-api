@@ -33,6 +33,7 @@ All notable changes to this project will be documented in this file.
 
 ### ⚙️ Miscellaneous Tasks
 
+- *(workflows)* Run npm release script in publish job - ([262eecd](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/262eecd174a4d2cfbb8ea6c88a132eacf36ee4c0))
 - *(workflows)* Split release sync and npm publish jobs - ([8dc0f37](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/8dc0f37c0cd2a49d90f95be0400cede8347e1975))
 - *(github)* Add workflow to sync releases to github - ([e7b37ea](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/e7b37eaca9489d1f0591a94da58c27402c2451ac))
 
