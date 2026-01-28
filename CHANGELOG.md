@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## [unreleased]
+## [0.1.0-pre.1](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/compare/v0.1.0-pre.0..v0.1.0-pre.1) (pre-release) - 2026-01-28
 
 ### 🚀 Features
 
