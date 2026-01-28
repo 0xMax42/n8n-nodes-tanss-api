@@ -1,0 +1,199 @@
+{
+    "name": "getManyComponents returns success wrapper (all fields)",
+    "itemIndex": 0,
+    "parameters": {
+        "operation": "getManyComponents",
+        "getComponentsFilters": {
+            "active": "ACTIVE_ONLY",
+            "branch": "COMPANY_ONLY",
+            "builtInFilter": "NOT_BUILT_IN_COMPONENTS",
+            "companyId": 1,
+            "componentTypeId": 1,
+            "pcId": 2,
+            "peripheryId": 3
+        }
+    },
+    "credentials": {
+        "tanssApi": {
+            "baseURL": "https://example.invalid",
+            "authentication": "loginTotp",
+            "username": "user",
+            "password": "pass"
+        }
+    },
+    "http": [
+        {
+            "expect": {
+                "method": "POST",
+                "url": "https://example.invalid/backend/api/v1/login",
+                "json": true,
+                "returnFullResponse": true,
+                "headers": {
+                    "Content-Type": "application/json"
+                },
+                "body": {
+                    "username": "user",
+                    "password": "pass"
+                }
+            },
+            "reply": {
+                "statusCode": 200,
+                "body": {
+                    "content": {
+                        "apiKey": "TOKEN-123"
+                    }
+                },
+                "headers": {
+                    "content-type": "application/json"
+                }
+            }
+        },
+        {
+            "expect": {
+                "method": "PUT",
+                "url": "https://example.invalid/backend/api/v1/components",
+                "json": true,
+                "headers": {
+                    "Content-Type": "application/json",
+                    "apiToken": "Bearer TOKEN-123"
+                },
+                "body": {
+                    "active": "ACTIVE_ONLY",
+                    "branch": "COMPANY_ONLY",
+                    "builtInFilter": "NOT_BUILT_IN_COMPONENTS",
+                    "companyId": 1,
+                    "componentTypeId": 1,
+                    "pcId": 2,
+                    "peripheryId": 3
+                }
+            },
+            "reply": {
+                "statusCode": 200,
+                "body": {
+                    "meta": {
+                        "linkedEntities": { },
+                        "properties": { },
+                        "listProperties": { }
+                    },
+                    "content": [
+                        {
+                            "id": 7001,
+                            "inventoryNumber": "INV002-2021-04-27",
+                            "componentTypeId": 1,
+                            "pcId": 1234,
+                            "peripheryId": 0,
+                            "manufacturerId": 21,
+                            "type": "IronWolf NAS HDD ST4000VN008",
+                            "serialNumber": "HDFGT10374627",
+                            "megabytes": 4000000,
+                            "hddTypeId": 1,
+                            "scsiId": "",
+                            "onBoard": false,
+                            "companyId": 0,
+                            "remark": "Installed in server",
+                            "active": true,
+                            "date": 1622498400,
+                            "billingNumber": "BILL-2021-001",
+                            "articleNumber": "3406-25L",
+                            "storageId": 2,
+                            "purchasePrice": 90,
+                            "sellingPrice": 120,
+                            "description": "4TB NAS HDD"
+                        },
+                        {
+                            "id": 7002,
+                            "inventoryNumber": "INV003-2021-05-10",
+                            "componentTypeId": 3,
+                            "pcId": 0,
+                            "peripheryId": 9001,
+                            "manufacturerId": 55,
+                            "type": "DDR4 RAM 16GB",
+                            "serialNumber": "RAM-0001",
+                            "megabytes": 16384,
+                            "hddTypeId": 0,
+                            "scsiId": "",
+                            "onBoard": true,
+                            "companyId": 5,
+                            "remark": "Spare",
+                            "active": true,
+                            "date": 1625090400,
+                            "billingNumber": "BILL-2021-002",
+                            "articleNumber": "RAM-16GB",
+                            "storageId": 9,
+                            "purchasePrice": 45,
+                            "sellingPrice": 65,
+                            "description": "Onboard RAM"
+                        }
+                    ]
+                },
+                "headers": {
+                    "content-type": "application/json"
+                }
+            }
+        }
+    ],
+    "expected": {
+        "kind": "returns",
+        "matchObject": {
+            "success": true,
+            "statusCode": 200,
+            "body": {
+                "meta": {
+                    "linkedEntities": { },
+                    "properties": { },
+                    "listProperties": { }
+                },
+                "content": [
+                    {
+                        "id": 7001,
+                        "inventoryNumber": "INV002-2021-04-27",
+                        "componentTypeId": 1,
+                        "pcId": 1234,
+                        "peripheryId": 0,
+                        "manufacturerId": 21,
+                        "type": "IronWolf NAS HDD ST4000VN008",
+                        "serialNumber": "HDFGT10374627",
+                        "megabytes": 4000000,
+                        "hddTypeId": 1,
+                        "scsiId": "",
+                        "onBoard": false,
+                        "companyId": 0,
+                        "remark": "Installed in server",
+                        "active": true,
+                        "date": 1622498400,
+                        "billingNumber": "BILL-2021-001",
+                        "articleNumber": "3406-25L",
+                        "storageId": 2,
+                        "purchasePrice": 90,
+                        "sellingPrice": 120,
+                        "description": "4TB NAS HDD"
+                    },
+                    {
+                        "id": 7002,
+                        "inventoryNumber": "INV003-2021-05-10",
+                        "componentTypeId": 3,
+                        "pcId": 0,
+                        "peripheryId": 9001,
+                        "manufacturerId": 55,
+                        "type": "DDR4 RAM 16GB",
+                        "serialNumber": "RAM-0001",
+                        "megabytes": 16384,
+                        "hddTypeId": 0,
+                        "scsiId": "",
+                        "onBoard": true,
+                        "companyId": 5,
+                        "remark": "Spare",
+                        "active": true,
+                        "date": 1625090400,
+                        "billingNumber": "BILL-2021-002",
+                        "articleNumber": "RAM-16GB",
+                        "storageId": 9,
+                        "purchasePrice": 45,
+                        "sellingPrice": 65,
+                        "description": "Onboard RAM"
+                    }
+                ]
+            }
+        }
+    }
+}

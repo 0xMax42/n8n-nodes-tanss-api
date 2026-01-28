@@ -1,0 +1,103 @@
+{
+    "name": "createComponentType returns success wrapper (all fields)",
+    "itemIndex": 0,
+    "parameters": {
+        "operation": "createComponentType",
+        "componentTypeFields": {
+            "type": "Festplatte",
+            "shortName": "HDD",
+            "shown": true
+        }
+    },
+    "credentials": {
+        "tanssApi": {
+            "baseURL": "https://example.invalid",
+            "authentication": "loginTotp",
+            "username": "user",
+            "password": "pass"
+        }
+    },
+    "http": [
+        {
+            "expect": {
+                "method": "POST",
+                "url": "https://example.invalid/backend/api/v1/login",
+                "json": true,
+                "returnFullResponse": true,
+                "headers": {
+                    "Content-Type": "application/json"
+                },
+                "body": {
+                    "username": "user",
+                    "password": "pass"
+                }
+            },
+            "reply": {
+                "statusCode": 200,
+                "body": {
+                    "content": {
+                        "apiKey": "TOKEN-123"
+                    }
+                },
+                "headers": {
+                    "content-type": "application/json"
+                }
+            }
+        },
+        {
+            "expect": {
+                "method": "POST",
+                "url": "https://example.invalid/backend/api/v1/components/types",
+                "json": true,
+                "headers": {
+                    "Content-Type": "application/json",
+                    "apiToken": "Bearer TOKEN-123"
+                },
+                "body": {
+                    "type": "Festplatte",
+                    "shortName": "HDD",
+                    "shown": true
+                }
+            },
+            "reply": {
+                "statusCode": 201,
+                "body": {
+                    "meta": {
+                        "linkedEntities": { },
+                        "properties": { },
+                        "listProperties": { }
+                    },
+                    "content": {
+                        "id": 1,
+                        "type": "Festplatte",
+                        "shortName": "HDD",
+                        "shown": true
+                    }
+                },
+                "headers": {
+                    "content-type": "application/json"
+                }
+            }
+        }
+    ],
+    "expected": {
+        "kind": "returns",
+        "matchObject": {
+            "success": true,
+            "statusCode": 201,
+            "body": {
+                "meta": {
+                    "linkedEntities": { },
+                    "properties": { },
+                    "listProperties": { }
+                },
+                "content": {
+                    "id": 1,
+                    "type": "Festplatte",
+                    "shortName": "HDD",
+                    "shown": true
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,21 @@
+{
+    "name": "getComponent throws NodeOperationError on missing componentId",
+    "itemIndex": 0,
+    "parameters": {
+        "operation": "getComponent",
+        "componentId": 0
+    },
+    "credentials": {
+        "tanssApi": {
+            "baseURL": "https://example.invalid",
+            "authentication": "apiToken",
+            "apiToken": "TOKEN-123"
+        }
+    },
+    "http": [ ],
+    "expected": {
+        "kind": "throws",
+        "name": "NodeOperationError",
+        "messageIncludes": "componentId must be a positive number"
+    }
+}

@@ -21,6 +21,7 @@ export { callbackOperations, callbackFields, handleCallback } from './callback';
 export { callsOperations, callsFields, handleCalls } from './calls';
 export { callsUserOperations, callsUserFields, handleCallsUser } from './callsuser';
 export { checklistOperations, checklistFields, handleChecklist } from './checklist';
+export { componentOperations, componentFields, handleComponents } from './components';
 export { hddTypesOperations, hddTypesFields, handleHddTypes } from './hddTypes';
 export { ipsOperations, ipsFields, handleIps } from './ips';
 export { manufacturersOperations, manufacturersFields, handleManufacturers } from './manufacturers';
