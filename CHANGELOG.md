@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [unreleased]
+
+### 📚 Documentation
+
+- *(readme)* Mark callback checklist and ip endpoints as done - ([593a7d6](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/593a7d6484a2c9333de1780f7566eb676e706e83))
+
 ## [0.2.0-pre.1](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/compare/v0.2.0-pre.0..v0.2.0-pre.1) (pre-release) - 2026-01-28
 
 ### 🚀 Features
