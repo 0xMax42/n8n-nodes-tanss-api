@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [unreleased]
+
+### 🚀 Features
+
+- 🔀 *(tanss)* **Add checklist ticket operations and handler tests** - ([59e4d23](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/59e4d23dfeac3255bc7529c9a66e61964f579c63))
+    - **docs**:*(readme)* Mark checklist endpoints as implemented in progress list - ([497a8a9](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/497a8a9f899635253b3e8b36ab46f2b3293c1c18))
+    - *(tanss)* Wire checklist resource into tanss node configuration - ([0e9f743](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/0e9f743c9fee3568e5e0635314f537abe2eefcef))
+    - *(tanss)* Export checklist handler from sub index - ([5c01dfe](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/5c01dfe01a1791280f5e886c095e5c1c1c3d73cc))
+    - *(checklist)* Add checklist handler for ticket operations - ([ca43f46](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/ca43f46f7ab961340efb7aa9eb629feb25579608))
+    - **test**:*(checklist)* Add handler fixtures for checklist operations - ([d7f38f3](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/d7f38f3c04559a8f98410447d16302d0eee33115))
+
 ## [0.1.0-pre.1](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/compare/v0.1.0-pre.0..v0.1.0-pre.1) (pre-release) - 2026-01-27
 
 ### 🚀 Features
