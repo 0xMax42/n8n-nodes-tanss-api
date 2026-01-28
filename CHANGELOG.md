@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 
 ## [unreleased]
 
+### 🚀 Features
+
+- 🔀 *(tanss)* **Add periphery resource support with tests** - ([fc33e75](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/fc33e75c553afe957824d9a2e33563e9aac85b4d))
+    - **docs**:*(readme)* Mark periphery endpoints as implemented in checklist - ([4e31a84](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/4e31a84e3221e4bf999e7da6bcab7b8f71cd17d6))
+    - *(tanss)* Wire periphery resource into TANSS node - ([8239add](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/8239add85c37bac9a5d2137e29470620491be03f))
+    - **test**:*(periphery)* Add handler fixtures and tests for periphery CRUD - ([831a0f6](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/831a0f6d8d4519e6af991643a2c232a7b26140fd))
+    - *(tanss)* Add periphery resource handling to TANSS node - ([2cf6098](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/2cf6098793d68f625458f065aff951159f6e968c))
+
 ### 🐛 Bug Fixes
 
 - *(tanss)* Add checklist resource handling to TANSS node - ([d2f8b28](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/d2f8b28cc61f881f662541fda009671fd89f6bd4))
