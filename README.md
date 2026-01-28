@@ -205,12 +205,12 @@ Progress: **93 / 256 (1 not in API Docs; login not necessary)** (36%)
 - [ ] **search [0/1]**
   - [ ] [PUT] global search
 
-- [ ] **checklist [0/5]**
-  - [ ] [POST] Assigns a checklist to a ticket
-  - [ ] [DEL] Removes a checklist from a ticket
-  - [ ] [GET] Gets checklists for a ticket
-  - [ ] [GET] Gets checklist for ticket
-  - [ ] [PUT] Check an item
+- [x] **checklist [0/5]**
+  - [x] [POST] Assigns a checklist to a ticket
+  - [x] [DEL] Removes a checklist from a ticket
+  - [x] [GET] Gets checklists for a ticket
+  - [x] [GET] Gets checklist for ticket
+  - [x] [PUT] Check an item
 
 - [ ] **supports [0/5]**
   - [ ] [PUT] Get a support list
