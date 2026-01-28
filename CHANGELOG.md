@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file.
 
 ### 📦 Dependencies
 
+- *(deps)* Update dependency typescript to v5.9.3 - ([fe62e39](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/fe62e39d983d0dcd5775c677ef87123f949c2e61))
 - *(deps)* Add renovate.json5 - ([85d1f67](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/85d1f6736b58cdcfe325e3840016624ffbf5575f))
 
 ## [0.2.0-pre.0](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/compare/v0.1.0-pre.0..v0.2.0-pre.0) (pre-release) - 2026-01-28
