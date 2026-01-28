@@ -1,0 +1,23 @@
+{
+    "name": "assignChecklistToTicket throws NodeOperationError on missing checklistId",
+    "itemIndex": 0,
+    "parameters": {
+        "operation": "assignChecklistToTicket",
+        "linkTypeId": 11,
+        "linkId": 12345,
+        "checklistId": 0
+    },
+    "credentials": {
+        "tanssApi": {
+            "baseURL": "https://example.invalid",
+            "authentication": "apiToken",
+            "apiToken": "TOKEN-123"
+        }
+    },
+    "http": [],
+    "expected": {
+        "kind": "throws",
+        "name": "NodeOperationError",
+        "messageIncludes": "checklistId must be a positive number"
+    }
+}

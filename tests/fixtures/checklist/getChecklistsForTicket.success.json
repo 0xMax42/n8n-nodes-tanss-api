@@ -1,0 +1,146 @@
+{
+    "name": "getChecklistsForTicket returns success wrapper (all fields)",
+    "itemIndex": 0,
+    "parameters": {
+        "operation": "getChecklistsForTicket",
+        "linkTypeId": 11,
+        "linkId": 12345
+    },
+    "credentials": {
+        "tanssApi": {
+            "baseURL": "https://example.invalid",
+            "authentication": "loginTotp",
+            "username": "user",
+            "password": "pass"
+        }
+    },
+    "http": [
+        {
+            "expect": {
+                "method": "POST",
+                "url": "https://example.invalid/backend/api/v1/login",
+                "json": true,
+                "returnFullResponse": true,
+                "headers": {
+                    "Content-Type": "application/json"
+                },
+                "body": {
+                    "username": "user",
+                    "password": "pass"
+                }
+            },
+            "reply": {
+                "statusCode": 200,
+                "body": {
+                    "content": {
+                        "apiKey": "TOKEN-123"
+                    }
+                },
+                "headers": {
+                    "content-type": "application/json"
+                }
+            }
+        },
+        {
+            "expect": {
+                "method": "GET",
+                "url": "https://example.invalid/backend/api/v1/checklists/assignment/11/12345",
+                "returnFullResponse": true,
+                "headers": {
+                    "apiToken": "Bearer TOKEN-123"
+                }
+            },
+            "reply": {
+                "statusCode": 200,
+                "body": {
+                    "meta": {
+                        "linkedEntities": {},
+                        "properties": {},
+                        "listProperties": {}
+                    },
+                    "content": [
+                        {
+                            "id": 456,
+                            "name": "Windows Installation",
+                            "description": "Beschreibt die Installation von Windows",
+                            "type": "CHECKLIST",
+                            "creatorId": 12,
+                            "predecessorId": 0,
+                            "active": true,
+                            "assignmentInfos": {
+                                "rank": 1,
+                                "completedByEmployeeId": 0,
+                                "completedOnDate": 0,
+                                "completedReason": ""
+                            }
+                        },
+                        {
+                            "id": 457,
+                            "name": "Linux Installation",
+                            "description": "Beschreibt die Installation von Linux",
+                            "type": "TEMPLATE",
+                            "creatorId": 13,
+                            "predecessorId": 456,
+                            "active": false,
+                            "assignmentInfos": {
+                                "rank": 2,
+                                "completedByEmployeeId": 42,
+                                "completedOnDate": 1700000000,
+                                "completedReason": "Automatischer Prozess"
+                            }
+                        }
+                    ]
+                },
+                "headers": {
+                    "content-type": "application/json"
+                }
+            }
+        }
+    ],
+    "expected": {
+        "kind": "returns",
+        "matchObject": {
+            "success": true,
+            "statusCode": 200,
+            "body": {
+                "meta": {
+                    "linkedEntities": {},
+                    "properties": {},
+                    "listProperties": {}
+                },
+                "content": [
+                    {
+                        "id": 456,
+                        "name": "Windows Installation",
+                        "description": "Beschreibt die Installation von Windows",
+                        "type": "CHECKLIST",
+                        "creatorId": 12,
+                        "predecessorId": 0,
+                        "active": true,
+                        "assignmentInfos": {
+                            "rank": 1,
+                            "completedByEmployeeId": 0,
+                            "completedOnDate": 0,
+                            "completedReason": ""
+                        }
+                    },
+                    {
+                        "id": 457,
+                        "name": "Linux Installation",
+                        "description": "Beschreibt die Installation von Linux",
+                        "type": "TEMPLATE",
+                        "creatorId": 13,
+                        "predecessorId": 456,
+                        "active": false,
+                        "assignmentInfos": {
+                            "rank": 2,
+                            "completedByEmployeeId": 42,
+                            "completedOnDate": 1700000000,
+                            "completedReason": "Automatischer Prozess"
+                        }
+                    }
+                ]
+            }
+        }
+    }
+}

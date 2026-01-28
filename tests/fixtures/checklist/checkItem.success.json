@@ -1,0 +1,225 @@
+{
+    "name": "checkItem returns success wrapper (all fields)",
+    "itemIndex": 0,
+    "parameters": {
+        "operation": "checkItem",
+        "itemId": 1002,
+        "checklistId": 456,
+        "mainChecklistId": 0,
+        "linkTypeId": 11,
+        "linkId": 12345,
+        "value": 1,
+        "multiSelectId": 2,
+        "vars": "{\"var1\": \"Eingegebener Text\",\"var2\": \"Noch ein Text für eine Variable\"}"
+    },
+    "credentials": {
+        "tanssApi": {
+            "baseURL": "https://example.invalid",
+            "authentication": "loginTotp",
+            "username": "user",
+            "password": "pass"
+        }
+    },
+    "http": [
+        {
+            "expect": {
+                "method": "POST",
+                "url": "https://example.invalid/backend/api/v1/login",
+                "json": true,
+                "returnFullResponse": true,
+                "headers": {
+                    "Content-Type": "application/json"
+                },
+                "body": {
+                    "username": "user",
+                    "password": "pass"
+                }
+            },
+            "reply": {
+                "statusCode": 200,
+                "body": {
+                    "content": {
+                        "apiKey": "TOKEN-123"
+                    }
+                },
+                "headers": {
+                    "content-type": "application/json"
+                }
+            }
+        },
+        {
+            "expect": {
+                "method": "PUT",
+                "url": "https://example.invalid/backend/api/v1/checklists/check",
+                "json": true,
+                "returnFullResponse": true,
+                "headers": {
+                    "Content-Type": "application/json",
+                    "apiToken": "Bearer TOKEN-123"
+                },
+                "body": {
+                    "itemId": 1002,
+                    "checklistId": 456,
+                    "mainChecklistId": 0,
+                    "linkTypeId": 11,
+                    "linkId": 12345,
+                    "value": 1,
+                    "multiSelectId": 2,
+                    "vars": {
+                        "var1": "Eingegebener Text",
+                        "var2": "Noch ein Text für eine Variable"
+                    }
+                }
+            },
+            "reply": {
+                "statusCode": 200,
+                "body": {
+                    "meta": {
+                        "linkedEntities": { },
+                        "properties": { },
+                        "listProperties": { }
+                    },
+                    "content": {
+                        "id": 456,
+                        "name": "Windows Installation",
+                        "description": "Beschreibt die Installation von Windows",
+                        "type": "CHECKLIST",
+                        "creatorId": 12,
+                        "predecessorId": 0,
+                        "active": true,
+                        "items": [
+                            {
+                                "id": 1001,
+                                "checklistId": 456,
+                                "type": "TEXT_FIELD",
+                                "heading": "Windows Version",
+                                "description": "Welche Windows-Version soll installiert werden?",
+                                "entryPoint": true,
+                                "nextItemId": 1002,
+                                "serviceText": "Windows Installation vorbereiten",
+                                "hidden": false,
+                                "action": {
+                                    "value": 1,
+                                    "date": 1700000001,
+                                    "userId": 12,
+                                    "supportId": 55
+                                },
+                                "vars": [
+                                    {
+                                        "name": "var1",
+                                        "type": "INPUT"
+                                    }
+                                ]
+                            },
+                            {
+                                "id": 1002,
+                                "checklistId": 456,
+                                "type": "REQUIRED_MULTISELECT",
+                                "heading": "Edition",
+                                "description": "Welche Edition wird benötigt?",
+                                "entryPoint": false,
+                                "nextItemId": 1003,
+                                "serviceText": "Edition auswählen",
+                                "hidden": false,
+                                "action": {
+                                    "value": 1,
+                                    "date": 1700000100,
+                                    "userId": 12,
+                                    "supportId": 0
+                                },
+                                "vars": [
+                                    {
+                                        "name": "osEdition",
+                                        "type": "MULTISELECT",
+                                        "options": [
+                                            "Home",
+                                            "Pro"
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                },
+                "headers": {
+                    "content-type": "application/json"
+                }
+            }
+        }
+    ],
+    "expected": {
+        "kind": "returns",
+        "matchObject": {
+            "success": true,
+            "statusCode": 200,
+            "body": {
+                "meta": {
+                    "linkedEntities": { },
+                    "properties": { },
+                    "listProperties": { }
+                },
+                "content": {
+                    "id": 456,
+                    "name": "Windows Installation",
+                    "description": "Beschreibt die Installation von Windows",
+                    "type": "CHECKLIST",
+                    "creatorId": 12,
+                    "predecessorId": 0,
+                    "active": true,
+                    "items": [
+                        {
+                            "id": 1001,
+                            "checklistId": 456,
+                            "type": "TEXT_FIELD",
+                            "heading": "Windows Version",
+                            "description": "Welche Windows-Version soll installiert werden?",
+                            "entryPoint": true,
+                            "nextItemId": 1002,
+                            "serviceText": "Windows Installation vorbereiten",
+                            "hidden": false,
+                            "action": {
+                                "value": 1,
+                                "date": 1700000001,
+                                "userId": 12,
+                                "supportId": 55
+                            },
+                            "vars": [
+                                {
+                                    "name": "var1",
+                                    "type": "INPUT"
+                                }
+                            ]
+                        },
+                        {
+                            "id": 1002,
+                            "checklistId": 456,
+                            "type": "REQUIRED_MULTISELECT",
+                            "heading": "Edition",
+                            "description": "Welche Edition wird benötigt?",
+                            "entryPoint": false,
+                            "nextItemId": 1003,
+                            "serviceText": "Edition auswählen",
+                            "hidden": false,
+                            "action": {
+                                "value": 1,
+                                "date": 1700000100,
+                                "userId": 12,
+                                "supportId": 0
+                            },
+                            "vars": [
+                                {
+                                    "name": "osEdition",
+                                    "type": "MULTISELECT",
+                                    "options": [
+                                        "Home",
+                                        "Pro"
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            }
+        }
+    }
+}
