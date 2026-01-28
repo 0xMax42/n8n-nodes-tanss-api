@@ -3,7 +3,7 @@ import { Icon, ICredentialType, INodeProperties, ICredentialTestRequest } from '
 export class TanssApi implements ICredentialType {
 	name = 'tanssApi';
 	displayName = 'TANSS API';
-	icon: Icon = { light: 'file:../icons/tanss.svg', dark: 'file:../icons/tanss.svg' };
+	icon: Icon = { light: 'file:../icons/tanss.svg', dark: 'file:../icons/tanss.dark.svg' };
 	documentationUrl = 'https://api-doc.tanss.de/';
 	properties: INodeProperties[] = [
 		{
