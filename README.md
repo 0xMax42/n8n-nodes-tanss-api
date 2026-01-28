@@ -196,7 +196,7 @@ Progress: **121 / 254** (48 %)
   - [ ] [PUT] Assigns multiple tags
   - [ ] [GET] List of tags logs to an assignment
 
-- [x] **callback [0/4]**
+- [x] **callback [4/4]**
   - [x] [POST] Creates a callback
   - [x] [PUT] Get a list of callbacks
   - [x] [GET] Gets a callback
@@ -205,7 +205,7 @@ Progress: **121 / 254** (48 %)
 - [ ] **search [0/1]**
   - [ ] [PUT] global search
 
-- [x] **checklist [0/5]**
+- [x] **checklist [5/5]**
   - [x] [POST] Assigns a checklist to a ticket
   - [x] [DEL] Removes a checklist from a ticket
   - [x] [GET] Gets checklists for a ticket
@@ -236,7 +236,7 @@ Progress: **121 / 254** (48 %)
   - [x] [POST] Creates a pc
   - [x] [PUT] Gets a list of pcs
 
-- [x] **periphery [0/11]**
+- [x] **periphery [11/11]**
   - [x] [GET] Gets a periphery by id
   - [x] [PUT] Updates a periphery
   - [x] [DEL] Deletes a periphery
@@ -267,7 +267,7 @@ Progress: **121 / 254** (48 %)
   - [ ] [PUT] Updates a service
   - [ ] [DEL] Deletes a service
 
-- [x] **ip [0/4]**
+- [x] **ip [4/4]**
   - [x] [GET] Gets ip addresses
   - [x] [POST] Creates an ip address
   - [x] [PUT] Update ip address
