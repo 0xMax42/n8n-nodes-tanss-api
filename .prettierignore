@@ -4,6 +4,7 @@ coverage/
 
 # Root *.json files
 *.json
+renovate.json5
 
 # Dependency lockfiles
 package-lock.json
