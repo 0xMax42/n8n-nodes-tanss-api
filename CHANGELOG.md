@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 
 ## [unreleased]
 
+### 🚀 Features
+
+- 🔀 *(tanss)* **Add components CRUD support with handler tests** - ([c053e05](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/c053e05013b7ec1678c9359956345a5004e5694f))
+    - **docs**:*(readme)* Mark components endpoints as implemented and update progress - ([7e4c9ad](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/7e4c9ade62aed28c0af856d2ef38663a41b68c78))
+    - *(tanss)* Wire components resource into TANSS node - ([3f0c26e](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/3f0c26edb570efbf603812449408092e20b0a33b))
+    - *(tanss)* Add components resource support to TANSS node - ([e6edc98](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/e6edc98bd95dd6b6213b5c3a59d3287799bc3828))
+    - **test**:*(components)* Add handler fixtures and tests for components CRUD - ([ce587b0](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/ce587b0abfd9dcc980da1de0a943686af9a70d38))
+
 ### 📚 Documentation
 
 - *(readme)* Reorganize implementation roadmap and progress sections - ([4b8f20f](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/4b8f20f12a6c87ad40f012fb409f54d7dd717ed6))
