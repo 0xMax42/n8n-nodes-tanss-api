@@ -35,7 +35,7 @@ Optionally, a dev container configuration is included to provide a ready-to-use 
 
 ### Implementation Progress
 
-> Progress: **121 / 254** (48 %)
+> Progress: **131 / 254** (52 %)
 
 #### Done
 
@@ -196,20 +196,18 @@ Optionally, a dev container configuration is included to provide a ready-to-use 
   - [x] [GET] Get a hdd type
   - [x] [DEL] Deletes a hdd type
 
+- [x] **components [9/9]**
+  - [x] [GET] Gets a component by id
+  - [x] [PUT] Updates a component
+  - [x] [DEL] Deletes a component
+  - [x] [POST] Creates a component
+  - [x] [PUT] Gets a list of components
+  - [x] [GET] Gets a list of component types
+  - [x] [POST] Create component type
+  - [x] [PUT] Update component type
+  - [x] [DEL] Delete component type
+
 #### Todo
-
-##### v0.2.0
-
-- [ ] **components [0/9]**
-  - [ ] [GET] Gets a component by id
-  - [ ] [PUT] Updates a component
-  - [ ] [DEL] Deletes a component
-  - [ ] [POST] Creates a component
-  - [ ] [PUT] Gets a list of components
-  - [ ] [GET] Gets a list of component types
-  - [ ] [POST] Create component type
-  - [ ] [PUT] Update component type
-  - [ ] [DEL] Delete component type
 
 ##### v0.3.0
 
