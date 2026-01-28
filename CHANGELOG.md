@@ -8,6 +8,10 @@ All notable changes to this project will be documented in this file.
 
 - *(tanss)* Add checklist resource handling to TANSS node - ([d2f8b28](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/d2f8b28cc61f881f662541fda009671fd89f6bd4))
 
+### 🧪 Testing
+
+- *(handlerFixtures)* Improve subset diff reporting in http mocks - ([22341f1](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/22341f13d519e62c22bf2640d0a8d7a58afec53a))
+
 ### ⚙️ Miscellaneous Tasks
 
 - *(package)* Remove unused release-it dev dependency - ([e999574](https://git.0xmax42.io/LI-Praktikum/n8n-nodes-tanss-api/commit/e9995745185e3df14902f5aba38a17a1711a24cb))
